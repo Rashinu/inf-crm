@@ -1,0 +1,410 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ========== TENANT & USERS ==========
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users         User[]
+  brands        Brand[]
+  contacts      Contact[]
+  deals         Deal[]
+  deliverables  Deliverable[]
+  payments      Payment[]
+  contractFiles ContractFile[]
+  invoices      Invoice[]
+  reminders     Reminder[]
+  notifications Notification[]
+  activityLogs  ActivityLog[]
+  deviceTokens  DeviceToken[]
+
+  @@map("tenants")
+}
+
+enum UserRole {
+  OWNER
+  ASSISTANT
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  email        String   @unique
+  passwordHash String
+  fullName     String?
+  role         UserRole @default(ASSISTANT)
+  
+  // Mobile Support
+  refreshToken String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  notifications Notification[]
+  deviceTokens  DeviceToken[]
+
+  @@index([tenantId])
+  @@index([email])
+  @@map("users")
+}
+
+// ========== BRANDS & CONTACTS ==========
+
+model Brand {
+  id             String    @id @default(uuid())
+  tenantId       String
+  tenant         Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name           String
+  website        String?
+  notes          String?
+  softDeletedAt  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  contacts Contact[]
+  deals    Deal[]
+
+  @@index([tenantId])
+  @@index([tenantId, softDeletedAt])
+  @@map("brands")
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  brandId   String
+  brand     Brand    @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  name      String
+  email     String?
+  phone     String?
+  position  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  deals Deal[]
+
+  @@index([tenantId])
+  @@index([brandId])
+  @@map("contacts")
+}
+
+// ========== DEALS ==========
+
+enum DealStage {
+  LEAD
+  CONTACTED
+  NEGOTIATION
+  APPROVED
+  IN_PRODUCTION
+  SCHEDULED
+  POSTED
+  COMPLETED
+  LOST
+  DELAYED
+  CANCELLED
+}
+
+enum Platform {
+  INSTAGRAM
+  TIKTOK
+  YOUTUBE
+  TWITTER
+  LINKEDIN
+  OTHER
+}
+
+enum ContractType {
+  INFLUENCER
+  DEVELOPER
+  OTHER
+}
+
+enum PaymentType {
+  UPFRONT
+  MILESTONE
+  AFTER_DELIVERY
+}
+
+model Deal {
+  id                  String    @id @default(uuid())
+  tenantId            String
+  tenant              Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  brandId             String
+  brand               Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  title               String
+  stage               DealStage @default(LEAD)
+  platform            Platform?
+  totalAmount         Decimal   @default(0) @db.Decimal(10, 2)
+  currency            String    @default("TRY")
+
+  // Flutter App Specific (OOP Mapping)
+  grossAmount         Decimal   @default(0) @db.Decimal(10, 2)
+  taxRate             Decimal   @default(0.18) @db.Decimal(4, 3) 
+  paymentType         PaymentType @default(UPFRONT)
+  contractType        ContractType @default(INFLUENCER)
+  
+  // Influencer Fields
+  storyCount          Int?
+  reelCount           Int?
+
+  // Developer Fields
+  revisionCount       Int?
+
+  deliverableDueDate  DateTime?
+  publishDate         DateTime?
+  paymentDueDate      DateTime?
+  notes               String?
+  softDeletedAt       DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  contactId           String?
+  contact             Contact?  @relation(fields: [contactId], references: [id])
+  deliverables  Deliverable[]
+  payments      Payment[]
+  contractFiles ContractFile[]
+  invoices      Invoice[]
+  reminders     Reminder[]
+  activityLogs  ActivityLog[]
+
+  @@index([tenantId])
+  @@index([tenantId, stage])
+  @@index([tenantId, softDeletedAt])
+  @@index([brandId])
+  @@map("deals")
+}
+
+// ========== DELIVERABLES ==========
+
+enum DeliverableType {
+  REELS
+  STORY
+  POST
+  YOUTUBE_VIDEO
+  YOUTUBE_SHORT
+  TIKTOK_VIDEO
+  TWEET
+  OTHER
+}
+
+enum DeliverableStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model Deliverable {
+  id          String             @id @default(uuid())
+  tenantId    String
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dealId      String
+  deal        Deal               @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  type        DeliverableType
+  description String?
+  quantity    Int                @default(1)
+  dueDate     DateTime?
+  publishDate DateTime?
+  status      DeliverableStatus  @default(TODO)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([tenantId])
+  @@index([dealId])
+  @@index([tenantId, dueDate])
+  @@map("deliverables")
+}
+
+// ========== PAYMENTS ==========
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+model Payment {
+  id         String        @id @default(uuid())
+  tenantId   String
+  tenant     Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dealId     String
+  deal       Deal          @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  amount     Decimal       @db.Decimal(10, 2)
+  dueDate    DateTime
+  status     PaymentStatus @default(PENDING)
+  paidAt     DateTime?
+  paidAmount Decimal       @default(0) @db.Decimal(10, 2)
+  notes      String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([tenantId])
+  @@index([dealId])
+  @@index([tenantId, dueDate])
+  @@index([tenantId, status])
+  @@map("payments")
+}
+
+// ========== CONTRACTS & FILES ==========
+
+enum ContractStatus {
+  NOT_SENT
+  SENT
+  SIGNED
+}
+
+model ContractFile {
+  id           String         @id @default(uuid())
+  tenantId     String
+  tenant       Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dealId       String
+  deal         Deal           @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  fileKey      String         // S3/MinIO key
+  fileName     String
+  fileUrl      String?        // Optional: presigned URL or public URL
+  status       ContractStatus @default(NOT_SENT)
+  externalLink String?        // External signing link (DocuSign, etc.)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([tenantId])
+  @@index([dealId])
+  @@map("contract_files")
+}
+
+// ========== INVOICES ==========
+
+model Invoice {
+  id          String   @id @default(uuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dealId      String
+  deal        Deal     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  invoiceNo   String?
+  invoiceDate DateTime?
+  link        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([dealId])
+  @@map("invoices")
+}
+
+// ========== REMINDERS ==========
+
+enum ReminderType {
+  PAYMENT_DUE
+  DELIVERABLE_DUE
+  PUBLISH_DATE
+  INVOICE_REMINDER
+}
+
+enum ReminderChannel {
+  EMAIL
+  IN_APP
+}
+
+enum ReminderStatus {
+  PENDING
+  SENT
+  CANCELLED
+}
+
+model Reminder {
+  id           String          @id @default(uuid())
+  tenantId     String
+  tenant       Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dealId       String?
+  deal         Deal?           @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  type         ReminderType
+  scheduledFor DateTime
+  channel      ReminderChannel
+  status       ReminderStatus  @default(PENDING)
+  payload      Json?           // Email template variables, etc.
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([tenantId])
+  @@index([tenantId, scheduledFor, status])
+  @@map("reminders")
+}
+
+// ========== NOTIFICATIONS ==========
+
+model Notification {
+  id        String    @id @default(uuid())
+  tenantId  String
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([userId, readAt])
+  @@map("notifications")
+}
+
+// ========== ACTIVITY LOG ==========
+
+enum ActivityType {
+  STAGE_CHANGED
+  NOTE_ADDED
+  PAYMENT_UPDATED
+  FILE_UPLOADED
+  DELIVERABLE_ADDED
+  CONTRACT_SIGNED
+}
+
+model ActivityLog {
+  id        String       @id @default(uuid())
+  tenantId  String
+  tenant    Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  dealId    String
+  deal      Deal         @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  type      ActivityType
+  message   String
+  metadata  Json?
+  createdAt DateTime     @default(now())
+
+  @@index([tenantId])
+  @@index([dealId])
+  @@index([tenantId, createdAt])
+  @@map("activity_logs")
+}
+
+// ========== MOBILE DEVICES ==========
+
+model DeviceToken {
+  id        String   @id @default(uuid())
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  platform  String?  // iOS, Android, Web
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([userId])
+  @@map("device_tokens")
+}
