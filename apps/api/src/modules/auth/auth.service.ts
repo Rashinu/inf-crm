@@ -43,7 +43,7 @@ export class AuthService {
                 },
             });
 
-            const tokens = await this.generateTokens(user.id, tenant.id, user.role);
+            const tokens = await this.generateTokens(user.id, tenant.id, user.role, tx);
             return {
                 user: {
                     id: user.id,
@@ -84,7 +84,7 @@ export class AuthService {
         };
     }
 
-    async generateTokens(userId: string, tenantId: string, role: string) {
+    async generateTokens(userId: string, tenantId: string, role: string, tx?: any) {
         const payload = { sub: userId, tenantId, role };
 
         const [accessToken, refreshToken] = await Promise.all([
@@ -98,8 +98,9 @@ export class AuthService {
             }),
         ]);
 
+        const db = tx || this.prisma;
         // Save refresh token to user
-        await this.prisma.user.update({
+        await db.user.update({
             where: { id: userId },
             data: { refreshToken }
         });
