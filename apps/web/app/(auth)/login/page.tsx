@@ -77,13 +77,16 @@ export default function LoginPage() {
                         </Button>
                     </form>
                 </CardContent>
-                <CardFooter className="flex flex-col space-y-2">
+                <CardFooter className="flex flex-col space-y-4">
                     <div className="text-sm text-center text-gray-500">
                         Don't have an account?{" "}
                         <Link href="/register" className="text-blue-600 hover:underline">
                             Register
                         </Link>
                     </div>
+                    <Link href="/" className="text-sm text-gray-500 hover:text-gray-900 underline underline-offset-4">
+                        Return to Homepage
+                    </Link>
                 </CardFooter>
             </Card>
         </div>
