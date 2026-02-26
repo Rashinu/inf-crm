@@ -29,6 +29,7 @@ model Tenant {
   notifications Notification[]
   activityLogs  ActivityLog[]
   deviceTokens  DeviceToken[]
+  calendarTodos CalendarTodo[]
 
   @@map("tenants")
 }
@@ -55,6 +56,7 @@ model User {
 
   notifications Notification[]
   deviceTokens  DeviceToken[]
+  calendarTodos CalendarTodo[]
 
   @@index([tenantId])
   @@index([email])
@@ -407,4 +409,24 @@ model DeviceToken {
   @@index([tenantId])
   @@index([userId])
   @@map("device_tokens")
+}
+
+// ========== CALENDAR TODO ==========
+
+model CalendarTodo {
+  id          String   @id @default(uuid())
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime @db.Date
+  text        String
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([tenantId, date])
+  @@map("calendar_todos")
 }

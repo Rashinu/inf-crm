@@ -8,6 +8,8 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { startOfMonth, endOfMonth, format } from "date-fns";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import CalendarTodoPanel from "@/components/calendar/CalendarTodoPanel";
 
 export default function CalendarPage() {
     const router = useRouter();
@@ -15,6 +17,8 @@ export default function CalendarPage() {
         start: startOfMonth(new Date()),
         end: endOfMonth(new Date()),
     });
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [sheetOpen, setSheetOpen] = useState(false);
 
     const { data: events } = useQuery({
         queryKey: ["calendar-events", dateRange],
@@ -52,6 +56,11 @@ export default function CalendarPage() {
         router.push(`/dashboard/deals/${event.dealId}`);
     };
 
+    const handleDateClick = (info: any) => {
+        setSelectedDate(info.date);
+        setSheetOpen(true);
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -67,6 +76,7 @@ export default function CalendarPage() {
                     initialView="dayGridMonth"
                     events={calendarEvents}
                     eventClick={handleEventClick}
+                    dateClick={handleDateClick}
                     datesSet={(dateInfo) => {
                         setDateRange({
                             start: dateInfo.start,
@@ -81,6 +91,20 @@ export default function CalendarPage() {
                     }}
                 />
             </div>
+
+            <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+                <SheetContent className="w-[400px] sm:w-[540px]">
+                    <SheetHeader>
+                        <SheetTitle>
+                            {selectedDate ? format(selectedDate, "MMMM d, yyyy") : "Tasks"}
+                        </SheetTitle>
+                        <SheetDescription>
+                            Manage your personal to-do list for this day.
+                        </SheetDescription>
+                    </SheetHeader>
+                    <CalendarTodoPanel date={selectedDate} />
+                </SheetContent>
+            </Sheet>
         </div>
     );
 }

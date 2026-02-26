@@ -70,4 +70,43 @@ export class CalendarService {
 
         return events.sort((a, b) => a.date.getTime() - b.date.getTime());
     }
+
+    async getTodos(tenantId: string, userId: string, from: Date, to: Date) {
+        return this.prisma.calendarTodo.findMany({
+            where: {
+                tenantId,
+                userId,
+                date: { gte: from, lte: to },
+            },
+            orderBy: { createdAt: 'asc' },
+        });
+    }
+
+    async createTodo(tenantId: string, userId: string, date: Date, text: string) {
+        return this.prisma.calendarTodo.create({
+            data: {
+                tenantId,
+                userId,
+                date,
+                text,
+            },
+        });
+    }
+
+    async updateTodo(id: string, isCompleted?: boolean, text?: string) {
+        const data: any = {};
+        if (isCompleted !== undefined) data.isCompleted = isCompleted;
+        if (text !== undefined) data.text = text;
+
+        return this.prisma.calendarTodo.update({
+            where: { id },
+            data,
+        });
+    }
+
+    async deleteTodo(id: string) {
+        return this.prisma.calendarTodo.delete({
+            where: { id },
+        });
+    }
 }
