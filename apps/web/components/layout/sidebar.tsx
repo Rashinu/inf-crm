@@ -73,10 +73,10 @@ export function Sidebar() {
             {/* Bottom Section */}
             <div className="p-3 border-t border-gray-100 space-y-1">
                 <Link
-                    href="/settings"
+                    href="/dashboard/settings"
                     className={cn(
                         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50",
-                        pathname === "/settings" && "bg-blue-50 text-blue-700"
+                        pathname === "/dashboard/settings" && "bg-blue-50 text-blue-700"
                     )}
                 >
                     <Settings className="size-5 text-gray-400" />

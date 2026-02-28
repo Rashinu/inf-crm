@@ -21,6 +21,15 @@ export default function DealOverview({ deal }: { deal: any }) {
                         <span className="text-gray-500">Created At</span>
                         <span>{new Date(deal.createdAt).toLocaleDateString()}</span>
                     </div>
+                    {deal.contact && (
+                        <div className="flex justify-between border-b pb-2 items-center">
+                            <span className="text-gray-500">Contact Person</span>
+                            <div className="flex flex-col items-end">
+                                <span className="font-bold text-sm text-slate-800">{deal.contact.name}</span>
+                                {deal.contact.email && <span className="text-xs text-slate-500">{deal.contact.email}</span>}
+                            </div>
+                        </div>
+                    )}
                     {deal.dealScore !== undefined && (
                         <div className="flex justify-between border-b pb-2 items-center bg-gray-50 -mx-6 px-6 py-3 mt-4">
                             <span className="text-gray-700 font-semibold">AI Deal Prediction Score</span>

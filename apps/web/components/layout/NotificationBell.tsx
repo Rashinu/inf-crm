@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export function NotificationBell() {
     const queryClient = useQueryClient();
@@ -61,16 +62,30 @@ export function NotificationBell() {
             <DropdownMenuContent align="end" className="w-[340px] p-0 border-gray-100 shadow-xl overflow-hidden rounded-xl">
                 <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                     <h3 className="font-semibold text-gray-900 font-outfit">Notifications</h3>
-                    {unreadCount > 0 && (
+                    <div className="flex gap-2">
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="h-auto py-1 px-2 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                            onClick={() => markAllAsReadMutation.mutate()}
+                            className="h-auto py-1 px-2 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-50 font-bold"
+                            onClick={async () => {
+                                await apiClient.post("/notifications/demo");
+                                queryClient.invalidateQueries({ queryKey: ["notifications"] });
+                                toast.success("Test notification triggered!");
+                            }}
                         >
-                            Mark all as read
+                            + Demo
                         </Button>
-                    )}
+                        {unreadCount > 0 && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-auto py-1 px-2 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                                onClick={() => markAllAsReadMutation.mutate()}
+                            >
+                                Mark all as read
+                            </Button>
+                        )}
+                    </div>
                 </div>
                 <div className="max-h-[350px] overflow-y-auto w-full">
                     {notifications?.length === 0 ? (

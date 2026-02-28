@@ -64,80 +64,145 @@ export default function FinancePage() {
                 <div className="h-32 flex items-center justify-center text-gray-500">Loading your summary...</div>
             ) : summary ? (
                 <div className="grid gap-6 md:grid-cols-4">
-                    <Card className="border-none shadow-sm bg-indigo-600 text-white">
+                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
+                        <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                            <TrendingUp size={120} />
+                        </div>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-indigo-100 uppercase flex items-center gap-2">
-                                <TrendingUp size={16} /> Total Expected
+                            <CardTitle className="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                                <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                                    <TrendingUp size={16} />
+                                </div>
+                                Total Expected
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold font-outfit">₺{summary.totalExpected.toLocaleString()}</div>
+                            <div className="text-4xl font-black font-outfit tracking-tight text-slate-900 mt-2">
+                                ₺{summary.totalExpected.toLocaleString()}
+                            </div>
                         </CardContent>
                     </Card>
-                    <Card className="border-none shadow-sm bg-emerald-600 text-white">
+
+                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
+                        <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                            <CheckCircle2 size={120} />
+                        </div>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-emerald-100 uppercase flex items-center gap-2">
-                                <CheckCircle2 size={16} /> Total Collected
+                            <CardTitle className="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                                <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+                                    <CheckCircle2 size={16} />
+                                </div>
+                                Total Collected
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold font-outfit">₺{summary.totalCollected.toLocaleString()}</div>
+                            <div className="text-4xl font-black font-outfit tracking-tight text-slate-900 mt-2">
+                                ₺{summary.totalCollected.toLocaleString()}
+                            </div>
                         </CardContent>
                     </Card>
-                    <Card className="border-none shadow-sm bg-rose-600 text-white">
+
+                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
+                        <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                            <AlertCircle size={120} />
+                        </div>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-rose-100 uppercase flex items-center gap-2">
-                                <AlertCircle size={16} /> Overdue / Risk
+                            <CardTitle className="text-sm font-bold text-rose-500 uppercase tracking-wider flex items-center gap-2">
+                                <div className="p-2 bg-rose-50 text-rose-600 rounded-lg">
+                                    <AlertCircle size={16} />
+                                </div>
+                                Overdue / Risk
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold font-outfit">₺{summary.totalOverdue.toLocaleString()}</div>
-                            {summary.totalOverdue > 0 && <p className="text-xs text-rose-200 mt-1">Needs attention</p>}
+                            <div className="text-4xl font-black font-outfit tracking-tight text-rose-600 mt-2">
+                                ₺{summary.totalOverdue.toLocaleString()}
+                            </div>
+                            {summary.totalOverdue > 0 && (
+                                <p className="text-xs font-medium text-rose-500 mt-2 flex items-center gap-1">
+                                    <AlertCircle size={12} /> Needs immediate attention
+                                </p>
+                            )}
                         </CardContent>
                     </Card>
-                    <Card className="border-none shadow-sm bg-amber-600 text-white">
+
+                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-gradient-to-br from-slate-900 to-slate-800 text-white relative overflow-hidden group hover:-translate-y-1 transition-all duration-300">
+                        <div className="absolute -right-4 -top-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Calendar size={120} />
+                        </div>
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-amber-100 uppercase flex items-center gap-2">
-                                <Calendar size={16} /> Monthly Revenue
+                            <CardTitle className="text-sm font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                                <div className="p-2 bg-white/10 text-white rounded-lg backdrop-blur-sm">
+                                    <Calendar size={16} />
+                                </div>
+                                Monthly Revenue
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold font-outfit">₺{summary.monthlyRevenue.toLocaleString()}</div>
-                            <p className="text-xs text-amber-200 mt-1">This Month</p>
+                            <div className="text-4xl font-black font-outfit tracking-tight text-white mt-2">
+                                ₺{summary.monthlyRevenue.toLocaleString()}
+                            </div>
+                            <p className="text-xs font-medium text-slate-400 mt-2">
+                                Earned this month
+                            </p>
                         </CardContent>
                     </Card>
                 </div>
-            ) : null}
+            ) : null
+            }
 
-            {summary?.topBrands && summary.topBrands.length > 0 && (
-                <Card className="border-none shadow-sm bg-white">
-                    <CardHeader className="pb-2 text-gray-800">
-                        <CardTitle className="text-lg">🏆 Top Paying Brands</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex gap-4 overflow-x-auto pb-4 pt-2">
-                        {summary.topBrands.map((brand: any, index: number) => (
-                            <div key={index} className="flex-shrink-0 bg-blue-50 border border-blue-100 rounded-lg p-4 min-w-[200px]">
-                                <div className="text-xs text-blue-500 uppercase font-bold tracking-wider mb-1">#{index + 1} Brand</div>
-                                <div className="font-bold text-gray-900 truncate">{brand.name}</div>
-                                <div className="text-lg text-blue-700 font-semibold font-outfit mt-2">₺{brand.value.toLocaleString()}</div>
-                            </div>
-                        ))}
-                    </CardContent>
-                </Card>
-            )}
+            {
+                summary?.topBrands && summary.topBrands.length > 0 && (
+                    <div className="mt-8 mb-4">
+                        <h2 className="text-xl font-bold font-outfit text-slate-900 mb-4 flex items-center gap-2">
+                            <span>🏆</span> Top Paying Brands
+                        </h2>
+                        <div className="flex gap-4 overflow-x-auto pb-4 pt-1 px-1 custom-scrollbar">
+                            {summary.topBrands.map((brand: any, index: number) => (
+                                <div
+                                    key={index}
+                                    className="flex-shrink-0 bg-white border-none shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all rounded-2xl p-5 min-w-[240px] group cursor-default"
+                                >
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-2 py-1 rounded-md">
+                                            Row #{index + 1}
+                                        </div>
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs ${index === 0 ? 'bg-amber-100 text-amber-600' :
+                                            index === 1 ? 'bg-slate-100 text-slate-600' :
+                                                index === 2 ? 'bg-orange-100 text-orange-600' :
+                                                    'bg-blue-50 text-blue-500'
+                                            }`}>
+                                            {brand.name.charAt(0).toUpperCase()}
+                                        </div>
+                                    </div>
+                                    <div className="font-bold text-slate-700 truncate text-lg group-hover:text-slate-900 transition-colors">
+                                        {brand.name}
+                                    </div>
+                                    <div className="text-2xl text-slate-900 font-transparent font-outfit mt-1">
+                                        ₺{brand.value.toLocaleString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )
+            }
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div className="p-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
-                    <h2 className="font-semibold text-gray-900">All Scheduled Payments</h2>
+            <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-none overflow-hidden">
+                <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white">
+                    <div>
+                        <h2 className="font-bold text-xl text-slate-900 font-outfit">All Scheduled Payments</h2>
+                        <p className="text-sm text-slate-500 mt-1">View and manage all your incoming transactions.</p>
+                    </div>
                 </div>
                 <Table>
-                    <TableHeader>
-                        <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
-                            <TableHead className="font-semibold text-gray-900">Project / Deal</TableHead>
-                            <TableHead className="font-semibold text-gray-900">Amount</TableHead>
-                            <TableHead className="font-semibold text-gray-900">Status</TableHead>
-                            <TableHead className="font-semibold text-gray-900">Due Date</TableHead>
-                            <TableHead className="font-semibold text-gray-900 text-right">Actions</TableHead>
+                    <TableHeader className="bg-slate-50 border-b border-slate-100">
+                        <TableRow className="hover:bg-slate-50">
+                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4">Project / Deal</TableHead>
+                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4">Amount</TableHead>
+                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4">Status</TableHead>
+                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4">Due Date</TableHead>
+                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs text-right py-4">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -216,6 +281,6 @@ export default function FinancePage() {
                     </TableBody>
                 </Table>
             </div>
-        </div>
+        </div >
     );
 }

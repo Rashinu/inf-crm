@@ -33,32 +33,92 @@ export default function CalendarPage() {
         }
     });
 
+    const { data: todos } = useQuery({
+        queryKey: ["calendar-todos-global", dateRange],
+        queryFn: async () => {
+            const { data } = await apiClient.get('/calendar/todos', {
+                params: {
+                    from: format(dateRange.start, 'yyyy-MM-dd'),
+                    to: format(dateRange.end, 'yyyy-MM-dd'),
+                }
+            });
+            return data;
+        }
+    });
+
     const getEventColor = (type: string) => {
         switch (type) {
             case 'DELIVERABLE_DUE': return '#f97316'; // orange-500
             case 'PUBLISH_DATE': return '#a855f7'; // purple-500
             case 'PAYMENT_DUE': return '#22c55e'; // green-500
+            case 'TODO': return '#64748b'; // slate-500
             default: return '#3b82f6'; // blue-500
         }
     };
 
-    const calendarEvents = events?.map((event: any) => ({
-        id: event.id,
-        title: event.title,
-        start: event.date,
-        backgroundColor: getEventColor(event.type),
-        borderColor: 'transparent',
-        extendedProps: event,
-    }));
+    const calendarEvents = [
+        ...(events || []).map((event: any) => ({
+            id: event.id,
+            title: event.title,
+            start: event.date,
+            allDay: true,
+            backgroundColor: getEventColor(event.type),
+            borderColor: 'transparent',
+            extendedProps: { ...event, isEvent: true },
+        })),
+        ...(todos || []).map((todo: any) => ({
+            id: `todo-${todo.id}`,
+            title: (todo.isCompleted ? '✓ ' : '') + todo.text,
+            start: todo.date,
+            allDay: true,
+            backgroundColor: todo.isCompleted ? '#cbd5e1' : getEventColor('TODO'), // Gray out if completed
+            borderColor: 'transparent',
+            extendedProps: { ...todo, isTodo: true },
+        }))
+    ];
 
     const handleEventClick = (info: any) => {
         const event = info.event.extendedProps;
-        router.push(`/dashboard/deals/${event.dealId}`);
+        if (event.isTodo) {
+            // Clicked a To-Do item, open the sheet for that day
+            setSelectedDate(new Date(event.date));
+            setSheetOpen(true);
+        } else if (event.dealId) {
+            router.push(`/dashboard/deals/${event.dealId}`);
+        }
     };
 
     const handleDateClick = (info: any) => {
         setSelectedDate(info.date);
         setSheetOpen(true);
+    };
+
+    const renderEventContent = (eventInfo: any) => {
+        const isTodo = eventInfo.event.extendedProps.isTodo;
+        const isCompleted = eventInfo.event.extendedProps.isCompleted;
+        const bgColor = eventInfo.backgroundColor;
+
+        if (isTodo) {
+            return (
+                <div className={`flex w-full items-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-all shadow-sm border ${isCompleted
+                        ? 'bg-slate-50 text-slate-400 border-slate-200 line-through'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+                    }`}>
+                    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isCompleted ? 'bg-slate-300' : 'bg-[#64748b]'}`} />
+                    <span className="truncate">{eventInfo.event.title.replace('✓ ', '')}</span>
+                </div>
+            );
+        }
+
+        // Standard Event (Deliverable/Payment)
+        return (
+            <div
+                className="w-full px-2 py-1.5 rounded-md text-xs font-semibold text-white cursor-pointer shadow-sm truncate transition-opacity hover:opacity-90"
+                style={{ backgroundColor: bgColor }}
+            >
+                <span className="truncate">{eventInfo.event.title}</span>
+            </div>
+        );
     };
 
     return (
@@ -75,6 +135,7 @@ export default function CalendarPage() {
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
                     events={calendarEvents}
+                    eventContent={renderEventContent}
                     eventClick={handleEventClick}
                     dateClick={handleDateClick}
                     datesSet={(dateInfo) => {

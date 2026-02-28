@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TenantGuard } from '../../common/guards/tenant.guard';
@@ -12,6 +12,16 @@ export class NotificationsController {
     @Get()
     findAll(@TenantId() tenantId: string, @Request() req) {
         return this.notificationsService.findAll(tenantId, req.user.userId);
+    }
+
+    @Post('demo')
+    async createDemoNotification(@TenantId() tenantId: string, @Request() req) {
+        return this.notificationsService.create({
+            tenantId,
+            userId: req.user.userId,
+            title: "Parası Alınacak Anlaşma",
+            body: "Trendyol Anlaşmasının Parası Bugün Alınmalı!"
+        });
     }
 
     @Get('unread-count')

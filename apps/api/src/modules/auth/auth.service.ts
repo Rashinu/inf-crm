@@ -130,4 +130,42 @@ export class AuthService {
             throw new UnauthorizedException('Invalid refresh token');
         }
     }
+
+    async updateProfile(userId: string, tenantId: string, data: { email?: string; agencyName?: string; newPassword?: string; currentPassword?: string }) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId, tenantId },
+            include: { tenant: true },
+        });
+
+        if (!user) throw new UnauthorizedException();
+
+        if (data.newPassword && data.currentPassword) {
+            const isValid = await argon2.verify(user.passwordHash, data.currentPassword);
+            if (!isValid) throw new UnauthorizedException('Invalid current password');
+
+            const newHash = await argon2.hash(data.newPassword);
+            await this.prisma.user.update({
+                where: { id: userId },
+                data: { passwordHash: newHash },
+            });
+        }
+
+        if (data.email && data.email !== user.email) {
+            const duplicate = await this.prisma.user.findUnique({ where: { email: data.email } });
+            if (duplicate) throw new ConflictException('Email already in use');
+            await this.prisma.user.update({
+                where: { id: userId },
+                data: { email: data.email },
+            });
+        }
+
+        if (data.agencyName && data.agencyName !== user.tenant?.name) {
+            await this.prisma.tenant.update({
+                where: { id: tenantId },
+                data: { name: data.agencyName },
+            });
+        }
+
+        return { success: true };
+    }
 }

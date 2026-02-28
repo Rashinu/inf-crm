@@ -33,6 +33,7 @@ export default function CalendarTodoPanel({ date }: { date: Date | null }) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["calendar-todos", dateStr] });
+            queryClient.invalidateQueries({ queryKey: ["calendar-todos-global"] });
             setNewTodo("");
             toast.success("Todo added");
         }
@@ -44,6 +45,7 @@ export default function CalendarTodoPanel({ date }: { date: Date | null }) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["calendar-todos", dateStr] });
+            queryClient.invalidateQueries({ queryKey: ["calendar-todos-global"] });
         }
     });
 
@@ -53,6 +55,7 @@ export default function CalendarTodoPanel({ date }: { date: Date | null }) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["calendar-todos", dateStr] });
+            queryClient.invalidateQueries({ queryKey: ["calendar-todos-global"] });
             toast.success("Todo removed");
         }
     });
@@ -96,8 +99,8 @@ export default function CalendarTodoPanel({ date }: { date: Date | null }) {
                                 <button
                                     onClick={() => toggleMutation.mutate({ id: todo.id, isCompleted: !todo.isCompleted })}
                                     className={`flex-shrink-0 h-5 w-5 rounded-full border flex items-center justify-center transition-colors ${todo.isCompleted
-                                            ? 'bg-blue-600 border-blue-600 text-white'
-                                            : 'border-gray-300 text-transparent hover:border-blue-600'
+                                        ? 'bg-blue-600 border-blue-600 text-white'
+                                        : 'border-gray-300 text-transparent hover:border-blue-600'
                                         }`}
                                 >
                                     <Check className="h-3.5 w-3.5" />

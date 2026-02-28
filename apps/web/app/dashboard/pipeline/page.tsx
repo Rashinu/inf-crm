@@ -69,6 +69,14 @@ export default function PipelinePage() {
         },
     });
 
+    const { data: contacts } = useQuery<any[]>({
+        queryKey: ["contacts"],
+        queryFn: async () => {
+            const { data } = await apiClient.get("/contacts");
+            return data;
+        },
+    });
+
     const updateStageMutation = useMutation({
         mutationFn: async ({ id, stage }: { id: string; stage: DealStage }) => {
             return apiClient.patch(`/deals/${id}/stage`, { stage });
@@ -81,7 +89,8 @@ export default function PipelinePage() {
         },
     });
 
-    const { register, handleSubmit, reset, control, setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, control, setValue, watch, formState: { errors } } = useForm();
+    const selectedBrandId = watch("brandId");
 
     const analyzeContractMutation = useMutation({
         mutationFn: async (text: string) => {
@@ -211,13 +220,37 @@ export default function PipelinePage() {
                                         control={control}
                                         rules={{ required: "Brand is required" }}
                                         render={({ field }) => (
-                                            <Select onValueChange={field.onChange} value={field.value}>
+                                            <Select onValueChange={(val) => {
+                                                field.onChange(val);
+                                                setValue("contactId", ""); // Reset contact when brand changes
+                                            }} value={field.value}>
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Select brand" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {brands?.map((brand) => (
                                                         <SelectItem key={brand.id} value={brand.id}>{brand.name}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        )}
+                                    />
+                                    {errors.brandId && <p className="text-xs text-red-500">{errors.brandId.message as string}</p>}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label>Contact (Optional)</Label>
+                                    <Controller
+                                        name="contactId"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Select onValueChange={field.onChange} value={field.value} disabled={!selectedBrandId}>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder={selectedBrandId ? "Select contact" : "Select brand first"} />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {contacts?.filter((c: any) => c.brandId === selectedBrandId).map((contact) => (
+                                                        <SelectItem key={contact.id} value={contact.id}>{contact.name}</SelectItem>
                                                     ))}
                                                 </SelectContent>
                                             </Select>

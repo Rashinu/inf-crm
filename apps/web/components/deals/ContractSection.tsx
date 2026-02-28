@@ -95,9 +95,12 @@ export default function ContractSection({ dealId }: { dealId: string }) {
     if (isLoading) return <div>Loading...</div>;
 
     return (
-        <div className="space-y-4">
-            <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold font-outfit">Contracts & Files</h3>
+        <div className="space-y-6 bg-white p-6 md:p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h3 className="text-xl font-bold font-outfit text-slate-900 mb-1">Contracts & Briefs</h3>
+                    <p className="text-sm text-slate-500">Upload agreement files, strategy briefs, or relevant PDFs.</p>
+                </div>
                 <div>
                     <input
                         type="file"
@@ -107,7 +110,7 @@ export default function ContractSection({ dealId }: { dealId: string }) {
                         className="hidden"
                     />
                     <label htmlFor="contract-upload">
-                        <Button asChild size="sm" className="bg-purple-600 hover:bg-purple-700 cursor-pointer">
+                        <Button asChild className="bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-600/20 text-white rounded-xl transition-all font-semibold px-5 cursor-pointer">
                             <span><UploadCloud size={16} className="mr-2" /> Upload File</span>
                         </Button>
                     </label>
@@ -124,67 +127,86 @@ export default function ContractSection({ dealId }: { dealId: string }) {
                 </div>
             )}
 
-            <div className="grid gap-3">
+            <div className="grid gap-3 pt-2">
                 {contracts?.map((item) => (
-                    <Card key={item.id} className="border-none shadow-sm hover:ring-1 hover:ring-purple-100 transition-all">
-                        <CardContent className="p-4 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="p-2 bg-purple-50 text-purple-600 rounded-lg">
-                                    <FileText className="w-6 h-6" />
+                    <Card key={item.id} className="border border-slate-100 shadow-sm hover:shadow-md hover:border-purple-200 transition-all group overflow-hidden bg-white rounded-xl">
+                        <CardContent className="p-0">
+                            <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 gap-4">
+                                <div className="flex items-center gap-4 w-full md:w-auto">
+                                    <div className="p-3 bg-purple-50 text-purple-600 rounded-xl group-hover:scale-110 transition-transform">
+                                        <FileText className="w-6 h-6" />
+                                    </div>
+                                    <div className="overflow-hidden">
+                                        <p className="font-bold text-slate-800 truncate max-w-[200px] md:max-w-[300px] text-base font-outfit">
+                                            {item.fileName}
+                                        </p>
+                                        <p className="text-xs font-medium text-slate-400 mt-0.5">
+                                            Uploaded on {new Date(item.createdAt).toLocaleDateString()}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="font-medium text-gray-900 line-clamp-1 max-w-[200px] md:max-w-md">
-                                        {item.fileName}
-                                    </p>
-                                    <p className="text-xs text-gray-500">
-                                        {new Date(item.createdAt).toLocaleDateString()}
-                                    </p>
-                                </div>
-                            </div>
 
-                            <div className="flex items-center gap-3">
-                                <Select
-                                    value={item.status}
-                                    onValueChange={(val: ContractStatus) => updateStatusMutation.mutate({ id: item.id, status: val })}
-                                >
-                                    <SelectTrigger className="w-[120px] h-8 text-xs">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value={ContractStatus.NOT_SENT}>Not Sent</SelectItem>
-                                        <SelectItem value={ContractStatus.SENT}>Sent</SelectItem>
-                                        <SelectItem value={ContractStatus.SIGNED}>Signed</SelectItem>
-                                    </SelectContent>
-                                </Select>
-
-                                <div className="flex items-center gap-1 border-l pl-3 border-gray-100">
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-blue-600" title="Download">
-                                        <Download size={14} />
-                                    </Button>
-                                    {item.externalLink && (
-                                        <Button asChild variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-purple-600" title="External Link">
-                                            <a href={item.externalLink} target="_blank" rel="noreferrer">
-                                                <LinkIcon size={14} />
-                                            </a>
-                                        </Button>
-                                    )}
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-8 w-8 text-gray-500 hover:text-red-600"
-                                        title="Delete"
-                                        onClick={() => window.confirm("Are you sure?") && deleteMutation.mutate(item.id)}
+                                <div className="flex items-center justify-between w-full md:w-auto gap-4 bg-slate-50/50 md:bg-transparent p-2 md:p-0 rounded-lg">
+                                    <Select
+                                        value={item.status}
+                                        onValueChange={(val: ContractStatus) => updateStatusMutation.mutate({ id: item.id, status: val })}
                                     >
-                                        <Trash2 size={14} />
-                                    </Button>
+                                        <SelectTrigger className="w-[130px] h-9 text-xs font-bold border-slate-200 bg-white shadow-sm focus:ring-purple-500 rounded-lg">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent className="rounded-xl shadow-xl">
+                                            <SelectItem value={ContractStatus.NOT_SENT} className="font-medium">Not Sent</SelectItem>
+                                            <SelectItem value={ContractStatus.SENT} className="font-medium text-blue-600">Sent to Brand</SelectItem>
+                                            <SelectItem value={ContractStatus.SIGNED} className="font-bold text-emerald-600">Signed & Approved</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+
+                                    <div className="flex items-center gap-1">
+                                        {item.fileUrl ? (
+                                            <Button asChild variant="ghost" size="icon" className="h-9 w-9 shrink-0 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Download">
+                                                <a href={item.fileUrl} download={item.fileName} target="_blank" rel="noreferrer">
+                                                    <Download size={16} />
+                                                </a>
+                                            </Button>
+                                        ) : (
+                                            <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Download (Not Ready)">
+                                                <Download size={16} />
+                                            </Button>
+                                        )}
+
+                                        {item.externalLink && (
+                                            <Button asChild variant="ghost" size="icon" className="h-9 w-9 shrink-0 text-slate-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="External Link">
+                                                <a href={item.externalLink} target="_blank" rel="noreferrer">
+                                                    <LinkIcon size={16} />
+                                                </a>
+                                            </Button>
+                                        )}
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-9 w-9 shrink-0 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
+                                            title="Delete permanently"
+                                            onClick={() => {
+                                                if (confirm("Are you sure you want to permanently delete this file?")) {
+                                                    deleteMutation.mutate(item.id);
+                                                }
+                                            }}
+                                        >
+                                            <Trash2 size={16} />
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
                     </Card>
                 ))}
                 {contracts?.length === 0 && (
-                    <div className="text-center py-10 bg-gray-50 rounded-xl border-2 border-dashed border-gray-100">
-                        <p className="text-gray-400">No contracts uploaded yet.</p>
+                    <div className="text-center py-12 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200 mt-4">
+                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center border border-slate-100 shadow-sm mx-auto mb-3">
+                            <UploadCloud className="text-slate-400 h-5 w-5" />
+                        </div>
+                        <p className="text-slate-600 font-medium text-sm">No files uploaded yet.</p>
+                        <p className="text-slate-400 text-xs mt-1">Upload brief documents, NDAs, or contracts here.</p>
                     </div>
                 )}
             </div>
