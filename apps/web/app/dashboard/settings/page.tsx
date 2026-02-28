@@ -7,13 +7,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User, Building, Lock, Monitor, Image as ImageIcon, Camera } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
 
 export default function SettingsPage() {
     const [darkMode, setDarkMode] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+
+    // Initialize dark mode state from document / localstorage
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const isDark = document.documentElement.classList.contains('dark') || localStorage.theme === 'dark';
+            setDarkMode(isDark);
+        }
+    }, []);
 
     // Normally this would fetch from /auth/me or a settings config endpoint
     const { data: user } = useQuery<any>({
@@ -65,12 +73,15 @@ export default function SettingsPage() {
     };
 
     const handleThemeToggle = () => {
-        setDarkMode(!darkMode);
-        if (!darkMode) {
+        const willBeDark = !darkMode;
+        setDarkMode(willBeDark);
+        if (willBeDark) {
             document.documentElement.classList.add('dark');
-            toast.success("Dark Mode activated (Preview)");
+            localStorage.theme = 'dark';
+            toast.success("Dark Mode activated & saved");
         } else {
             document.documentElement.classList.remove('dark');
+            localStorage.theme = 'light';
             toast.success("Light Mode activated");
         }
     };
@@ -79,20 +90,20 @@ export default function SettingsPage() {
         <div className="space-y-8 max-w-5xl">
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-slate-900 font-outfit">Settings</h1>
-                    <p className="text-slate-500 mt-1 font-medium">Manage your agency profile, preferences, and account security.</p>
+                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white font-outfit">Settings</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Manage your agency profile, preferences, and account security.</p>
                 </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
                 {/* Profile Card */}
                 <div className="col-span-2 space-y-6">
-                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl overflow-hidden">
-                        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <User className="text-blue-600" size={20} /> Personal Profile
+                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 rounded-2xl overflow-hidden ring-1 ring-slate-100 dark:ring-slate-800">
+                        <CardHeader className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 pb-4">
+                            <CardTitle className="flex items-center gap-2 text-lg dark:text-slate-100">
+                                <User className="text-blue-600 dark:text-blue-400" size={20} /> Personal Profile
                             </CardTitle>
-                            <CardDescription>Update your photo and personal details.</CardDescription>
+                            <CardDescription className="dark:text-slate-400">Update your photo and personal details.</CardDescription>
                         </CardHeader>
                         <CardContent className="p-6 md:p-8">
                             <div className="flex flex-col sm:flex-row gap-8 mb-8 items-start">
@@ -103,57 +114,57 @@ export default function SettingsPage() {
                                     <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
                                         <Camera className="text-white" size={24} />
                                     </div>
-                                    <button className="absolute bottom-0 right-0 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-sm text-slate-600 hover:text-blue-600 transition-colors">
+                                    <button className="absolute bottom-0 right-0 w-8 h-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center shadow-sm text-slate-600 dark:text-slate-300 hover:text-blue-600 transition-colors">
                                         <ImageIcon size={14} />
                                     </button>
                                 </div>
                                 <div className="space-y-4 flex-1">
                                     <div className="space-y-1.5">
-                                        <Label className="text-slate-600 font-medium">Your Name</Label>
-                                        <Input disabled value={user?.fullName || "Loading..."} className="bg-slate-50 border-slate-200 shadow-none font-medium text-slate-500" />
+                                        <Label className="text-slate-600 dark:text-slate-300 font-medium">Your Name</Label>
+                                        <Input disabled value={user?.fullName || "Loading..."} className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-none font-medium text-slate-500 dark:text-slate-400" />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <Label className="text-slate-600 font-medium">Email Address</Label>
-                                        <Input name="email" value={formData.email} onChange={handleChange} className="border-slate-200 shadow-sm focus-visible:ring-blue-500 font-medium" />
+                                        <Label className="text-slate-600 dark:text-slate-300 font-medium">Email Address</Label>
+                                        <Input name="email" value={formData.email} onChange={handleChange} className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm focus-visible:ring-blue-500 font-medium" />
                                     </div>
                                 </div>
                             </div>
 
-                            <hr className="border-slate-100 mb-8" />
+                            <hr className="border-slate-100 dark:border-slate-800 mb-8" />
 
                             <div className="space-y-4 mb-8">
-                                <h4 className="font-bold text-slate-800 flex items-center gap-2">
-                                    <Building size={18} className="text-indigo-500" /> Agency / Workspace
+                                <h4 className="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                                    <Building size={18} className="text-indigo-500 dark:text-indigo-400" /> Agency / Workspace
                                 </h4>
                                 <div className="space-y-1.5">
-                                    <Label className="text-slate-600 font-medium">Agency Name</Label>
-                                    <Input name="agencyName" value={formData.agencyName} onChange={handleChange} className="border-slate-200 shadow-sm focus-visible:ring-indigo-500 font-medium" />
+                                    <Label className="text-slate-600 dark:text-slate-300 font-medium">Agency Name</Label>
+                                    <Input name="agencyName" value={formData.agencyName} onChange={handleChange} className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm focus-visible:ring-indigo-500 font-medium" />
                                 </div>
                             </div>
 
-                            <Button onClick={handleSaveProfile} disabled={isSaving} className="bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] rounded-xl font-bold px-8">
+                            <Button onClick={handleSaveProfile} disabled={isSaving} className="bg-slate-900 dark:bg-blue-600 text-white hover:bg-slate-800 dark:hover:bg-blue-700 transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] rounded-xl font-bold px-8">
                                 {isSaving ? "Saving..." : "Save Profile Changes"}
                             </Button>
                         </CardContent>
                     </Card>
 
-                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl overflow-hidden">
-                        <CardHeader className="bg-slate-50/50 border-b border-slate-100 pb-4">
-                            <CardTitle className="flex items-center gap-2 text-lg">
-                                <Lock className="text-rose-500" size={20} /> Security & Passwords
+                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 rounded-2xl overflow-hidden ring-1 ring-slate-100 dark:ring-slate-800">
+                        <CardHeader className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 pb-4">
+                            <CardTitle className="flex items-center gap-2 text-lg dark:text-slate-100">
+                                <Lock className="text-rose-500 dark:text-rose-400" size={20} /> Security & Passwords
                             </CardTitle>
-                            <CardDescription>Ensure your account remains safe.</CardDescription>
+                            <CardDescription className="dark:text-slate-400">Ensure your account remains safe.</CardDescription>
                         </CardHeader>
                         <CardContent className="p-6 md:p-8 space-y-6">
                             <div className="space-y-1.5">
-                                <Label className="text-slate-600 font-medium">Current Password</Label>
-                                <Input type="password" name="currentPassword" value={formData.currentPassword} onChange={handleChange} placeholder="Enter your current password" className="border-slate-200 shadow-sm" />
+                                <Label className="text-slate-600 dark:text-slate-300 font-medium">Current Password</Label>
+                                <Input type="password" name="currentPassword" value={formData.currentPassword} onChange={handleChange} placeholder="Enter your current password" className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm" />
                             </div>
                             <div className="space-y-1.5">
-                                <Label className="text-slate-600 font-medium">New Password</Label>
-                                <Input type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} placeholder="Enter your new password" className="border-slate-200 shadow-sm" />
+                                <Label className="text-slate-600 dark:text-slate-300 font-medium">New Password</Label>
+                                <Input type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} placeholder="Enter your new password" className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm" />
                             </div>
-                            <Button onClick={handleSavePassword} disabled={!formData.currentPassword || !formData.newPassword || isSaving} className="bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 transition-all rounded-xl font-bold px-8">
+                            <Button onClick={handleSavePassword} disabled={!formData.currentPassword || !formData.newPassword || isSaving} className="bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 border border-rose-200 dark:border-rose-800 transition-all rounded-xl font-bold px-8">
                                 Update Password
                             </Button>
                         </CardContent>
@@ -162,7 +173,7 @@ export default function SettingsPage() {
 
                 {/* Sidebar Cards */}
                 <div className="space-y-6">
-                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl overflow-hidden bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none rounded-2xl overflow-hidden bg-gradient-to-b from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 text-white ring-1 ring-slate-800">
                         <CardHeader className="pb-4">
                             <CardTitle className="flex items-center gap-2 text-lg text-white">
                                 <Monitor size={20} className="text-blue-400" /> Preferences
