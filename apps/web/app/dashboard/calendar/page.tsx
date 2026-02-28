@@ -101,10 +101,10 @@ export default function CalendarPage() {
         if (isTodo) {
             return (
                 <div className={`flex w-full items-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-medium cursor-pointer transition-all shadow-sm border ${isCompleted
-                        ? 'bg-slate-50 text-slate-400 border-slate-200 line-through'
-                        : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'
+                    ? 'bg-slate-50 dark:bg-slate-800/50 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-700/50 line-through'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                     }`}>
-                    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isCompleted ? 'bg-slate-300' : 'bg-[#64748b]'}`} />
+                    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${isCompleted ? 'bg-slate-300 dark:bg-slate-600' : 'bg-[#64748b] dark:bg-slate-400'}`} />
                     <span className="truncate">{eventInfo.event.title.replace('✓ ', '')}</span>
                 </div>
             );
@@ -125,12 +125,12 @@ export default function CalendarPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 font-outfit">Calendar</h1>
-                    <p className="text-gray-500 mt-1">Track upcoming deliverables and payments.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Calendar</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">Track upcoming deliverables and payments.</p>
                 </div>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border-none ring-1 ring-slate-100 dark:ring-slate-800">
                 <FullCalendar
                     plugins={[dayGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
