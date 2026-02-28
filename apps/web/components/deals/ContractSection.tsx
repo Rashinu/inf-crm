@@ -5,17 +5,20 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "@/lib/api-client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Download, UploadCloud, Link as LinkIcon, Trash2 } from "lucide-react";
+import { FileText, Download, UploadCloud, Link as LinkIcon, Trash2, Wand2, Printer } from "lucide-react";
 import { toast } from "sonner";
 import { ContractStatus } from "@inf-crm/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import axios from "axios";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 
 export default function ContractSection({ dealId }: { dealId: string }) {
     const queryClient = useQueryClient();
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
+    const [showPdfModal, setShowPdfModal] = useState(false);
+    const [contractTemplate, setContractTemplate] = useState('');
 
     const { data: contracts, isLoading } = useQuery<any[]>({
         queryKey: ["contracts", dealId],
@@ -45,6 +48,43 @@ export default function ContractSection({ dealId }: { dealId: string }) {
             toast.success("Contract deleted");
         },
     });
+
+    const generatePdfMutation = useMutation({
+        mutationFn: async () => {
+            const { data } = await apiClient.get(`/contracts/generate/${dealId}`);
+            return data.content;
+        },
+        onSuccess: (content) => {
+            setContractTemplate(content);
+            setShowPdfModal(true);
+        },
+        onError: () => toast.error("Failed to generate smart contract"),
+    });
+
+    const handlePrintPdf = () => {
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Print Contract</title>
+                    <style>
+                        body { font-family: 'Helvetica', 'Arial', sans-serif; padding: 40px; line-height: 1.6; color: #333; }
+                        h1 { font-size: 24px; text-align: center; margin-bottom: 30px; }
+                        strong { font-weight: bold; }
+                        pre { white-space: pre-wrap; font-family: inherit; }
+                    </style>
+                </head>
+                <body>
+                    <pre>${contractTemplate}</pre>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+    };
 
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -101,19 +141,30 @@ export default function ContractSection({ dealId }: { dealId: string }) {
                     <h3 className="text-xl font-bold font-outfit text-slate-900 mb-1">Contracts & Briefs</h3>
                     <p className="text-sm text-slate-500">Upload agreement files, strategy briefs, or relevant PDFs.</p>
                 </div>
-                <div>
-                    <input
-                        type="file"
-                        id="contract-upload"
-                        onChange={handleFileUpload}
-                        accept=".pdf,.doc,.docx"
-                        className="hidden"
-                    />
-                    <label htmlFor="contract-upload">
-                        <Button asChild className="bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-600/20 text-white rounded-xl transition-all font-semibold px-5 cursor-pointer">
-                            <span><UploadCloud size={16} className="mr-2" /> Upload File</span>
-                        </Button>
-                    </label>
+                <div className="flex items-center gap-3">
+                    <Button
+                        onClick={() => generatePdfMutation.mutate()}
+                        disabled={generatePdfMutation.isPending}
+                        variant="outline"
+                        className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-semibold px-4 rounded-xl"
+                    >
+                        {generatePdfMutation.isPending ? "Generating..." : <><Wand2 size={16} className="mr-2" /> AI Smart PDF</>}
+                    </Button>
+
+                    <div>
+                        <input
+                            type="file"
+                            id="contract-upload"
+                            onChange={handleFileUpload}
+                            accept=".pdf,.doc,.docx"
+                            className="hidden"
+                        />
+                        <label htmlFor="contract-upload">
+                            <Button asChild className="bg-purple-600 hover:bg-purple-700 shadow-lg shadow-purple-600/20 text-white rounded-xl transition-all font-semibold px-5 cursor-pointer">
+                                <span><UploadCloud size={16} className="mr-2" /> Upload File</span>
+                            </Button>
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -210,6 +261,29 @@ export default function ContractSection({ dealId }: { dealId: string }) {
                     </div>
                 )}
             </div>
+
+            <Dialog open={showPdfModal} onOpenChange={setShowPdfModal}>
+                <DialogContent className="max-w-3xl h-[80vh] flex flex-col bg-slate-50 border-slate-200">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl flex items-center gap-2">
+                            <FileText className="text-indigo-600" /> Auto-Generated Smart Contract
+                        </DialogTitle>
+                        <DialogDescription>Review the generated contract based on the deal details. You can export it as PDF and sign it.</DialogDescription>
+                    </DialogHeader>
+
+                    <div className="flex-1 overflow-y-auto p-6 bg-white border border-slate-200 shadow-inner rounded-xl font-mono text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                        {contractTemplate}
+                    </div>
+
+                    <DialogFooter className="mt-4">
+                        <Button variant="outline" onClick={() => setShowPdfModal(false)} className="rounded-xl font-semibold">Cancel</Button>
+                        <Button onClick={handlePrintPdf} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md gap-2 font-bold">
+                            <Printer size={16} /> Print / Save as PDF
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
         </div>
     );
 }

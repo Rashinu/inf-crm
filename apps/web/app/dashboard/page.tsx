@@ -9,7 +9,9 @@ import {
     CheckCircle2,
     Clock,
     DollarSign,
-    Package
+    Package,
+    TrendingUp,
+    Briefcase
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -45,8 +47,72 @@ export default function DashboardPage() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Overview</h1>
-                <p className="text-gray-500 dark:text-slate-400 mt-1">Here is the summary of your pipeline and tasks.</p>
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Patron Panel</h1>
+                <p className="text-gray-500 dark:text-slate-400 mt-1">High-level financial and pipeline metrics for executive review.</p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-gradient-to-br from-blue-600 to-blue-800 ring-1 ring-slate-100 dark:ring-slate-800 text-white">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium text-blue-100 flex items-center gap-2">
+                            <DollarSign className="w-4 h-4" />
+                            Monthly Revenue
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div>
+                            <h3 className="text-3xl font-bold">₺{summary?.advanced?.monthlyRevenue?.toLocaleString() || '0'}</h3>
+                            <p className="text-xs text-blue-200 mt-1">Total revenue collected this month</p>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
+                            <Briefcase className="w-4 h-4 text-purple-500" />
+                            Active Pipeline Value
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div>
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">₺{summary?.advanced?.activePipelineValue?.toLocaleString() || '0'}</h3>
+                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Across {summary?.advanced?.activeDealsCount || 0} active deals</p>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4 text-green-500" />
+                            Win Rate
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div>
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">% {summary?.advanced?.winRate || '0'}</h3>
+                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Percentage of won deals</p>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
+                            <AlertCircle className="w-4 h-4 text-red-500 dark:text-red-400" />
+                            Overdue Payments
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div>
+                            <h3 className="text-2xl font-bold text-red-600 dark:text-red-400">
+                                ₺{summary?.overduePayments?.totalAmount?.toLocaleString() || '0'}
+                            </h3>
+                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Across {summary?.overduePayments?.count || 0} invoices</p>
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -74,21 +140,15 @@ export default function DashboardPage() {
                 <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
-                            <AlertCircle className="w-4 h-4 text-red-500 dark:text-red-400" />
-                            Overdue Payments
+                            <Clock className="w-4 h-4 text-orange-500" />
+                            Weekly Deliverables Overview
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-end">
                             <div>
-                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{summary?.overduePayments.count}</h3>
-                                <p className="text-xs text-gray-500 dark:text-slate-400">Overdue Invoices</p>
-                            </div>
-                            <div className="text-right">
-                                <h3 className="text-2xl font-bold text-red-600 dark:text-red-400">
-                                    ₺{summary?.overduePayments.totalAmount.toLocaleString()}
-                                </h3>
-                                <p className="text-xs text-gray-500 dark:text-slate-400">Total Amount</p>
+                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{summary?.todayTasks.deliverablesDue}</h3>
+                                <p className="text-xs text-gray-500 dark:text-slate-400">Deliverables Due Today</p>
                             </div>
                         </div>
                     </CardContent>

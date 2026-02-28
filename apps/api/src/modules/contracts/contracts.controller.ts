@@ -19,6 +19,11 @@ export class ContractsController {
         return this.contractsService.create(tenantId, dealId, body);
     }
 
+    @Get('generate/:dealId')
+    generateAutoContract(@TenantId() tenantId: string, @Param('dealId') dealId: string) {
+        return this.contractsService.generateAutoContract(tenantId, dealId);
+    }
+
     @Get('deal/:dealId')
     findAll(@TenantId() tenantId: string, @Param('dealId') dealId: string) {
         return this.contractsService.findAll(tenantId, dealId);

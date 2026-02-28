@@ -18,7 +18,7 @@ export class DashboardService {
             where: {
                 tenantId,
                 dueDate: { gte: startOfToday, lte: endOfToday },
-                status: { not: DeliverableStatus.DONE as any } // Cast for Prisma schema matching enum
+                status: { not: DeliverableStatus.DONE as any }
             }
         });
 
@@ -47,6 +47,45 @@ export class DashboardService {
             include: { deal: { select: { title: true } } }
         });
 
+        // Advanced Metrics (Patron Paneli)
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
+
+        // 1. Monthly Revenue (Payments PAID this month) // Using createdAt or updatedAt as proxy for when it was paid if we don't have paidAt
+        const monthlyPayments = await this.prisma.payment.findMany({
+            where: {
+                tenantId,
+                status: PaymentStatus.PAID as any,
+                updatedAt: { gte: startOfMonth, lte: endOfMonth }
+            }
+        });
+        const monthlyRevenue = monthlyPayments.reduce((sum, p) => sum + Number(p.amount), 0);
+
+        // 2. Active Pipeline Value
+        const activeDeals = await this.prisma.deal.findMany({
+            where: {
+                tenantId,
+                stage: { notIn: ['COMPLETED', 'LOST', 'CANCELLED'] }
+            }
+        });
+        const activePipelineValue = activeDeals.reduce((sum, d) => sum + Number(d.totalAmount), 0);
+        const activeDealsCount = activeDeals.length;
+
+        // 3. Win Rate
+        const totalClosedDeals = await this.prisma.deal.count({
+            where: {
+                tenantId,
+                stage: { in: ['COMPLETED', 'LOST', 'CANCELLED'] }
+            }
+        });
+        const wonDeals = await this.prisma.deal.count({
+            where: {
+                tenantId,
+                stage: 'COMPLETED'
+            }
+        });
+        const winRate = totalClosedDeals > 0 ? Math.round((wonDeals / totalClosedDeals) * 100) : 0;
+
         return {
             todayTasks: {
                 deliverablesDue: deliverablesDueToday,
@@ -55,6 +94,12 @@ export class DashboardService {
             overduePayments: {
                 count: overduePaymentsCount,
                 totalAmount: overduePaymentsAmount,
+            },
+            advanced: {
+                monthlyRevenue,
+                activePipelineValue,
+                activeDealsCount,
+                winRate
             },
             recentActivity
         };
