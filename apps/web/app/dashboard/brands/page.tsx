@@ -83,8 +83,8 @@ export default function BrandsPage() {
         <div className="space-y-8">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 font-outfit">Brands</h1>
-                    <p className="text-gray-500 mt-1">Manage all brands and companies you work with.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Brands</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">Manage all brands and companies you work with.</p>
                 </div>
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
@@ -119,15 +119,15 @@ export default function BrandsPage() {
                 </Dialog>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-gray-100 dark:border-slate-800 overflow-hidden">
                 <Table>
                     <TableHeader>
-                        <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
-                            <TableHead className="font-semibold text-gray-900">Brand Name</TableHead>
-                            <TableHead className="font-semibold text-gray-900">Website</TableHead>
-                            <TableHead className="font-semibold text-gray-900 text-center">Contacts</TableHead>
-                            <TableHead className="font-semibold text-gray-900 text-center">Deals</TableHead>
-                            <TableHead className="font-semibold text-gray-900 text-right">Actions</TableHead>
+                        <TableRow className="bg-gray-50/50 dark:bg-slate-800/50 border-gray-100 dark:border-slate-800 hover:bg-gray-50/50 dark:hover:bg-slate-800/50">
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Brand Name</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Website</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-center">Contacts</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-center">Deals</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -147,17 +147,17 @@ export default function BrandsPage() {
                             brands.map((brand) => (
                                 <TableRow
                                     key={brand.id}
-                                    className="cursor-pointer hover:bg-gray-50"
+                                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800/30 border-gray-100 dark:border-slate-800"
                                     onClick={() => router.push(`/dashboard/brands/${brand.id}`)}
                                 >
-                                    <TableCell className="font-medium text-gray-900">{brand.name}</TableCell>
+                                    <TableCell className="font-medium text-gray-900 dark:text-white">{brand.name}</TableCell>
                                     <TableCell>
                                         {brand.website ? (
                                             <a
                                                 href={brand.website.startsWith('http') ? brand.website : `https://${brand.website}`}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="flex items-center text-blue-600 hover:underline gap-1.5 text-sm"
+                                                className="flex items-center text-blue-600 dark:text-blue-400 hover:underline gap-1.5 text-sm"
                                             >
                                                 <Globe size={14} />
                                                 {(() => {
@@ -170,15 +170,15 @@ export default function BrandsPage() {
                                                 <ExternalLink size={12} />
                                             </a>
                                         ) : (
-                                            <span className="text-gray-400 text-sm">-</span>
+                                            <span className="text-gray-400 dark:text-slate-500 text-sm">-</span>
                                         )}
                                     </TableCell>
-                                    <TableCell className="text-center font-medium">{brand._count?.contacts || 0}</TableCell>
-                                    <TableCell className="text-center font-medium">{brand._count?.deals || 0}</TableCell>
+                                    <TableCell className="text-center font-medium dark:text-slate-300">{brand._count?.contacts || 0}</TableCell>
+                                    <TableCell className="text-center font-medium dark:text-slate-300">{brand._count?.deals || 0}</TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                <Button variant="ghost" size="icon" className="h-8 w-8 dark:text-slate-400">
                                                     <MoreVertical size={16} />
                                                 </Button>
                                             </DropdownMenuTrigger>

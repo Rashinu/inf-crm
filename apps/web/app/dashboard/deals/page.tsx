@@ -48,21 +48,21 @@ export default function DealsPage() {
         <div className="space-y-8">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 font-outfit">Deals</h1>
-                    <p className="text-gray-500 mt-1">Full list of all active and past collaborations.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Deals</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">Full list of all active and past collaborations.</p>
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-gray-100 dark:border-slate-800 overflow-hidden">
                 <Table>
                     <TableHeader>
-                        <TableRow className="bg-gray-50/50 hover:bg-gray-50/50">
-                            <TableHead className="font-semibold text-gray-900">Title</TableHead>
-                            <TableHead className="font-semibold text-gray-900">Brand</TableHead>
-                            <TableHead className="font-semibold text-gray-900">Stage</TableHead>
-                            <TableHead className="font-semibold text-gray-900">Value</TableHead>
-                            <TableHead className="font-semibold text-gray-900">Platform</TableHead>
-                            <TableHead className="font-semibold text-gray-900 text-right">Actions</TableHead>
+                        <TableRow className="bg-gray-50/50 dark:bg-slate-800/50 border-gray-100 dark:border-slate-800 hover:bg-gray-50/50 dark:hover:bg-slate-800/50">
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Title</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Brand</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Stage</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Value</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Platform</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -80,24 +80,24 @@ export default function DealsPage() {
                             </TableRow>
                         ) : (
                             deals?.map((deal) => (
-                                <TableRow key={deal.id}>
-                                    <TableCell className="font-medium text-gray-900">{deal.title}</TableCell>
-                                    <TableCell className="text-gray-600">{deal.brand?.name}</TableCell>
+                                <TableRow key={deal.id} className="border-gray-100 dark:border-slate-800 dark:hover:bg-slate-800/30">
+                                    <TableCell className="font-medium text-gray-900 dark:text-white">{deal.title}</TableCell>
+                                    <TableCell className="text-gray-600 dark:text-slate-400">{deal.brand?.name}</TableCell>
                                     <TableCell>
-                                        <Badge variant="outline" className="capitalize">
+                                        <Badge variant="outline" className="capitalize dark:border-slate-700 dark:text-slate-300">
                                             {deal.stage.toLowerCase()}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="font-medium">₺{deal.totalAmount?.toLocaleString()}</TableCell>
+                                    <TableCell className="font-medium dark:text-white">₺{deal.totalAmount?.toLocaleString()}</TableCell>
                                     <TableCell>
-                                        <Badge className="bg-gray-100 text-gray-600 hover:bg-gray-100 border-none">
+                                        <Badge className="bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 border-none">
                                             {deal.platform}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                <Button variant="ghost" size="icon" className="h-8 w-8 dark:text-slate-400">
                                                     <MoreVertical size={16} />
                                                 </Button>
                                             </DropdownMenuTrigger>

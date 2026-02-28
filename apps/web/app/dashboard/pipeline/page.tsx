@@ -165,8 +165,8 @@ export default function PipelinePage() {
         <div className="space-y-8 h-full">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 font-outfit">Deal Pipeline</h1>
-                    <p className="text-gray-500 mt-1">Manage your collaborations and track progress.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Deal Pipeline</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">Manage your collaborations and track progress.</p>
                 </div>
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
@@ -302,8 +302,8 @@ export default function PipelinePage() {
                             <div key={stage.id} className="flex flex-col w-80 shrink-0">
                                 <div className="flex items-center justify-between mb-4 px-1">
                                     <div className="flex items-center gap-2">
-                                        <h2 className="font-semibold text-gray-900">{stage.title}</h2>
-                                        <Badge variant="secondary" className="bg-gray-200/50 text-gray-600">
+                                        <h2 className="font-semibold text-gray-900 dark:text-white">{stage.title}</h2>
+                                        <Badge variant="secondary" className="bg-gray-200/50 dark:bg-slate-800 text-gray-600 dark:text-slate-400">
                                             {stageDeals.length}
                                         </Badge>
                                     </div>
@@ -314,7 +314,7 @@ export default function PipelinePage() {
                                         <div
                                             {...provided.droppableProps}
                                             ref={provided.innerRef}
-                                            className="flex-1 bg-gray-100/50 border border-dashed border-gray-200 rounded-xl p-3 min-h-[400px]"
+                                            className="flex-1 bg-gray-100/50 dark:bg-slate-800/30 border border-dashed border-gray-200 dark:border-slate-700/50 rounded-xl p-3 min-h-[400px]"
                                         >
                                             {stageDeals.map((deal, index) => (
                                                 <Draggable key={deal.id} draggableId={deal.id} index={index}>
@@ -324,21 +324,21 @@ export default function PipelinePage() {
                                                             {...provided.draggableProps}
                                                             {...provided.dragHandleProps}
                                                             onClick={() => router.push(`/dashboard/deals/${deal.id}`)}
-                                                            className="mb-3 border-none shadow-sm hover:shadow-md transition-shadow cursor-pointer bg-white"
+                                                            className="mb-3 border-none shadow-sm hover:shadow-md dark:shadow-none dark:ring-1 dark:ring-slate-700 transition-shadow cursor-pointer bg-white dark:bg-slate-900 dark:hover:bg-slate-800"
                                                         >
                                                             <CardContent className="p-4 space-y-3">
                                                                 <div className="flex justify-between items-start">
-                                                                    <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-50 border-none font-semibold text-[10px]">
+                                                                    <Badge className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-50 border-none font-semibold text-[10px]">
                                                                         {deal.brand?.name}
                                                                     </Badge>
-                                                                    <span className="text-xs text-gray-400 font-medium">₺{deal.totalAmount?.toLocaleString()}</span>
+                                                                    <span className="text-xs text-gray-400 dark:text-slate-500 font-medium">₺{deal.totalAmount?.toLocaleString()}</span>
                                                                 </div>
-                                                                <h3 className="font-semibold text-gray-900 text-sm leading-tight">
+                                                                <h3 className="font-semibold text-gray-900 dark:text-slate-100 text-sm leading-tight">
                                                                     {deal.title}
                                                                 </h3>
-                                                                <div className="flex items-center gap-2 pt-1 border-t border-gray-50 mt-2">
+                                                                <div className="flex items-center gap-2 pt-1 border-t border-gray-50 dark:border-slate-800 mt-2">
                                                                     {getPlatformIcon(deal.platform as Platform)}
-                                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                                                    <span className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider">
                                                                         {deal.platform}
                                                                     </span>
                                                                 </div>

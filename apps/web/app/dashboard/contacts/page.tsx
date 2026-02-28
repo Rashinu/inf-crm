@@ -88,8 +88,8 @@ export default function ContactsPage() {
         <div className="space-y-8">
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-slate-900 font-outfit">Contacts Network</h1>
-                    <p className="text-slate-500 mt-1 font-medium">Manage and connect with your brand representatives directly.</p>
+                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white font-outfit">Contacts Network</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Manage and connect with your brand representatives directly.</p>
                 </div>
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
@@ -159,7 +159,7 @@ export default function ContactsPage() {
 
             {/* Premium Metric Cards */}
             <div className="grid gap-6 md:grid-cols-3">
-                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-gradient-to-br from-indigo-500 to-indigo-600 text-white relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-2xl">
+                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-gradient-to-br from-indigo-500 to-indigo-600 text-white relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-2xl ring-1 ring-slate-100/10 dark:ring-slate-800">
                     <div className="absolute -right-4 -top-4 opacity-10 group-hover:opacity-20 transition-opacity">
                         <Users size={120} />
                     </div>
@@ -178,32 +178,32 @@ export default function ContactsPage() {
                     </CardContent>
                 </Card>
 
-                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-2xl">
-                    <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-2xl ring-1 ring-slate-100 dark:ring-slate-800">
+                    <div className="absolute -right-4 -top-4 opacity-[0.03] dark:opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
                         <Building2 size={120} />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-                            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                        <CardTitle className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
                                 <Building2 size={16} />
                             </div>
                             Active Brands
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-4xl font-black font-outfit tracking-tight text-slate-900 mt-1">
+                        <div className="text-4xl font-black font-outfit tracking-tight text-slate-900 dark:text-white mt-1">
                             {brands?.length || 0}
                         </div>
                     </CardContent>
                 </Card>
 
-                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-2xl">
-                    <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 rounded-2xl ring-1 ring-slate-100 dark:ring-slate-800">
+                    <div className="absolute -right-4 -top-4 opacity-[0.03] dark:opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
                         <Fingerprint size={120} />
                     </div>
                     <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-                            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+                        <CardTitle className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <div className="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg">
                                 <Fingerprint size={16} />
                             </div>
                             Network Health
@@ -220,18 +220,18 @@ export default function ContactsPage() {
                 </Card>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-none overflow-hidden">
-                <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-white">
-                    <h2 className="font-bold text-xl text-slate-900 font-outfit">Contact Directory</h2>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border-none overflow-hidden ring-1 ring-slate-100 dark:ring-slate-800">
+                <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
+                    <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">Contact Directory</h2>
                 </div>
                 <Table>
-                    <TableHeader className="bg-slate-50 border-b border-slate-100">
-                        <TableRow className="hover:bg-slate-50 border-none">
-                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4">Name</TableHead>
-                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4">Brand</TableHead>
-                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4">Contact Info</TableHead>
-                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4">Position</TableHead>
-                            <TableHead className="font-bold text-slate-500 uppercase tracking-wider text-xs py-4 text-right">Actions</TableHead>
+                    <TableHeader className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                        <TableRow className="hover:bg-slate-50 dark:hover:bg-slate-800 border-none">
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Name</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Brand</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Contact Info</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Position</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4 text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -249,10 +249,10 @@ export default function ContactsPage() {
                             </TableRow>
                         ) : (
                             contacts.map((contact) => (
-                                <TableRow key={contact.id}>
-                                    <TableCell className="font-medium text-slate-900 py-4">
+                                <TableRow key={contact.id} className="border-slate-100 dark:border-slate-800 dark:hover:bg-slate-800/30">
+                                    <TableCell className="font-medium text-slate-900 dark:text-slate-200 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-sm ${contact.brand?.name ? 'bg-indigo-50 text-indigo-700 border border-indigo-100' : 'bg-slate-100 text-slate-600'
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-sm ${contact.brand?.name ? 'bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-800' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
                                                 }`}>
                                                 {contact.name.charAt(0).toUpperCase()}
                                             </div>
@@ -263,37 +263,37 @@ export default function ContactsPage() {
                                     </TableCell>
                                     <TableCell className="py-4">
                                         {contact.brand?.name ? (
-                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100">
+                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-100 dark:border-blue-800">
                                                 {contact.brand.name}
                                             </span>
                                         ) : (
-                                            <span className="text-slate-400 italic text-sm">No Brand</span>
+                                            <span className="text-slate-400 dark:text-slate-500 italic text-sm">No Brand</span>
                                         )}
                                     </TableCell>
                                     <TableCell className="py-4">
                                         <div className="space-y-1.5 cursor-default">
                                             {contact.email ? (
-                                                <div className="flex items-center gap-2 text-sm text-slate-600 hover:text-indigo-600 transition-colors">
-                                                    <div className="p-1 bg-slate-50 rounded-md text-slate-400"><Mail size={12} /></div>
+                                                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                                                    <div className="p-1 bg-slate-50 dark:bg-slate-800 rounded-md text-slate-400 dark:text-slate-500"><Mail size={12} /></div>
                                                     {contact.email}
                                                 </div>
                                             ) : null}
                                             {contact.phone ? (
-                                                <div className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 transition-colors">
-                                                    <div className="p-1 bg-slate-50 rounded-md text-slate-400"><Phone size={12} /></div>
+                                                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                                                    <div className="p-1 bg-slate-50 dark:bg-slate-800 rounded-md text-slate-400 dark:text-slate-500"><Phone size={12} /></div>
                                                     {contact.phone}
                                                 </div>
                                             ) : null}
                                         </div>
                                     </TableCell>
-                                    <TableCell className="text-sm font-semibold text-slate-500 py-4">
+                                    <TableCell className="text-sm font-semibold text-slate-500 dark:text-slate-400 py-4">
                                         {contact.position || <span className="opacity-50">-</span>}
                                     </TableCell>
                                     <TableCell className="text-right py-4">
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="text-rose-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors"
+                                            className="text-rose-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-xl transition-colors"
                                             onClick={() => {
                                                 if (confirm("Are you sure you want to remove this contact?")) {
                                                     deleteMutation.mutate(contact.id);
