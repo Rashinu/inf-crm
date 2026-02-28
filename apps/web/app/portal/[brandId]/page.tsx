@@ -1,18 +1,21 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import apiClient from "@/lib/api-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Building2, Package, CheckCircle2, AlertCircle, Clock, CalendarDays, Wallet } from "lucide-react";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 export default function ClientPortalPage() {
     const params = useParams();
     const searchParams = useSearchParams();
     const brandId = params.brandId as string;
     const accessKey = searchParams.get('key');
+    const queryClient = useQueryClient();
 
     const { data: brand, isLoading, isError } = useQuery<any>({
         queryKey: ["portal", brandId, accessKey],
@@ -20,7 +23,21 @@ export default function ClientPortalPage() {
             const { data } = await apiClient.get(`/portal/brands/${brandId}?key=${accessKey}`);
             return data;
         },
-        retry: false, // Don't keep retrying if unauthorised
+        retry: false,
+    });
+
+    const approveMutation = useMutation({
+        mutationFn: async (deliverableId: string) => {
+            const { data } = await apiClient.post(`/portal/brands/${brandId}/deliverables/${deliverableId}/approve?key=${accessKey}`);
+            return data;
+        },
+        onSuccess: () => {
+            toast.success("Deliverable approved successfully!");
+            queryClient.invalidateQueries({ queryKey: ["portal", brandId, accessKey] });
+        },
+        onError: () => {
+            toast.error("Failed to approve deliverable.");
+        }
     });
 
     if (isLoading) {
@@ -193,10 +210,18 @@ export default function ClientPortalPage() {
                                                                         {deliv.description && <p className="text-xs text-slate-500">{deliv.description}</p>}
                                                                     </div>
                                                                 </div>
-                                                                <div className="text-right">
-                                                                    {deliv.status === 'DONE' && <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-none font-bold scale-90">DONE</Badge>}
-                                                                    {deliv.dueDate && deliv.status !== 'DONE' && (
-                                                                        <span className="text-xs text-slate-500 flex items-center gap-1"><CalendarDays size={12} /> {format(new Date(deliv.dueDate), 'MMM d')}</span>
+                                                                <div className="text-right flex items-center gap-3">
+                                                                    {deliv.status === 'DONE' ? (
+                                                                        <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-none font-bold scale-90">APPROVED</Badge>
+                                                                    ) : (
+                                                                        <Button
+                                                                            size="sm"
+                                                                            className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm text-xs h-8 px-3 rounded-lg"
+                                                                            onClick={() => approveMutation.mutate(deliv.id)}
+                                                                            disabled={approveMutation.isPending}
+                                                                        >
+                                                                            Approve
+                                                                        </Button>
                                                                     )}
                                                                 </div>
                                                             </div>
@@ -233,8 +258,8 @@ export default function ClientPortalPage() {
                                                             <p className="text-xs font-medium text-slate-500 truncate max-w-[150px]">{payment.dealTitle}</p>
                                                         </div>
                                                         <Badge className={`border-none ${payment.status === 'PAID' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' :
-                                                                payment.status === 'OVERDUE' ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' :
-                                                                    'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400'
+                                                            payment.status === 'OVERDUE' ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' :
+                                                                'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400'
                                                             }`}>
                                                             {payment.status}
                                                         </Badge>

@@ -39,4 +39,13 @@ export class DealsController {
     remove(@TenantId() tenantId: string, @Param('id') id: string) {
         return this.dealsService.remove(tenantId, id);
     }
+
+    @Post(':id/communications')
+    sendCommunication(
+        @TenantId() tenantId: string,
+        @Param('id') id: string,
+        @Body() dto: { type: 'EMAIL' | 'WHATSAPP'; message: string },
+    ) {
+        return this.dealsService.sendCommunication(tenantId, id, dto);
+    }
 }

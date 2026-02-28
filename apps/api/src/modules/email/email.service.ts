@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class EmailService {
@@ -24,6 +25,24 @@ export class EmailService {
         }).catch(err => {
             console.error('Failed to send email via Resend:', err.message);
         });
+    }
+
+    async sendGenericEmail(toEmail: string, subject: string, htmlContent: string) {
+        const fromEmail = this.configService.get('EMAIL_FROM') || 'INF CRM <noreply@infcrm.com>';
+
+        await this.resend.emails.send({
+            from: fromEmail,
+            to: toEmail,
+            subject,
+            html: htmlContent,
+        }).catch(err => {
+            console.error('Failed to send generic email via Resend:', err.message);
+        });
+    }
+
+    @OnEvent('comm.email.send')
+    async handleCommEmailSend(payload: { email: string, subject: string, htmlContent: string }) {
+        await this.sendGenericEmail(payload.email, payload.subject, payload.htmlContent);
     }
 
     private getSubject(type: string): string {

@@ -29,4 +29,9 @@ export class PaymentsController {
     remove(@TenantId() tenantId: string, @Param('id') id: string) {
         return this.paymentsService.remove(tenantId, id);
     }
+
+    @Post(':id/send-efatura')
+    sendEFatura(@TenantId() tenantId: string, @Param('id') id: string) {
+        return this.paymentsService.sendEFatura(tenantId, id);
+    }
 }

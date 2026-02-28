@@ -13,6 +13,8 @@ import ContractSection from "@/components/deals/ContractSection";
 import ActivityTimeline from "@/components/deals/ActivityTimeline";
 import DealOverview from "@/components/deals/DealOverview";
 import AiAssistantTab from "@/components/deals/AiAssistantTab";
+import CommSyncTab from "@/components/deals/CommSyncTab";
+import { MessageCircle } from "lucide-react";
 
 export default function DealDetailPage() {
     const params = useParams();
@@ -83,6 +85,9 @@ export default function DealDetailPage() {
                     <TabsTrigger value="activity" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-amber-600 data-[state=active]:text-white transition-all font-semibold">
                         <ActivityIcon size={16} /> <span className="hidden md:inline">Log</span>
                     </TabsTrigger>
+                    <TabsTrigger value="comms" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all font-semibold">
+                        <MessageCircle size={16} /> <span className="hidden md:inline">Sync</span>
+                    </TabsTrigger>
                     <TabsTrigger value="ai" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white transition-all font-semibold text-slate-500">
                         <Sparkles size={16} /> <span className="hidden md:inline">Magic</span>
                     </TabsTrigger>
@@ -103,6 +108,9 @@ export default function DealDetailPage() {
                     </TabsContent>
                     <TabsContent value="activity">
                         <ActivityTimeline dealId={id} />
+                    </TabsContent>
+                    <TabsContent value="comms">
+                        <CommSyncTab dealId={id} />
                     </TabsContent>
                     <TabsContent value="ai">
                         <AiAssistantTab deal={deal} />

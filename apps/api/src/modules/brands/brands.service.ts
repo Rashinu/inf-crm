@@ -91,4 +91,53 @@ export class BrandsService {
         // Optionally map/filter out sensitive info like internal notes, but for now we provide the structured data
         return brand;
     }
+
+    async approveDeliverable(id: string, key: string, deliverableId: string) {
+        const brand = await this.prisma.brand.findUnique({
+            where: { id, portalAccessKey: key, softDeletedAt: null },
+        });
+
+        if (!brand) throw new NotFoundException('Brand not found or invalid access key');
+
+        // Check if deliverable belongs to a deal of this brand
+        const deliverable = await this.prisma.deliverable.findFirst({
+            where: {
+                id: deliverableId,
+                deal: { brandId: id },
+            }
+        });
+
+        if (!deliverable) throw new NotFoundException('Deliverable not found for this brand');
+
+        return this.prisma.deliverable.update({
+            where: { id: deliverableId },
+            data: { status: 'DONE' },
+        });
+    }
+
+    async getMediaKit(tenantId: string) {
+        const tenant = await this.prisma.tenant.findUnique({ where: { id: tenantId } });
+        if (!tenant) throw new NotFoundException('Tenant not found');
+
+        const deals = await this.prisma.deal.findMany({
+            where: { tenantId, stage: 'COMPLETED', softDeletedAt: null },
+            include: { brand: { select: { name: true } } },
+        });
+
+        const brandNames = [...new Set(deals.map(d => d.brand.name))];
+        const platforms = [...new Set(deals.map(d => d.platform))].filter(Boolean);
+
+        return {
+            tenantName: tenant.name,
+            totalCompletedDeals: deals.length,
+            brandsWorkedWith: brandNames,
+            platforms: platforms,
+            // dummy social stats for the media kit
+            stats: {
+                instagramFollowers: "2.5M",
+                tiktokLikes: "15M",
+                averageEngagementRate: "5.2%",
+            }
+        };
+    }
 }

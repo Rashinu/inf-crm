@@ -5,8 +5,9 @@ import apiClient from "@/lib/api-client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { Plus, CheckCircle2, Clock, XCircle, FileText } from "lucide-react";
 import { PaymentStatus } from "@inf-crm/types";
+import { toast } from "sonner";
 
 export default function PaymentsList({ dealId }: { dealId: string }) {
     const queryClient = useQueryClient();
@@ -17,6 +18,17 @@ export default function PaymentsList({ dealId }: { dealId: string }) {
             const { data } = await apiClient.get(`/payments?dealId=${dealId}`);
             return data;
         },
+    });
+
+    const sendEFaturaMutation = useMutation({
+        mutationFn: async (id: string) => {
+            return await apiClient.post(`/payments/${id}/send-efatura`);
+        },
+        onSuccess: () => {
+            toast.success("e-Fatura simulated and logged successfully!");
+            queryClient.invalidateQueries({ queryKey: ["activities", dealId] });
+            queryClient.invalidateQueries({ queryKey: ["payments", dealId] });
+        }
     });
 
     if (isLoading) return <div>Loading...</div>;
@@ -55,15 +67,22 @@ export default function PaymentsList({ dealId }: { dealId: string }) {
                                     </p>
                                 </div>
                             </div>
-                            <Badge variant={
-                                item.status === PaymentStatus.PAID ? "default" :
-                                    item.status === PaymentStatus.PENDING ? "secondary" : "destructive"
-                            } className={
-                                item.status === PaymentStatus.PAID ? "bg-green-100 text-green-700 hover:bg-green-100 border-none" :
-                                    item.status === PaymentStatus.PENDING ? "bg-orange-100 text-orange-700 hover:bg-orange-100 border-none" : ""
-                            }>
-                                {item.status}
-                            </Badge>
+                            <div className="flex items-center gap-3">
+                                <Badge variant={
+                                    item.status === 'PAID' ? "default" :
+                                        item.status === 'PENDING' ? "secondary" : "destructive"
+                                } className={
+                                    item.status === 'PAID' ? "bg-green-100 text-green-700 hover:bg-green-100 border-none" :
+                                        item.status === 'PENDING' ? "bg-orange-100 text-orange-700 hover:bg-orange-100 border-none" : ""
+                                }>
+                                    {item.status}
+                                </Badge>
+                                {item.status === 'PENDING' && (
+                                    <Button size="sm" variant="outline" className="h-8 gap-1 border-slate-200 hover:bg-slate-50 text-slate-600" onClick={() => sendEFaturaMutation.mutate(item.id)}>
+                                        <FileText size={14} /> Send e-Fatura
+                                    </Button>
+                                )}
+                            </div>
                         </CardContent>
                     </Card>
                 ))}

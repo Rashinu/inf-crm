@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateDealDto } from './dto/create-deal.dto';
 import { UpdateDealStageDto } from './dto/update-deal-stage.dto';
@@ -10,6 +11,7 @@ export class DealsService {
     constructor(
         private prisma: PrismaService,
         private activities: ActivitiesService,
+        private eventEmitter: EventEmitter2,
     ) { }
 
     async create(tenantId: string, dto: CreateDealDto) {
@@ -107,7 +109,38 @@ export class DealsService {
             message: `Stage changed from ${deal.stage} to ${dto.stage}`,
         });
 
+        this.eventEmitter.emit('deal.stage.changed', {
+            tenantId,
+            dealId: id,
+            oldStage: deal.stage,
+            newStage: dto.stage,
+        });
+
         return updated;
+    }
+
+    async sendCommunication(tenantId: string, id: string, dto: { type: 'EMAIL' | 'WHATSAPP', message: string }) {
+        const deal = await this.findOne(tenantId, id);
+
+        // Log to timeline
+        await this.activities.log({
+            tenantId,
+            dealId: id,
+            type: ActivityType.NOTE_ADDED,
+            message: `Outbound $${dto.type}: $${dto.message}`,
+        });
+
+        // If email, send actual email
+        if (dto.type === 'EMAIL' && deal.contact?.email) {
+            // we'd inject EmailService, but to keep dependencies clean, we could fire an event or do it here
+            this.eventEmitter.emit('comm.email.send', {
+                email: deal.contact.email,
+                subject: `Message regarding $${deal.title}`,
+                htmlContent: `<p>$${dto.message}</p><br><p>Sent from INF CRM by your Agent</p>`
+            });
+        }
+
+        return { success: true };
     }
 
     async remove(tenantId: string, id: string) {

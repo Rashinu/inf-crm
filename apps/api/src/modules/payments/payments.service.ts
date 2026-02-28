@@ -67,6 +67,34 @@ export class PaymentsService {
         });
     }
 
+    async sendEFatura(tenantId: string, id: string) {
+        const payment = await this.prisma.payment.findFirst({
+            where: { id, tenantId },
+            include: { deal: { include: { brand: true } } },
+        });
+        if (!payment) throw new NotFoundException('Payment not found');
+
+        // Simulate e-Fatura integration
+        const invoiceObj = await this.prisma.invoice.create({
+            data: {
+                tenantId,
+                dealId: payment.dealId,
+                invoiceNo: `F-${Date.now()}`,
+                invoiceDate: new Date(),
+                link: `https://efatura.gib.gov.tr/${Date.now()}` // Mock URL
+            }
+        });
+
+        await this.activities.log({
+            tenantId,
+            dealId: payment.dealId,
+            type: ActivityType.PAYMENT_UPDATED,
+            message: `e-Fatura created and sent: ${invoiceObj.invoiceNo}`,
+        });
+
+        return invoiceObj;
+    }
+
     async remove(tenantId: string, id: string) {
         const payment = await this.prisma.payment.findFirst({
             where: { id, tenantId },
