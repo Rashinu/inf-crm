@@ -33,11 +33,21 @@ export default function SettingsPage() {
     });
 
     const [formData, setFormData] = useState({
-        agencyName: user?.tenantName || "INF CRM Agency",
-        email: user?.email || "admin@inf-crm.com",
+        agencyName: "INF CRM Agency",
+        email: "",
         currentPassword: "",
         newPassword: "",
     });
+
+    useEffect(() => {
+        if (user) {
+            setFormData((prev) => ({
+                ...prev,
+                agencyName: user.tenantName || "INF CRM Agency",
+                email: user.email || "",
+            }));
+        }
+    }, [user]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
