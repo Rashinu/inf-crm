@@ -80,3 +80,12 @@ export enum ActivityType {
     DELIVERABLE_ADDED = 'DELIVERABLE_ADDED',
     CONTRACT_SIGNED = 'CONTRACT_SIGNED',
 }
+
+export enum TriggerType {
+    DEAL_STAGE_CHANGED = 'DEAL_STAGE_CHANGED',
+}
+
+export enum ActionType {
+    SEND_EMAIL = 'SEND_EMAIL',
+    SEND_SLACK_MESSAGE = 'SEND_SLACK_MESSAGE',
+}

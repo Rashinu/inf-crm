@@ -26,6 +26,7 @@ import { MobileModule } from './modules/mobile/mobile.module';
 import { AiModule } from './modules/ai/ai.module';
 import { SearchModule } from './modules/search/search.module';
 import { FinanceModule } from './modules/finance/finance.module';
+import { AutomationsModule } from './modules/automations/automations.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { FinanceModule } from './modules/finance/finance.module';
     AiModule,
     SearchModule,
     FinanceModule,
+    AutomationsModule,
   ],
   controllers: [AppController, MobileController],
   providers: [AppService, MobileService],

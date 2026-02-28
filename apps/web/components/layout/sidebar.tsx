@@ -15,7 +15,8 @@ import {
     Bell,
     LogOut,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Zap
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ const menuItems = [
     { icon: Contact, label: "Contacts", href: "/dashboard/contacts" },
     { icon: Calendar, label: "Calendar", href: "/dashboard/calendar" },
     { icon: Wallet, label: "Finance", href: "/dashboard/finance" },
+    { icon: Zap, label: "Automations", href: "/dashboard/automations" },
 ];
 
 export function Sidebar() {

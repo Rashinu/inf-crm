@@ -30,6 +30,7 @@ model Tenant {
   activityLogs  ActivityLog[]
   deviceTokens  DeviceToken[]
   calendarTodos CalendarTodo[]
+  automations   Automation[]
 
   @@map("tenants")
 }
@@ -430,4 +431,36 @@ model CalendarTodo {
   @@index([userId])
   @@index([tenantId, date])
   @@map("calendar_todos")
+}
+
+// ========== AUTOMATIONS ==========
+
+enum TriggerType {
+  DEAL_STAGE_CHANGED
+}
+
+enum ActionType {
+  SEND_EMAIL
+  SEND_SLACK_MESSAGE
+}
+
+model Automation {
+  id              String      @id @default(uuid())
+  tenantId        String
+  tenant          Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  name            String
+  description     String?
+  isActive        Boolean     @default(true)
+  
+  triggerType     TriggerType
+  triggerCondition Json?       // e.g. { "targetStage": "APPROVED" }
+  
+  actionType      ActionType
+  actionPayload   Json?       // e.g. { "recipient": "...", "subject": "..." }
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([tenantId])
+  @@map("automations")
 }
