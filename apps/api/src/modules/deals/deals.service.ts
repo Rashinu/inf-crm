@@ -122,6 +122,18 @@ export class DealsService {
     async sendCommunication(tenantId: string, id: string, dto: { type: 'EMAIL' | 'WHATSAPP', message: string }) {
         const deal = await this.findOne(tenantId, id);
 
+        // Save to the dedicated communications model
+        const comm = await this.prisma.communication.create({
+            data: {
+                tenantId,
+                dealId: id,
+                type: dto.type,
+                direction: 'OUTBOUND',
+                message: dto.message,
+                recipient: deal.contact?.email || deal.contact?.phone || 'Unknown',
+            }
+        });
+
         // Log to timeline
         await this.activities.log({
             tenantId,
@@ -140,7 +152,7 @@ export class DealsService {
             });
         }
 
-        return { success: true };
+        return { success: true, communication: comm };
     }
 
     async remove(tenantId: string, id: string) {

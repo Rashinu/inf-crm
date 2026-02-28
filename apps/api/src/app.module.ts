@@ -27,6 +27,7 @@ import { AiModule } from './modules/ai/ai.module';
 import { SearchModule } from './modules/search/search.module';
 import { FinanceModule } from './modules/finance/finance.module';
 import { AutomationsModule } from './modules/automations/automations.module';
+import { CommunicationsModule } from './modules/communications/communications.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
@@ -77,6 +78,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     SearchModule,
     FinanceModule,
     AutomationsModule,
+    CommunicationsModule,
   ],
   controllers: [AppController, MobileController],
   providers: [AppService, MobileService],
