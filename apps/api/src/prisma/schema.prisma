@@ -72,6 +72,7 @@ model Brand {
   name           String
   website        String?
   notes          String?
+  portalAccessKey String    @unique @default(dbgenerated("gen_random_uuid()"))
   softDeletedAt  DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt

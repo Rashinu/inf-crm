@@ -5,8 +5,9 @@ import { useParams, useRouter } from "next/navigation";
 import apiClient from "@/lib/api-client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Building2, Globe, Users, FileText, ArrowLeft, MoreHorizontal, Mail, Phone } from "lucide-react";
+import { Building2, Globe, Users, FileText, ArrowLeft, Link as LinkIcon, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function BrandProfilePage() {
     const params = useParams();
@@ -31,18 +32,31 @@ export default function BrandProfilePage() {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" onClick={() => router.back()}>
-                    <ArrowLeft size={18} />
-                </Button>
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 font-outfit">{brand.name}</h1>
-                    {brand.website && (
-                        <a href={brand.website.startsWith('http') ? brand.website : `https://${brand.website}`} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline flex items-center gap-1 mt-1 text-sm">
-                            <Globe size={14} /> {brand.website}
-                        </a>
-                    )}
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <Button variant="ghost" size="icon" onClick={() => router.back()}>
+                        <ArrowLeft size={18} />
+                    </Button>
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">{brand.name}</h1>
+                        {brand.website && (
+                            <a href={brand.website.startsWith('http') ? brand.website : `https://${brand.website}`} target="_blank" rel="noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mt-1 text-sm">
+                                <Globe size={14} /> {brand.website}
+                            </a>
+                        )}
+                    </div>
                 </div>
+                <Button
+                    variant="outline"
+                    className="gap-2 font-medium border-slate-200 dark:border-slate-800 dark:hover:bg-slate-800"
+                    onClick={() => {
+                        const url = `${window.location.origin}/portal/${brand.id}?key=${brand.portalAccessKey}`;
+                        navigator.clipboard.writeText(url);
+                        toast.success("Client Portal link copied to clipboard");
+                    }}
+                >
+                    <LinkIcon size={16} /> Copy Portal Link
+                </Button>
             </div>
 
             {/* Quick Stats */}

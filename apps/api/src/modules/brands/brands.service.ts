@@ -60,4 +60,35 @@ export class BrandsService {
             data: { softDeletedAt: new Date() },
         });
     }
+
+    async getPortalData(id: string, key: string) {
+        // Fetch brand details if key matches
+        const brand = await this.prisma.brand.findUnique({
+            where: {
+                id,
+                portalAccessKey: key,
+                softDeletedAt: null,
+            },
+            include: {
+                deals: {
+                    where: { softDeletedAt: null },
+                    include: {
+                        deliverables: {
+                            orderBy: { dueDate: 'asc' },
+                        },
+                        payments: {
+                            orderBy: { dueDate: 'asc' },
+                        },
+                        contractFiles: true,
+                    },
+                    orderBy: { createdAt: 'desc' },
+                }
+            }
+        });
+
+        if (!brand) return null;
+
+        // Optionally map/filter out sensitive info like internal notes, but for now we provide the structured data
+        return brand;
+    }
 }
