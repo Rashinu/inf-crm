@@ -61,4 +61,84 @@ export class ContactsService {
             where: { id },
         });
     }
+
+    async getLeaderboard(tenantId: string) {
+        const contacts = await this.prisma.contact.findMany({
+            where: { tenantId },
+            include: {
+                brand: { select: { name: true } },
+                deals: {
+                    select: {
+                        stage: true,
+                        totalAmount: true,
+                        publishDate: true,
+                        deliverables: {
+                            select: {
+                                status: true,
+                                dueDate: true,
+                                updatedAt: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const leaderboard = contacts.map(contact => {
+            let totalLtv = 0;
+            let activeDeals = 0;
+            let totalDeliverables = 0;
+            let onTimeDeliverables = 0;
+            let delayedDeliverables = 0;
+
+            for (const deal of contact.deals) {
+                if (deal.stage === 'COMPLETED' || deal.stage === 'POSTED') {
+                    totalLtv += Number(deal.totalAmount);
+                } else if (deal.stage !== 'LOST' && deal.stage !== 'CANCELLED') {
+                    activeDeals++;
+                }
+
+                for (const del of deal.deliverables) {
+                    totalDeliverables++;
+                    if (del.status === 'DONE') {
+                        if (!del.dueDate || new Date(del.updatedAt) <= new Date(del.dueDate)) {
+                            onTimeDeliverables++;
+                        } else {
+                            delayedDeliverables++;
+                        }
+                    } else {
+                        if (del.dueDate && new Date() > new Date(del.dueDate)) {
+                            delayedDeliverables++;
+                        }
+                    }
+                }
+            }
+
+            let score = 50; // Base score
+            if (totalDeliverables > 0) {
+                const onTimeRate = onTimeDeliverables / totalDeliverables;
+                score += onTimeRate * 30; // Up to 30 points
+            }
+            const ltvBonus = Math.min((totalLtv / 100000) * 20, 20);
+            score += ltvBonus;
+            score -= (delayedDeliverables * 5);
+            score = Math.max(0, Math.min(100, Math.round(score)));
+
+            return {
+                id: contact.id,
+                name: contact.name,
+                brandName: contact.brand.name,
+                position: contact.position,
+                totalLtv,
+                activeDeals,
+                score,
+                onTimeRate: totalDeliverables > 0 ? (onTimeDeliverables / totalDeliverables) * 100 : 0,
+                totalDeliverables,
+                delayedDeliverables
+            };
+        });
+
+        leaderboard.sort((a, b) => b.score - a.score);
+        return leaderboard;
+    }
 }

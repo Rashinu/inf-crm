@@ -21,6 +21,11 @@ export class ContactsController {
         return this.contactsService.findAll(tenantId, brandId);
     }
 
+    @Get('leaderboard')
+    getLeaderboard(@TenantId() tenantId: string) {
+        return this.contactsService.getLeaderboard(tenantId);
+    }
+
     @Get(':id')
     findOne(@TenantId() tenantId: string, @Param('id') id: string) {
         return this.contactsService.findOne(tenantId, id);

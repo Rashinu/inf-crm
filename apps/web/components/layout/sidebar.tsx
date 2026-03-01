@@ -16,7 +16,8 @@ import {
     LogOut,
     ChevronLeft,
     ChevronRight,
-    Zap
+    Zap,
+    Trophy
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ const menuItems = [
     { icon: Contact, label: "Contacts", href: "/dashboard/contacts" },
     { icon: Calendar, label: "Calendar", href: "/dashboard/calendar" },
     { icon: Wallet, label: "Finance", href: "/dashboard/finance" },
+    { icon: Trophy, label: "Leaderboard", href: "/dashboard/leaderboard" },
     { icon: Zap, label: "Automations", href: "/dashboard/automations" },
 ];
 
