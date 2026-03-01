@@ -68,4 +68,73 @@ export class FinanceService {
                 .slice(0, 5)
         };
     }
+
+    async getCommissions(tenantId: string) {
+        const deals = await (this.prisma.deal as any).findMany({
+            where: { tenantId, stage: { in: ['COMPLETED', 'POSTED'] } },
+            include: {
+                brand: true,
+                contact: true,
+                salesRep: true,
+                payments: true
+            }
+        });
+
+        const commissions = await Promise.all(deals.map(async (deal) => {
+            const amountTry = await this.currencyService.convertToTRY(Number(deal.totalAmount), deal.currency);
+            const totalPaid = await this.currencyService.convertToTRY(
+                deal.payments.reduce((sum, p) => sum + Number(p.paidAmount || 0), 0),
+                deal.currency
+            );
+
+            // Calculate reps component
+            const salesRepRate = Number(deal.salesRepCommissionRate || 0);
+            const influencerRate = Number(deal.influencerCommissionRate || 0);
+
+            let salesRepCommissionTry = 0;
+            let influencerCommissionTry = 0;
+
+            if (salesRepRate > 0) {
+                // Rate is e.g. 15.0 for 15%
+                salesRepCommissionTry = (amountTry * salesRepRate) / 100;
+            }
+
+            if (influencerRate > 0) {
+                influencerCommissionTry = (amountTry * influencerRate) / 100;
+            }
+
+            return {
+                dealId: deal.id,
+                dealTitle: deal.title,
+                brandName: deal.brand.name,
+                currency: deal.currency,
+                dealAmountTry: amountTry,
+                totalPaidTry: totalPaid,
+                salesRepId: deal.salesRepId,
+                salesRepName: deal.salesRep?.fullName || 'Unassigned',
+                salesRepRate,
+                salesRepCommissionTry,
+                influencerId: deal.contactId,
+                influencerName: deal.contact?.name || 'Unassigned',
+                influencerRate,
+                influencerCommissionTry,
+                date: deal.updatedAt
+            };
+        }));
+
+        // Sort by newest
+        commissions.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+        // Calculate Totals
+        const summary = commissions.reduce((acc, curr) => {
+            acc.totalSalesRepCommissions += curr.salesRepCommissionTry;
+            acc.totalInfluencerCommissions += curr.influencerCommissionTry;
+            return acc;
+        }, { totalSalesRepCommissions: 0, totalInfluencerCommissions: 0 });
+
+        return {
+            items: commissions,
+            summary
+        };
+    }
 }

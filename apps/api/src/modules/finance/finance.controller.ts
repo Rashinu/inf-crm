@@ -13,4 +13,9 @@ export class FinanceController {
     async getSummary(@TenantId() tenantId: string) {
         return this.financeService.getSummary(tenantId);
     }
+
+    @Get('commissions')
+    async getCommissions(@TenantId() tenantId: string) {
+        return this.financeService.getCommissions(tenantId);
+    }
 }

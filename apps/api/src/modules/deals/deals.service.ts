@@ -51,6 +51,7 @@ export class DealsService {
             include: {
                 brand: { select: { name: true } },
                 contact: { select: { name: true, email: true } },
+                salesRep: { select: { fullName: true, email: true } },
             },
             orderBy: { createdAt: 'desc' },
         });

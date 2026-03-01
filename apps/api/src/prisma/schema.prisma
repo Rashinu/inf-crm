@@ -59,6 +59,7 @@ model User {
   notifications Notification[]
   deviceTokens  DeviceToken[]
   calendarTodos CalendarTodo[]
+  salesDeals    Deal[] @relation("DealSalesRep")
 
   @@index([tenantId])
   @@index([email])
@@ -179,6 +180,13 @@ model Deal {
 
   contactId           String?
   contact             Contact?  @relation(fields: [contactId], references: [id])
+  
+  salesRepId          String?
+  salesRep            User?     @relation("DealSalesRep", fields: [salesRepId], references: [id])
+  
+  salesRepCommissionRate Decimal @default(0) @db.Decimal(5, 2)
+  influencerCommissionRate Decimal @default(0) @db.Decimal(5, 2)
+
   deliverables  Deliverable[]
   payments      Payment[]
   contractFiles ContractFile[]

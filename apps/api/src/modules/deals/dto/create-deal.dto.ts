@@ -29,4 +29,16 @@ export class CreateDealDto {
     @IsOptional()
     @IsString()
     description?: string;
+
+    @IsOptional()
+    @IsUUID()
+    salesRepId?: string;
+
+    @IsOptional()
+    @IsNumber()
+    salesRepCommissionRate?: number;
+
+    @IsOptional()
+    @IsNumber()
+    influencerCommissionRate?: number;
 }
