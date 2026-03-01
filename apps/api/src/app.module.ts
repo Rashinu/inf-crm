@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
@@ -29,9 +30,11 @@ import { FinanceModule } from './modules/finance/finance.module';
 import { AutomationsModule } from './modules/automations/automations.module';
 import { CommunicationsModule } from './modules/communications/communications.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { CronModule } from './modules/cron/cron.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     EventEmitterModule.forRoot({ global: true }),
     ConfigModule.forRoot({ isGlobal: true }),
     BullModule.forRootAsync({
@@ -79,6 +82,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     FinanceModule,
     AutomationsModule,
     CommunicationsModule,
+    CronModule,
   ],
   controllers: [AppController, MobileController],
   providers: [AppService, MobileService],
