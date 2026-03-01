@@ -8,10 +8,12 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import apiClient from "@/lib/api-client";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "../providers/LanguageProvider";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<any>(null);
     const router = useRouter();
+    const { language, setLanguage } = useLanguage();
 
     useEffect(() => {
         async function fetchUser() {
@@ -36,6 +38,12 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                     </div>
 
                     <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setLanguage(language === 'en' ? 'tr' : 'en')}
+                            className="font-bold text-xs uppercase px-2 py-1 rounded-md bg-gray-100/80 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700 transition"
+                        >
+                            {language === 'en' ? 'TR' : 'EN'}
+                        </button>
                         <NotificationBell />
                         <div className="h-8 w-px bg-gray-200 dark:bg-slate-800"></div>
                         <div className="flex items-center gap-3">

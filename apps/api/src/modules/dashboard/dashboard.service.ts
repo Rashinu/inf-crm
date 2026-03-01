@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { PaymentStatus, DeliverableStatus } from '@inf-crm/types';
+import { CurrencyService } from '../finance/currency.service';
 
 @Injectable()
 export class DashboardService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService, private currencyService: CurrencyService) { }
 
     async getSummary(tenantId: string) {
         const today = new Date();
@@ -34,11 +35,15 @@ export class DashboardService {
                 tenantId,
                 status: { in: [PaymentStatus.PENDING as any, PaymentStatus.PARTIAL as any] },
                 dueDate: { lt: startOfToday }
-            }
+            },
+            include: { deal: true }
         });
 
         const overduePaymentsCount = overduePaymentsResult.length;
-        const overduePaymentsAmount = overduePaymentsResult.reduce((sum, p) => sum + Number(p.amount), 0);
+        let overduePaymentsAmount = 0;
+        for (const p of overduePaymentsResult) {
+            overduePaymentsAmount += await this.currencyService.convertToTRY(Number(p.amount), p.deal?.currency || 'TRY');
+        }
 
         const recentActivity = await this.prisma.activityLog.findMany({
             where: { tenantId },
@@ -57,9 +62,14 @@ export class DashboardService {
                 tenantId,
                 status: PaymentStatus.PAID as any,
                 updatedAt: { gte: startOfMonth, lte: endOfMonth }
-            }
+            },
+            include: { deal: true }
         });
-        const monthlyRevenue = monthlyPayments.reduce((sum, p) => sum + Number(p.amount), 0);
+
+        let monthlyRevenue = 0;
+        for (const p of monthlyPayments) {
+            monthlyRevenue += await this.currencyService.convertToTRY(Number(p.amount), p.deal?.currency || 'TRY');
+        }
 
         // 2. Active Pipeline Value
         const activeDeals = await this.prisma.deal.findMany({
@@ -68,7 +78,10 @@ export class DashboardService {
                 stage: { notIn: ['COMPLETED', 'LOST', 'CANCELLED'] }
             }
         });
-        const activePipelineValue = activeDeals.reduce((sum, d) => sum + Number(d.totalAmount), 0);
+        let activePipelineValue = 0;
+        for (const d of activeDeals) {
+            activePipelineValue += await this.currencyService.convertToTRY(Number(d.totalAmount), d.currency);
+        }
         const activeDealsCount = activeDeals.length;
 
         // 3. Win Rate

@@ -17,9 +17,11 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "../../components/providers/LanguageProvider";
 
 export default function DashboardPage() {
     const router = useRouter();
+    const { t } = useLanguage();
 
     const { data: summary, isLoading: isLoadingSummary } = useQuery<any>({
         queryKey: ["dashboard-summary"],
@@ -47,7 +49,7 @@ export default function DashboardPage() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Patron Panel</h1>
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">{t("dashboard.executive_review")}</h1>
                 <p className="text-gray-500 dark:text-slate-400 mt-1">High-level financial and pipeline metrics for executive review.</p>
             </div>
 
@@ -56,7 +58,7 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-blue-100 flex items-center gap-2">
                             <DollarSign className="w-4 h-4" />
-                            Monthly Revenue
+                            {t("dashboard.monthly_revenue")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -71,7 +73,7 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
                             <Briefcase className="w-4 h-4 text-purple-500" />
-                            Active Pipeline Value
+                            {t("dashboard.active_pipeline")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -86,7 +88,7 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
                             <TrendingUp className="w-4 h-4 text-green-500" />
-                            Win Rate
+                            {t("dashboard.win_rate")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>

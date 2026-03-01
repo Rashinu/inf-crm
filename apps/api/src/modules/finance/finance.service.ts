@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { CurrencyService } from './currency.service';
 
 @Injectable()
 export class FinanceService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService, private currencyService: CurrencyService) { }
 
     async getSummary(tenantId: string) {
         // Fetch all payments for tenant
@@ -20,9 +21,9 @@ export class FinanceService {
         let totalOverdue = 0;
         let monthlyRevenue = 0;
 
-        payments.forEach(p => {
-            const amount = Number(p.amount);
-            const paid = Number(p.paidAmount || 0);
+        for (const p of payments) {
+            const amount = await this.currencyService.convertToTRY(Number(p.amount), p.deal?.currency);
+            const paid = await this.currencyService.convertToTRY(Number(p.paidAmount || 0), p.deal?.currency);
 
             totalExpected += amount;
             totalCollected += paid;
@@ -34,7 +35,7 @@ export class FinanceService {
             if (p.paidAt && new Date(p.paidAt) >= startOfMonth) {
                 monthlyRevenue += paid;
             }
-        });
+        }
 
         // Top brands by revenue
         const deals = await this.prisma.deal.findMany({
@@ -43,12 +44,13 @@ export class FinanceService {
         });
 
         const brandRevenue: Record<string, { name: string, value: number }> = {};
-        deals.forEach(d => {
+        for (const d of deals) {
             if (!brandRevenue[d.brandId]) {
                 brandRevenue[d.brandId] = { name: d.brand.name, value: 0 };
             }
-            brandRevenue[d.brandId].value += Number(d.totalAmount || 0);
-        });
+            const dealAmount = await this.currencyService.convertToTRY(Number(d.totalAmount || 0), d.currency);
+            brandRevenue[d.brandId].value += dealAmount;
+        }
 
         const topBrands = Object.values(brandRevenue)
             .sort((a, b) => b.value - a.value)

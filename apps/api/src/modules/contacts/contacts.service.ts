@@ -2,10 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { CurrencyService } from '../finance/currency.service';
 
 @Injectable()
 export class ContactsService {
-    constructor(private prisma: PrismaService) { }
+    constructor(private prisma: PrismaService, private currencyService: CurrencyService) { }
 
     async create(tenantId: string, dto: CreateContactDto) {
         // Verify brand belongs to tenant
@@ -78,13 +79,16 @@ export class ContactsService {
                                 dueDate: true,
                                 updatedAt: true
                             }
-                        }
+                        },
+                        currency: true
                     }
                 }
             }
         });
 
-        const leaderboard = contacts.map(contact => {
+        const leaderboard: any[] = [];
+
+        for (const contact of contacts) {
             let totalLtv = 0;
             let activeDeals = 0;
             let totalDeliverables = 0;
@@ -93,7 +97,9 @@ export class ContactsService {
 
             for (const deal of contact.deals) {
                 if (deal.stage === 'COMPLETED' || deal.stage === 'POSTED') {
-                    totalLtv += Number(deal.totalAmount);
+                    // Convert foreign deal to TRY
+                    const amountInTry = await this.currencyService.convertToTRY(Number(deal.totalAmount), deal.currency);
+                    totalLtv += amountInTry;
                 } else if (deal.stage !== 'LOST' && deal.stage !== 'CANCELLED') {
                     activeDeals++;
                 }
@@ -124,7 +130,7 @@ export class ContactsService {
             score -= (delayedDeliverables * 5);
             score = Math.max(0, Math.min(100, Math.round(score)));
 
-            return {
+            leaderboard.push({
                 id: contact.id,
                 name: contact.name,
                 brandName: contact.brand.name,
@@ -135,8 +141,8 @@ export class ContactsService {
                 onTimeRate: totalDeliverables > 0 ? (onTimeDeliverables / totalDeliverables) * 100 : 0,
                 totalDeliverables,
                 delayedDeliverables
-            };
-        });
+            });
+        }
 
         leaderboard.sort((a, b) => b.score - a.score);
         return leaderboard;

@@ -21,22 +21,24 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "../providers/LanguageProvider";
 
 const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-    { icon: Trello, label: "Pipeline", href: "/dashboard/pipeline" },
-    { icon: Briefcase, label: "Deals", href: "/dashboard/deals" },
-    { icon: Building2, label: "Brands", href: "/dashboard/brands" },
-    { icon: Contact, label: "Contacts", href: "/dashboard/contacts" },
-    { icon: Calendar, label: "Calendar", href: "/dashboard/calendar" },
-    { icon: Wallet, label: "Finance", href: "/dashboard/finance" },
-    { icon: Trophy, label: "Leaderboard", href: "/dashboard/leaderboard" },
-    { icon: Zap, label: "Automations", href: "/dashboard/automations" },
+    { icon: LayoutDashboard, key: "nav.dashboard", href: "/dashboard" },
+    { icon: Trello, key: "nav.pipeline", href: "/dashboard/pipeline" },
+    { icon: Briefcase, key: "nav.deals", href: "/dashboard/deals" },
+    { icon: Building2, key: "nav.brands", href: "/dashboard/brands" },
+    { icon: Contact, key: "nav.contacts", href: "/dashboard/contacts" },
+    { icon: Calendar, key: "nav.calendar", href: "/dashboard/calendar" },
+    { icon: Wallet, key: "nav.finance", href: "/dashboard/finance" },
+    { icon: Trophy, key: "nav.leaderboard", href: "/dashboard/leaderboard" },
+    { icon: Zap, key: "nav.automations", href: "/dashboard/automations" },
 ];
 
 export function Sidebar() {
     const pathname = usePathname();
     const [collapsed, setCollapsed] = useState(false);
+    const { t } = useLanguage();
 
     return (
         <div
@@ -69,7 +71,7 @@ export function Sidebar() {
                         )}
                     >
                         <item.icon className={cn("size-5", pathname === item.href ? "text-blue-600 dark:text-blue-500" : "text-gray-400 dark:text-slate-500")} />
-                        {!collapsed && <span>{item.label}</span>}
+                        {!collapsed && <span>{t(item.key)}</span>}
                     </Link>
                 ))}
             </nav>
@@ -84,7 +86,7 @@ export function Sidebar() {
                     )}
                 >
                     <Settings className="size-5 text-gray-400 dark:text-slate-500" />
-                    {!collapsed && <span>Settings</span>}
+                    {!collapsed && <span>{t("nav.settings")}</span>}
                 </Link>
                 <button
                     onClick={() => {
@@ -94,7 +96,7 @@ export function Sidebar() {
                     className="flex w-full items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
                 >
                     <LogOut className="size-5" />
-                    {!collapsed && <span>Logout</span>}
+                    {!collapsed && <span>{t("nav.logout")}</span>}
                 </button>
             </div>
 
