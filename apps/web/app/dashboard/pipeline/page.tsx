@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const STAGES = [
     { id: DealStage.LEAD, title: "Lead" },
@@ -50,6 +51,7 @@ const STAGES = [
 export default function PipelinePage() {
     const queryClient = useQueryClient();
     const router = useRouter();
+    const { t } = useLanguage();
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [aiPrompt, setAiPrompt] = useState("");
 
@@ -165,8 +167,8 @@ export default function PipelinePage() {
         <div className="space-y-8 h-full">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Deal Pipeline</h1>
-                    <p className="text-gray-500 dark:text-slate-400 mt-1">Manage your collaborations and track progress.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">{t("pipeline.title")}</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">{t("pipeline.subtitle")}</p>
                 </div>
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>

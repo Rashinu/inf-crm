@@ -3,21 +3,13 @@ import { NotificationsService } from './notifications.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TenantGuard } from '../../common/guards/tenant.guard';
 import { TenantId } from '../../common/decorators/tenant.decorator';
-import { CronService } from '../cron/cron.service';
 
 @Controller('notifications')
 @UseGuards(JwtAuthGuard, TenantGuard)
 export class NotificationsController {
     constructor(
-        private readonly notificationsService: NotificationsService,
-        private readonly cronService: CronService
+        private readonly notificationsService: NotificationsService
     ) { }
-
-    @Post('trigger-daily')
-    async triggerDailySummary() {
-        await this.cronService.generateDailySummaries();
-        return { success: true, message: 'Daily summaries triggered and processed.' };
-    }
 
     @Get()
     findAll(@TenantId() tenantId: string, @Request() req) {

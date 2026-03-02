@@ -7,8 +7,10 @@ import { Trophy, Star, TrendingUp, Handshake, AlertCircle, CalendarClock, Target
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function LeaderboardPage() {
+    const { t } = useLanguage();
     const { data: leaderboard, isLoading } = useQuery<any[]>({
         queryKey: ["leaderboard"],
         queryFn: async () => {
@@ -38,11 +40,10 @@ export default function LeaderboardPage() {
             <div>
                 <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white font-outfit tracking-tight flex items-center gap-3">
                     <Trophy className="size-8 text-amber-500" />
-                    Influencer Leaderboard
+                    {t("leaderboard.title")}
                 </h1>
                 <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm max-w-2xl leading-relaxed">
-                    Track the performance, reliability, and lifetime value of all your contacts and influencers.
-                    The score is determined by on-time delivery rates, total revenue generated, and active collaborations.
+                    {t("leaderboard.subtitle")}
                 </p>
             </div>
 
@@ -86,7 +87,7 @@ export default function LeaderboardPage() {
                                                 <span>Trust Score</span>
                                                 <span>{contact.score} / 100</span>
                                             </div>
-                                            <Progress value={contact.score} className="h-2 bg-black/10" indicatorClassName="bg-white" />
+                                            <Progress value={contact.score} className="h-2 bg-black/10" />
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-2 text-sm">

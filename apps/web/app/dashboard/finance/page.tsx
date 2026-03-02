@@ -67,14 +67,14 @@ export default function FinancePage() {
     return (
         <div className="space-y-8">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Finance & Overview</h1>
-                <p className="text-gray-500 dark:text-slate-400 mt-1">Track your earnings, overdue payments, and expected commissions.</p>
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">{t("finance.title")}</h1>
+                <p className="text-gray-500 dark:text-slate-400 mt-1">{t("finance.subtitle")}</p>
             </div>
 
             <Tabs defaultValue="overview" className="w-full">
                 <TabsList className="mb-6">
-                    <TabsTrigger value="overview">Overview</TabsTrigger>
-                    <TabsTrigger value="commissions">Commissions Engine</TabsTrigger>
+                    <TabsTrigger value="overview">{t("finance.tab_overview")}</TabsTrigger>
+                    <TabsTrigger value="commissions">{t("finance.tab_commissions")}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-8">
@@ -91,7 +91,7 @@ export default function FinancePage() {
                                         <div className="p-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg">
                                             <TrendingUp size={16} />
                                         </div>
-                                        Total Expected
+                                        {t("finance.total_expected")}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
@@ -110,7 +110,7 @@ export default function FinancePage() {
                                         <div className="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg">
                                             <CheckCircle2 size={16} />
                                         </div>
-                                        Total Collected
+                                        {t("finance.total_collected")}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
@@ -129,7 +129,7 @@ export default function FinancePage() {
                                         <div className="p-2 bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-lg">
                                             <AlertCircle size={16} />
                                         </div>
-                                        Overdue / Risk
+                                        {t("finance.overdue_risk")}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
@@ -153,7 +153,7 @@ export default function FinancePage() {
                                         <div className="p-2 bg-white/10 text-white rounded-lg backdrop-blur-sm">
                                             <Calendar size={16} />
                                         </div>
-                                        Monthly Revenue
+                                        {t("finance.monthly_revenue")}
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
@@ -173,7 +173,7 @@ export default function FinancePage() {
                         summary?.topBrands && summary.topBrands.length > 0 && (
                             <div className="mt-8 mb-4">
                                 <h2 className="text-xl font-bold font-outfit text-slate-900 mb-4 flex items-center gap-2">
-                                    <span>🏆</span> Top Paying Brands
+                                    {t("finance.top_brands")}
                                 </h2>
                                 <div className="flex gap-4 overflow-x-auto pb-4 pt-1 px-1 custom-scrollbar">
                                     {summary.topBrands.map((brand: any, index: number) => (
@@ -209,7 +209,7 @@ export default function FinancePage() {
                     <div className="bg-white dark:bg-slate-900 dark:shadow-none ring-1 ring-slate-100 dark:ring-slate-800 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-none overflow-hidden">
                         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
                             <div>
-                                <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">All Scheduled Payments</h2>
+                                <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">{t("finance.scheduled_payments")}</h2>
                                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">View and manage all your incoming transactions.</p>
                             </div>
                         </div>
@@ -313,7 +313,7 @@ export default function FinancePage() {
                                     </div>
                                     <CardHeader className="pb-2">
                                         <CardTitle className="text-sm font-bold text-indigo-100 uppercase tracking-wider flex items-center gap-2">
-                                            Total Sales Rep Commissions
+                                            {t("finance.sales_rep_commissions")}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
@@ -329,7 +329,7 @@ export default function FinancePage() {
                                     </div>
                                     <CardHeader className="pb-2">
                                         <CardTitle className="text-sm font-bold text-orange-100 uppercase tracking-wider flex items-center gap-2">
-                                            Total Influencer Commissions
+                                            {t("finance.influencer_commissions")}
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
@@ -343,7 +343,7 @@ export default function FinancePage() {
                             <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
                                 <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                                     <div>
-                                        <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">Commission Breakdown</h2>
+                                        <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">{t("finance.commission_breakdown")}</h2>
                                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Detailed list of commissions per completed deal.</p>
                                     </div>
                                 </div>
