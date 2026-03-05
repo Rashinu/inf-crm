@@ -101,20 +101,20 @@ export default function BrandsPage() {
                         </DialogHeader>
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4">
                             <div className="space-y-2">
-                                <Label htmlFor="name">Brand Name</Label>
+                                <Label htmlFor="name">{t("brands.label_name")}</Label>
                                 <Input id="name" placeholder="Acme Corp" {...register("name", { required: "Name is required" })} />
                                 {errors.name && <p className="text-xs text-red-500">{errors.name.message as string}</p>}
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="website">Website (Optional)</Label>
+                                <Label htmlFor="website">{t("brands.label_website")}</Label>
                                 <Input id="website" placeholder="https://acme.com" {...register("website")} />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="notes">Notes (Optional)</Label>
+                                <Label htmlFor="notes">{t("brands.label_notes")}</Label>
                                 <Input id="notes" placeholder="Brief info about the brand" {...register("notes")} />
                             </div>
                             <Button type="submit" className="w-full" disabled={createMutation.isPending}>
-                                {createMutation.isPending ? "Creating..." : "Save Brand"}
+                                {createMutation.isPending ? t("common.loading") : t("brands.submit_save")}
                             </Button>
                         </form>
                     </DialogContent>
@@ -125,24 +125,24 @@ export default function BrandsPage() {
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-gray-50/50 dark:bg-slate-800/50 border-gray-100 dark:border-slate-800 hover:bg-gray-50/50 dark:hover:bg-slate-800/50">
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Brand Name</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Website</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-center">Contacts</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-center">Deals</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-right">Actions</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">{t("brands.brand_name")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">{t("brands.website")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-center">{t("brands.contacts")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-center">{t("brands.deals")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-right">{t("common.actions")}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {isLoading ? (
                             <TableRow>
                                 <TableCell colSpan={5} className="h-24 text-center text-gray-500">
-                                    Loading brands...
+                                    {t("common.loading")}
                                 </TableCell>
                             </TableRow>
                         ) : !Array.isArray(brands) || brands.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={5} className="h-24 text-center text-gray-500">
-                                    No brands found. Add your first brand to get started!
+                                    {t("brands.no_brands")}
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -189,14 +189,14 @@ export default function BrandsPage() {
                                                     e.stopPropagation();
                                                     router.push(`/dashboard/brands/${brand.id}`)
                                                 }}>
-                                                    View Profile
+                                                    {t("brands.view_profile")}
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem className="text-red-600 focus:bg-red-50 focus:text-red-600 cursor-pointer" onClick={(e) => {
                                                     e.stopPropagation();
                                                     deleteMutation.mutate(brand.id)
                                                 }}>
                                                     <Trash2 className="mr-2 size-4" />
-                                                    Delete Brand
+                                                    {t("brands.delete_brand")}
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>

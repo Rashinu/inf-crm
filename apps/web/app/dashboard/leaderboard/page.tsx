@@ -84,7 +84,7 @@ export default function LeaderboardPage() {
                                     <div className="mt-auto space-y-4">
                                         <div>
                                             <div className="flex justify-between text-sm font-bold mb-1">
-                                                <span>Trust Score</span>
+                                                <span>{t("leaderboard.trust_score")}</span>
                                                 <span>{contact.score} / 100</span>
                                             </div>
                                             <Progress value={contact.score} className="h-2 bg-black/10" />
@@ -92,11 +92,11 @@ export default function LeaderboardPage() {
 
                                         <div className="grid grid-cols-2 gap-2 text-sm">
                                             <div className="bg-black/10 rounded-lg p-2 backdrop-blur-sm">
-                                                <p className="opacity-70 text-xs font-semibold mb-0.5">Total Revenue</p>
+                                                <p className="opacity-70 text-xs font-semibold mb-0.5">{t("leaderboard.total_revenue")}</p>
                                                 <p className="font-bold">{formatCurrency(contact.totalLtv)}</p>
                                             </div>
                                             <div className="bg-black/10 rounded-lg p-2 backdrop-blur-sm">
-                                                <p className="opacity-70 text-xs font-semibold mb-0.5">On-Time Rate</p>
+                                                <p className="opacity-70 text-xs font-semibold mb-0.5">{t("leaderboard.ontime_rate")}</p>
                                                 <p className="font-bold">{contact.onTimeRate.toFixed(0)}%</p>
                                             </div>
                                         </div>
@@ -115,12 +115,12 @@ export default function LeaderboardPage() {
                         <table className="w-full text-sm text-left whitespace-nowrap">
                             <thead className="text-xs text-slate-500 dark:text-slate-400 bg-slate-50/50 dark:bg-slate-800/50 uppercase font-semibold">
                                 <tr>
-                                    <th className="px-6 py-4">Rank</th>
-                                    <th className="px-6 py-4">Influencer</th>
-                                    <th className="px-6 py-4">Score</th>
-                                    <th className="px-6 py-4 text-right">Lifetime Value (LTV)</th>
-                                    <th className="px-6 py-4 text-center">On-Time Delivery</th>
-                                    <th className="px-6 py-4 text-center">Active Deals</th>
+                                    <th className="px-6 py-4">{t("leaderboard.table_rank")}</th>
+                                    <th className="px-6 py-4">{t("leaderboard.table_influencer")}</th>
+                                    <th className="px-6 py-4">{t("leaderboard.table_score")}</th>
+                                    <th className="px-6 py-4 text-right">{t("leaderboard.table_ltv")}</th>
+                                    <th className="px-6 py-4 text-center">{t("leaderboard.table_ontime")}</th>
+                                    <th className="px-6 py-4 text-center">{t("leaderboard.table_active_deals")}</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
@@ -173,8 +173,8 @@ export default function LeaderboardPage() {
             {leaderboard?.length === 0 && (
                 <Card className="p-12 text-center text-slate-500 bg-white dark:bg-slate-900 flex flex-col items-center justify-center border-dashed border-slate-200 dark:border-slate-800 shadow-sm">
                     <Target className="size-12 text-slate-300 dark:text-slate-600 mb-4" />
-                    <h3 className="font-medium text-lg text-slate-900 dark:text-white">No data yet</h3>
-                    <p className="text-sm">Start closing deals and adding deliverables to build your leaderboard.</p>
+                    <h3 className="font-medium text-lg text-slate-900 dark:text-white">{t("leaderboard.no_data")}</h3>
+                    <p className="text-sm">{t("leaderboard.no_data_desc")}</p>
                 </Card>
             )}
         </div>

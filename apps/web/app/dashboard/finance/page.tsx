@@ -138,7 +138,7 @@ export default function FinancePage() {
                                     </div>
                                     {summary.totalOverdue > 0 && (
                                         <p className="text-xs font-medium text-rose-500 dark:text-rose-400 mt-2 flex items-center gap-1">
-                                            <AlertCircle size={12} /> Needs immediate attention
+                                            <AlertCircle size={12} /> {t("finance.needs_attention")}
                                         </p>
                                     )}
                                 </CardContent>
@@ -161,7 +161,7 @@ export default function FinancePage() {
                                         ₺{summary.monthlyRevenue.toLocaleString()}
                                     </div>
                                     <p className="text-xs font-medium text-slate-400 mt-2">
-                                        Earned this month
+                                        {t("finance.earned_this_month")}
                                     </p>
                                 </CardContent>
                             </Card>
@@ -210,30 +210,30 @@ export default function FinancePage() {
                         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
                             <div>
                                 <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">{t("finance.scheduled_payments")}</h2>
-                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">View and manage all your incoming transactions.</p>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{t("finance.scheduled_payments_sub")}</p>
                             </div>
                         </div>
                         <Table>
                             <TableHeader className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
                                 <TableRow className="hover:bg-slate-50 dark:hover:bg-slate-800/50 dark:border-slate-800">
-                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Project / Deal</TableHead>
-                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Amount</TableHead>
-                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Status</TableHead>
-                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Due Date</TableHead>
-                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs text-right py-4">Actions</TableHead>
+                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">{t("finance.table_project")}</TableHead>
+                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">{t("finance.table_amount")}</TableHead>
+                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">{t("finance.table_status")}</TableHead>
+                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">{t("finance.table_due_date")}</TableHead>
+                                    <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs text-right py-4">{t("common.actions")}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {loadingPayments ? (
                                     <TableRow>
                                         <TableCell colSpan={5} className="h-24 text-center text-gray-500">
-                                            Loading payments...
+                                            {t("common.loading")}
                                         </TableCell>
                                     </TableRow>
                                 ) : payments?.length === 0 ? (
                                     <TableRow>
                                         <TableCell colSpan={5} className="h-24 text-center text-gray-500">
-                                            No payments recorded yet.
+                                            {t("finance.no_payments")}
                                         </TableCell>
                                     </TableRow>
                                 ) : (
@@ -250,15 +250,15 @@ export default function FinancePage() {
                                                 <TableCell>
                                                     {trueStatus === PaymentStatus.PAID ? (
                                                         <Badge className="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-50 border-none flex items-center w-fit gap-1">
-                                                            <CheckCircle2 size={12} /> Paid
+                                                            <CheckCircle2 size={12} /> {t("finance.status_paid")}
                                                         </Badge>
                                                     ) : trueStatus === PaymentStatus.PENDING ? (
                                                         <Badge className="bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 hover:bg-orange-50 border-none flex items-center w-fit gap-1">
-                                                            <Clock size={12} /> Pending
+                                                            <Clock size={12} /> {t("finance.status_pending")}
                                                         </Badge>
                                                     ) : (
                                                         <Badge className="bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 hover:bg-rose-50 border-none flex items-center w-fit gap-1 shadow-sm border border-rose-100 dark:border-rose-800">
-                                                            <XCircle size={12} /> Overdue
+                                                            <XCircle size={12} /> {t("finance.status_overdue")}
                                                         </Badge>
                                                     )}
                                                 </TableCell>
@@ -278,7 +278,7 @@ export default function FinancePage() {
                                                                     className="cursor-pointer font-medium text-green-600 focus:bg-green-50 focus:text-green-700"
                                                                     onClick={() => updateStatusMutation.mutate({ id: payment.id, status: PaymentStatus.PAID })}
                                                                 >
-                                                                    <CheckCircle2 className="mr-2 size-4" /> Mark as Paid
+                                                                    <CheckCircle2 className="mr-2 size-4" /> {t("finance.action_mark_paid")}
                                                                 </DropdownMenuItem>
                                                             )}
                                                             {payment.status === PaymentStatus.PAID && (
@@ -286,7 +286,7 @@ export default function FinancePage() {
                                                                     className="cursor-pointer"
                                                                     onClick={() => updateStatusMutation.mutate({ id: payment.id, status: PaymentStatus.PENDING })}
                                                                 >
-                                                                    Mark as Pending
+                                                                    {t("finance.action_mark_pending")}
                                                                 </DropdownMenuItem>
                                                             )}
                                                         </DropdownMenuContent>
@@ -344,17 +344,17 @@ export default function FinancePage() {
                                 <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                                     <div>
                                         <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">{t("finance.commission_breakdown")}</h2>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Detailed list of commissions per completed deal.</p>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{t("finance.commission_breakdown_sub")}</p>
                                     </div>
                                 </div>
                                 <div className="overflow-x-auto">
                                     <Table>
                                         <TableHeader className="bg-slate-50 dark:bg-slate-800/50">
                                             <TableRow>
-                                                <TableHead>Deal & Brand</TableHead>
-                                                <TableHead>Total Deal Value (TRY)</TableHead>
-                                                <TableHead>Sales Rep</TableHead>
-                                                <TableHead>Influencer</TableHead>
+                                                <TableHead>{t("finance.table_deal_brand")}</TableHead>
+                                                <TableHead>{t("finance.table_deal_value")}</TableHead>
+                                                <TableHead>{t("finance.table_sales_rep")}</TableHead>
+                                                <TableHead>{t("finance.table_influencer")}</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>

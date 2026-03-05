@@ -159,10 +159,10 @@ export default function CalendarPage() {
                 <DialogContent className="sm:max-w-[540px]">
                     <DialogHeader>
                         <DialogTitle>
-                            {selectedDate ? format(selectedDate, "MMMM d, yyyy") : "Tasks"}
+                            {selectedDate ? format(selectedDate, "MMMM d, yyyy") : t("calendar.tasks")}
                         </DialogTitle>
                         <DialogDescription>
-                            Manage your personal to-do list for this day.
+                            {t("calendar.tasks_desc")}
                         </DialogDescription>
                     </DialogHeader>
                     <CalendarTodoPanel date={selectedDate} />

@@ -102,11 +102,11 @@ export default function ContactsPage() {
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Add New Contact</DialogTitle>
+                            <DialogTitle>{t("contacts.add_new")}</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4">
                             <div className="space-y-2">
-                                <Label>Brand</Label>
+                                <Label>{t("common.brand")}</Label>
                                 <Controller
                                     name="brandId"
                                     control={control}
@@ -130,29 +130,29 @@ export default function ContactsPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="name">Full Name</Label>
+                                <Label htmlFor="name">{t("contacts.label_name")}</Label>
                                 <Input id="name" placeholder="John Doe" {...register("name", { required: "Name is required" })} />
                                 {errors.name && <p className="text-xs text-red-500">{errors.name.message as string}</p>}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
+                                    <Label htmlFor="email">{t("contacts.label_email")}</Label>
                                     <Input id="email" type="email" placeholder="john@brand.com" {...register("email")} />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="phone">Phone</Label>
+                                    <Label htmlFor="phone">{t("contacts.label_phone")}</Label>
                                     <Input id="phone" placeholder="+90..." {...register("phone")} />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="position">Position</Label>
+                                <Label htmlFor="position">{t("contacts.position")}</Label>
                                 <Input id="position" placeholder="Marketing Manager" {...register("position")} />
                             </div>
 
                             <Button type="submit" className="w-full" disabled={createMutation.isPending}>
-                                {createMutation.isPending ? "Adding..." : "Add Contact"}
+                                {createMutation.isPending ? t("common.loading") : t("contacts.submit_add")}
                             </Button>
                         </form>
                     </DialogContent>
@@ -170,7 +170,7 @@ export default function ContactsPage() {
                             <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
                                 <Users size={16} />
                             </div>
-                            Total Contacts
+                            {t("contacts.total_contacts")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -189,7 +189,7 @@ export default function ContactsPage() {
                             <div className="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
                                 <Building2 size={16} />
                             </div>
-                            Active Brands
+                            {t("contacts.active_brands")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -208,7 +208,7 @@ export default function ContactsPage() {
                             <div className="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg">
                                 <Fingerprint size={16} />
                             </div>
-                            Network Health
+                            {t("contacts.network_health")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -216,7 +216,7 @@ export default function ContactsPage() {
                             100%
                         </div>
                         <p className="text-xs font-medium text-emerald-500 mt-2 flex items-center gap-1">
-                            Fully Connected
+                            {t("contacts.fully_connected")}
                         </p>
                     </CardContent>
                 </Card>
@@ -224,29 +224,29 @@ export default function ContactsPage() {
 
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border-none overflow-hidden ring-1 ring-slate-100 dark:ring-slate-800">
                 <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
-                    <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">Contact Directory</h2>
+                    <h2 className="font-bold text-xl text-slate-900 dark:text-white font-outfit">{t("contacts.directory")}</h2>
                 </div>
                 <Table>
                     <TableHeader className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
                         <TableRow className="hover:bg-slate-50 dark:hover:bg-slate-800 border-none">
-                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Name</TableHead>
-                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Brand</TableHead>
-                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Contact Info</TableHead>
-                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">Position</TableHead>
-                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4 text-right">Actions</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">{t("common.name")}</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">{t("common.brand")}</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">{t("contacts.info")}</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4">{t("contacts.position")}</TableHead>
+                            <TableHead className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs py-4 text-right">{t("common.actions")}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {loadingContacts ? (
                             <TableRow>
                                 <TableCell colSpan={5} className="h-24 text-center text-gray-500">
-                                    Loading contacts...
+                                    {t("common.loading")}
                                 </TableCell>
                             </TableRow>
                         ) : !Array.isArray(contacts) || contacts.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={5} className="h-24 text-center text-gray-500">
-                                    No contacts found.
+                                    {t("contacts.no_contacts")}
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -269,7 +269,7 @@ export default function ContactsPage() {
                                                 {contact.brand.name}
                                             </span>
                                         ) : (
-                                            <span className="text-slate-400 dark:text-slate-500 italic text-sm">No Brand</span>
+                                            <span className="text-slate-400 dark:text-slate-500 italic text-sm">{t("contacts.no_brand")}</span>
                                         )}
                                     </TableCell>
                                     <TableCell className="py-4">
@@ -297,7 +297,7 @@ export default function ContactsPage() {
                                             size="icon"
                                             className="text-rose-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-xl transition-colors"
                                             onClick={() => {
-                                                if (confirm("Are you sure you want to remove this contact?")) {
+                                                if (confirm(t("contacts.delete_confirm"))) {
                                                     deleteMutation.mutate(contact.id);
                                                 }
                                             }}

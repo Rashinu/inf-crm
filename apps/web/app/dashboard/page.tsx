@@ -39,6 +39,14 @@ export default function DashboardPage() {
         },
     });
 
+    const { data: statusData } = useQuery({
+        queryKey: ['billing-status'],
+        queryFn: async () => {
+            const res = await apiClient.get('/billing/status');
+            return res.data;
+        }
+    });
+
     if (isLoadingSummary || isLoadingPipeline) return <div>Loading dashboard...</div>;
 
     const chartData = pipelineStats ? Object.entries(pipelineStats).map(([stage, count]) => ({
@@ -52,6 +60,15 @@ export default function DashboardPage() {
                 <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">{t("dashboard.executive_review")}</h1>
                 <p className="text-gray-500 dark:text-slate-400 mt-1">High-level financial and pipeline metrics for executive review.</p>
             </div>
+
+            {statusData?.trialActive && (
+                <div onClick={() => router.push('/dashboard/billing')} className="cursor-pointer hover:shadow-md transition-shadow bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-300 p-4 rounded-xl flex items-center justify-between">
+                    <div>
+                        <h3 className="font-bold flex items-center gap-2">💡 14 Günlük Deneme Sürümü Aktif</h3>
+                        <p className="text-sm mt-1">Deneme sürümünüzün bitmesine <strong>{statusData.daysLeft} gün</strong> kaldı. Tüm özellikleri ücretsiz kullanıyorsunuz. Paketinizi belirlemek için tıklayın.</p>
+                    </div>
+                </div>
+            )}
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-gradient-to-br from-blue-600 to-blue-800 ring-1 ring-slate-100 dark:ring-slate-800 text-white">
