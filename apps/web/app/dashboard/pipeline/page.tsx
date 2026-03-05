@@ -190,19 +190,19 @@ export default function PipelinePage() {
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-blue-600 hover:bg-blue-700">
-                            <Plus className="mr-2 size-4" /> New Deal
+                            <Plus className="mr-2 size-4" /> {t("deals.new_deal")}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Create New Deal</DialogTitle>
+                            <DialogTitle>{t("deals.new_deal")}</DialogTitle>
                         </DialogHeader>
 
                         {/* AI Assistant Section */}
                         <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-3 mt-4">
                             <div className="flex items-center gap-2 text-blue-800 font-semibold text-sm">
                                 <Sparkles className="size-4 text-blue-600" />
-                                <span>AI Contract Autofill</span>
+                                <span>{t("deals.ai_autofill")}</span>
                             </div>
                             <Textarea
                                 placeholder="Paste contract text, brief, or email here..."

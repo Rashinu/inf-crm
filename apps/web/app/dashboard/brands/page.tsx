@@ -33,10 +33,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function BrandsPage() {
     const queryClient = useQueryClient();
     const router = useRouter();
+    const { t } = useLanguage();
     const [isAddOpen, setIsAddOpen] = useState(false);
 
     const { data: brands, isLoading } = useQuery<Brand[]>({
@@ -83,19 +85,19 @@ export default function BrandsPage() {
         <div className="space-y-8">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Brands</h1>
-                    <p className="text-gray-500 dark:text-slate-400 mt-1">Manage all brands and companies you work with.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">{t("brands.title")}</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">{t("brands.subtitle")}</p>
                 </div>
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-blue-600 hover:bg-blue-700">
-                            <Plus className="mr-2 size-4" /> Add Brand
+                            <Plus className="mr-2 size-4" /> {t("brands.new_brand")}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Add New Brand</DialogTitle>
+                            <DialogTitle>{t("brands.new_brand")}</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 pt-4">
                             <div className="space-y-2">

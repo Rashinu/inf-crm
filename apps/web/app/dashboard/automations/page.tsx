@@ -11,9 +11,11 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function AutomationsPage() {
     const queryClient = useQueryClient();
+    const { t } = useLanguage();
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -75,10 +77,10 @@ export default function AutomationsPage() {
             <div className="flex justify-between items-end">
                 <div>
                     <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white font-outfit flex items-center gap-2">
-                        <Zap className="text-amber-500" /> Agency Automations
+                        <Zap className="text-amber-500" /> {t("automations.title")}
                     </h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">
-                        Set up rules to automate repetitive tasks like emails and Slack notifications.
+                        {t("automations.subtitle")}
                     </p>
                 </div>
                 <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>

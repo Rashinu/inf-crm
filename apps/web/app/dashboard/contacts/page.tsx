@@ -32,9 +32,11 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function ContactsPage() {
     const queryClient = useQueryClient();
+    const { t } = useLanguage();
     const [isAddOpen, setIsAddOpen] = useState(false);
 
     const { data: contacts, isLoading: loadingContacts } = useQuery<any[]>({
@@ -88,14 +90,14 @@ export default function ContactsPage() {
         <div className="space-y-8">
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white font-outfit">Contacts Network</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Manage and connect with your brand representatives directly.</p>
+                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white font-outfit">{t("contacts.title")}</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">{t("contacts.subtitle")}</p>
                 </div>
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-slate-900 text-white hover:bg-slate-800 transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] rounded-xl font-bold px-5">
-                            <UserPlus className="mr-2 size-4" /> Add Contact
+                            <UserPlus className="mr-2 size-4" /> {t("contacts.new_contact")}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>

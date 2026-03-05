@@ -61,6 +61,10 @@ export default function BillingPage() {
                 <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
                     Kullanmadığınız özellikler veya ekstra kullanıcılar için ödeme yapmayın. İhtiyacınıza uygun paketi oluşturun ve sadece kullandığınız kadar ödeyin.
                 </p>
+                <div className="mt-6 max-w-3xl mx-auto bg-blue-50/50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-xl p-4 text-sm text-blue-800 dark:text-blue-300 text-left">
+                    <p className="font-semibold mb-1">💡 14 Günlük Deneme Süreciniz Nasıl Çalışır?</p>
+                    <p>Sisteme kayıt olduğunuz an itibariyle arka planda otomatik olarak 14 günlük tam erişimli deneme süreniz başlar. Bu sürenin sayacı anlık olarak takip edilir ve ana ekranınızda kalan gününüz bildirilir. Deneme süreniz dolduğunda sistem sizi otomatik olarak bu sayfaya yönlendirir. Hiçbir veri kaybı yaşamazsınız, dilediğiniz zaman aşağıdaki hesaplayıcıdan kendi paketinizi oluşturarak kesintisiz kullanıma devam edebilirsiniz.</p>
+                </div>
                 {statusData?.trialActive && (
                     <div className="mt-6 inline-flex border border-primary/20 bg-primary/10 text-primary rounded-full px-4 py-1.5 text-sm font-medium">
                         Deneme sürümünüzün bitmesine {statusData.daysLeft} gün kaldı.
@@ -166,6 +170,6 @@ export default function BillingPage() {
                     </Card>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

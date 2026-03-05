@@ -10,9 +10,11 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { startOfMonth, endOfMonth, format } from "date-fns";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import CalendarTodoPanel from "@/components/calendar/CalendarTodoPanel";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function CalendarPage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [dateRange, setDateRange] = useState({
         start: startOfMonth(new Date()),
         end: endOfMonth(new Date()),
@@ -125,8 +127,8 @@ export default function CalendarPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Calendar</h1>
-                    <p className="text-gray-500 dark:text-slate-400 mt-1">Track upcoming deliverables and payments.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">{t("calendar.title")}</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">{t("calendar.subtitle")}</p>
                 </div>
             </div>
 

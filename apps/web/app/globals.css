@@ -124,6 +124,43 @@
   }
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  /* slate-100 */
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+  /* slate-900 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  /* slate-300 */
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+  /* slate-600 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  /* slate-400 */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+  /* slate-500 */
+}
+
 /* =========================================
    FullCalendar Premium Aesthetics Overrides 
    ========================================= */
@@ -241,6 +278,13 @@
 
 .dark .fc .fc-toolbar-title {
   color: #f8fafc !important;
+}
+
+.dark .fc-theme-standard th,
+.dark .fc .fc-col-header-cell,
+.dark .fc .fc-scrollgrid-sync-inner {
+  background-color: #0f172a !important;
+  /* slate-900 */
 }
 
 .dark .fc .fc-col-header-cell-cushion {
