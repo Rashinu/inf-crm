@@ -73,8 +73,8 @@ export default function AiAssistantTab({ deal }: { deal: any }) {
                     {hooks.length > 0 && (
                         <div className="mt-4 space-y-3">
                             {hooks.map((hook, idx) => (
-                                <div key={idx} className="p-3 bg-gray-50 border border-gray-100 rounded-lg text-sm text-gray-800">
-                                    <strong className="text-violet-600 mr-2">#{idx + 1}</strong>
+                                <div key={idx} className="p-3 bg-gray-50 dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700 rounded-lg text-sm text-gray-800 dark:text-slate-200">
+                                    <strong className="text-violet-600 dark:text-violet-400 mr-2">#{idx + 1}</strong>
                                     {hook}
                                 </div>
                             ))}
@@ -111,7 +111,7 @@ export default function AiAssistantTab({ deal }: { deal: any }) {
                     </Button>
 
                     {draftEmail && (
-                        <div className="mt-4 p-4 bg-gray-50 border border-gray-100 rounded-lg text-sm whitespace-pre-wrap text-gray-700 flex-1">
+                        <div className="mt-4 p-4 bg-gray-50 dark:bg-slate-800/50 border border-gray-100 dark:border-slate-700 rounded-lg text-sm whitespace-pre-wrap text-gray-700 dark:text-slate-200 flex-1">
                             {draftEmail}
                         </div>
                     )}

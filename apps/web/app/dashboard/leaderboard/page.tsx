@@ -171,8 +171,8 @@ export default function LeaderboardPage() {
             )}
 
             {leaderboard?.length === 0 && (
-                <Card className="p-12 text-center text-slate-500 flex flex-col items-center justify-center border-dashed">
-                    <Target className="size-12 text-slate-300 mb-4" />
+                <Card className="p-12 text-center text-slate-500 bg-white dark:bg-slate-900 flex flex-col items-center justify-center border-dashed border-slate-200 dark:border-slate-800 shadow-sm">
+                    <Target className="size-12 text-slate-300 dark:text-slate-600 mb-4" />
                     <h3 className="font-medium text-lg text-slate-900 dark:text-white">No data yet</h3>
                     <p className="text-sm">Start closing deals and adding deliverables to build your leaderboard.</p>
                 </Card>

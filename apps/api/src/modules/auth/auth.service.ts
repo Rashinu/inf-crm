@@ -27,9 +27,13 @@ export class AuthService {
 
         // Create Tenant and Owner User in a transaction
         return this.prisma.$transaction(async (tx) => {
+            const trialEndsAt = new Date();
+            trialEndsAt.setDate(trialEndsAt.getDate() + 14);
+
             const tenant = await tx.tenant.create({
                 data: {
                     name: dto.workspaceName,
+                    trialEndsAt,
                 },
             });
 

@@ -17,7 +17,8 @@ import {
     ChevronLeft,
     ChevronRight,
     Zap,
-    Trophy
+    Trophy,
+    CreditCard
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -87,6 +88,16 @@ export function Sidebar() {
                 >
                     <Settings className="size-5 text-gray-400 dark:text-slate-500" />
                     {!collapsed && <span>{t("nav.settings")}</span>}
+                </Link>
+                <Link
+                    href="/dashboard/billing"
+                    className={cn(
+                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-900",
+                        pathname === "/dashboard/billing" && "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
+                    )}
+                >
+                    <CreditCard className="size-5 text-gray-400 dark:text-slate-500" />
+                    {!collapsed && <span>Abonelik</span>}
                 </Link>
                 <button
                     onClick={() => {

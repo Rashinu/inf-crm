@@ -38,6 +38,11 @@ apiClient.interceptors.response.use(
                 }
             }
         }
+        if (error.response?.status === 402) {
+            if (typeof window !== 'undefined' && window.location.pathname !== '/dashboard/billing') {
+                window.location.href = '/dashboard/billing';
+            }
+        }
         return Promise.reject(error);
     }
 );

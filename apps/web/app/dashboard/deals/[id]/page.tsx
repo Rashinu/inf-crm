@@ -69,27 +69,27 @@ export default function DealDetailPage() {
             </div>
 
             <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 bg-white p-1.5 rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 mb-6 h-auto">
+                <TabsList className="flex w-full overflow-x-auto scrollbar-hide no-scrollbar justify-start bg-white dark:bg-slate-900 p-1.5 rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100 dark:border-slate-800 mb-6 h-auto gap-1">
                     <TabsTrigger value="overview" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all font-semibold">
-                        <Package size={16} /> <span className="hidden md:inline">Overview</span>
+                        <Package size={16} /> <span className="whitespace-nowrap">Overview</span>
                     </TabsTrigger>
                     <TabsTrigger value="deliverables" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-indigo-600 data-[state=active]:text-white transition-all font-semibold">
-                        <Calendar size={16} /> <span className="hidden md:inline">Tasks</span>
+                        <Calendar size={16} /> <span className="whitespace-nowrap">Tasks</span>
                     </TabsTrigger>
                     <TabsTrigger value="payments" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-emerald-600 data-[state=active]:text-white transition-all font-semibold">
-                        <DollarSign size={16} /> <span className="hidden md:inline">Money</span>
+                        <DollarSign size={16} /> <span className="whitespace-nowrap">Money</span>
                     </TabsTrigger>
                     <TabsTrigger value="contracts" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-purple-600 data-[state=active]:text-white transition-all font-semibold">
-                        <FileText size={16} /> <span className="hidden md:inline">Files</span>
+                        <FileText size={16} /> <span className="whitespace-nowrap">Files</span>
                     </TabsTrigger>
                     <TabsTrigger value="activity" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-amber-600 data-[state=active]:text-white transition-all font-semibold">
-                        <ActivityIcon size={16} /> <span className="hidden md:inline">Log</span>
+                        <ActivityIcon size={16} /> <span className="whitespace-nowrap">Log</span>
                     </TabsTrigger>
                     <TabsTrigger value="comms" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-green-600 data-[state=active]:text-white transition-all font-semibold">
-                        <MessageCircle size={16} /> <span className="hidden md:inline">Sync</span>
+                        <MessageCircle size={16} /> <span className="whitespace-nowrap">Sync</span>
                     </TabsTrigger>
                     <TabsTrigger value="ai" className="flex items-center gap-2 py-2.5 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-indigo-500 data-[state=active]:to-purple-500 data-[state=active]:text-white transition-all font-semibold text-slate-500">
-                        <Sparkles size={16} /> <span className="hidden md:inline">Magic</span>
+                        <Sparkles size={16} /> <span className="whitespace-nowrap">Magic</span>
                     </TabsTrigger>
                 </TabsList>
 

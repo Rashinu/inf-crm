@@ -17,6 +17,12 @@ model Tenant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // Billing & Trial
+  trialEndsAt          DateTime?
+  billingStatus        String    @default("TRIAL") // TRIAL, ACTIVE, CANCELLED, PAST_DUE
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+
   users         User[]
   brands        Brand[]
   contacts      Contact[]

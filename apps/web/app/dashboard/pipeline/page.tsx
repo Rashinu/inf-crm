@@ -320,32 +320,37 @@ export default function PipelinePage() {
                                         >
                                             {stageDeals.map((deal, index) => (
                                                 <Draggable key={deal.id} draggableId={deal.id} index={index}>
-                                                    {(provided) => (
-                                                        <Card
+                                                    {(provided, snapshot) => (
+                                                        <div
                                                             ref={provided.innerRef}
                                                             {...provided.draggableProps}
                                                             {...provided.dragHandleProps}
-                                                            onClick={() => router.push(`/dashboard/deals/${deal.id}`)}
-                                                            className="mb-3 border-none shadow-sm hover:shadow-md dark:shadow-none dark:ring-1 dark:ring-slate-700 transition-shadow cursor-pointer bg-white dark:bg-slate-900 dark:hover:bg-slate-800"
+                                                            style={provided.draggableProps.style}
+                                                            className={`mb-3 ${snapshot.isDragging ? 'opacity-80 scale-[1.02] shadow-xl z-50' : ''}`}
                                                         >
-                                                            <CardContent className="p-4 space-y-3">
-                                                                <div className="flex justify-between items-start">
-                                                                    <Badge className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-50 border-none font-semibold text-[10px]">
-                                                                        {deal.brand?.name}
-                                                                    </Badge>
-                                                                    <span className="text-xs text-gray-400 dark:text-slate-500 font-medium">₺{deal.totalAmount?.toLocaleString()}</span>
-                                                                </div>
-                                                                <h3 className="font-semibold text-gray-900 dark:text-slate-100 text-sm leading-tight">
-                                                                    {deal.title}
-                                                                </h3>
-                                                                <div className="flex items-center gap-2 pt-1 border-t border-gray-50 dark:border-slate-800 mt-2">
-                                                                    {getPlatformIcon(deal.platform as Platform)}
-                                                                    <span className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider">
-                                                                        {deal.platform}
-                                                                    </span>
-                                                                </div>
-                                                            </CardContent>
-                                                        </Card>
+                                                            <Card
+                                                                onClick={() => router.push(`/dashboard/deals/${deal.id}`)}
+                                                                className="border-none shadow-sm hover:shadow-md dark:shadow-none dark:ring-1 dark:ring-slate-700 transition-shadow cursor-pointer bg-white dark:bg-slate-900 dark:hover:bg-slate-800"
+                                                            >
+                                                                <CardContent className="p-4 space-y-3">
+                                                                    <div className="flex justify-between items-start">
+                                                                        <Badge className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 hover:bg-blue-50 border-none font-semibold text-[10px]">
+                                                                            {deal.brand?.name}
+                                                                        </Badge>
+                                                                        <span className="text-xs text-gray-400 dark:text-slate-500 font-medium">₺{deal.totalAmount?.toLocaleString()}</span>
+                                                                    </div>
+                                                                    <h3 className="font-semibold text-gray-900 dark:text-slate-100 text-sm leading-tight">
+                                                                        {deal.title}
+                                                                    </h3>
+                                                                    <div className="flex items-center gap-2 pt-1 border-t border-gray-50 dark:border-slate-800 mt-2">
+                                                                        {getPlatformIcon(deal.platform as Platform)}
+                                                                        <span className="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-wider">
+                                                                            {deal.platform}
+                                                                        </span>
+                                                                    </div>
+                                                                </CardContent>
+                                                            </Card>
+                                                        </div>
                                                     )}
                                                 </Draggable>
                                             ))}

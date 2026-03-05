@@ -172,8 +172,8 @@ export default function AutomationsPage() {
                 ))}
 
                 {automations.length === 0 && (
-                    <div className="col-span-full py-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center">
-                        <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mb-4">
+                    <div className="col-span-full py-12 text-center bg-white dark:bg-slate-900 shadow-sm border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center">
+                        <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 dark:text-slate-500 mb-4">
                             <Settings size={32} />
                         </div>
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">No automations yet</h3>

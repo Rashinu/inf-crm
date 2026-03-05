@@ -74,8 +74,8 @@ export default function DeliverablesList({ dealId }: { dealId: string }) {
                     </Card>
                 ))}
                 {deliverables?.length === 0 && (
-                    <div className="text-center py-10 bg-gray-50 rounded-xl border-2 border-dashed border-gray-100">
-                        <p className="text-gray-400">No deliverables added yet.</p>
+                    <div className="text-center py-10 bg-gray-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-gray-200 dark:border-slate-800">
+                        <p className="text-gray-400 dark:text-slate-500">No deliverables added yet.</p>
                     </div>
                 )}
             </div>

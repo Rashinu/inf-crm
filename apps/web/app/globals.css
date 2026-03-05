@@ -231,3 +231,54 @@
   background: transparent;
   border: none;
 }
+
+/* Dark Mode Overrides for FullCalendar */
+.dark .fc-theme-standard td,
+.dark .fc-theme-standard th,
+.dark .fc-theme-standard .fc-scrollgrid {
+  border-color: #1e293b !important;
+}
+
+.dark .fc .fc-toolbar-title {
+  color: #f8fafc !important;
+}
+
+.dark .fc .fc-col-header-cell-cushion {
+  color: #94a3b8 !important;
+}
+
+.dark .fc .fc-daygrid-day-number {
+  color: #e2e8f0 !important;
+}
+
+.dark .fc .fc-daygrid-day-number:hover {
+  color: #ffffff !important;
+}
+
+.dark .fc .fc-day-today {
+  background-color: #0f172a !important;
+  /* slate-900 */
+}
+
+.dark .fc .fc-day-today .fc-daygrid-day-number {
+  background-color: #f8fafc;
+  color: #0f172a !important;
+}
+
+.dark .fc .fc-button-primary {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+.dark .fc .fc-button-primary:hover {
+  background-color: #334155 !important;
+  color: #ffffff !important;
+}
+
+.dark .fc .fc-button-primary:not(:disabled):active,
+.dark .fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #0f172a !important;
+  border-color: #475569 !important;
+  color: #ffffff !important;
+}

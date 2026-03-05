@@ -8,7 +8,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { startOfMonth, endOfMonth, format } from "date-fns";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import CalendarTodoPanel from "@/components/calendar/CalendarTodoPanel";
 
 export default function CalendarPage() {
@@ -153,19 +153,19 @@ export default function CalendarPage() {
                 />
             </div>
 
-            <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-                <SheetContent className="w-[400px] sm:w-[540px]">
-                    <SheetHeader>
-                        <SheetTitle>
+            <Dialog open={sheetOpen} onOpenChange={setSheetOpen}>
+                <DialogContent className="sm:max-w-[540px]">
+                    <DialogHeader>
+                        <DialogTitle>
                             {selectedDate ? format(selectedDate, "MMMM d, yyyy") : "Tasks"}
-                        </SheetTitle>
-                        <SheetDescription>
+                        </DialogTitle>
+                        <DialogDescription>
                             Manage your personal to-do list for this day.
-                        </SheetDescription>
-                    </SheetHeader>
+                        </DialogDescription>
+                    </DialogHeader>
                     <CalendarTodoPanel date={selectedDate} />
-                </SheetContent>
-            </Sheet>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

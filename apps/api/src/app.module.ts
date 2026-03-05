@@ -31,6 +31,7 @@ import { AutomationsModule } from './modules/automations/automations.module';
 import { CommunicationsModule } from './modules/communications/communications.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CronModule } from './modules/cron/cron.module';
+import { BillingModule } from './modules/billing/billing.module';
 
 @Module({
   imports: [
@@ -83,6 +84,7 @@ import { CronModule } from './modules/cron/cron.module';
     AutomationsModule,
     CommunicationsModule,
     CronModule,
+    BillingModule,
   ],
   controllers: [AppController, MobileController],
   providers: [AppService, MobileService],
