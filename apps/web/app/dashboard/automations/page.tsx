@@ -86,40 +86,40 @@ export default function AutomationsPage() {
                 <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-blue-600 hover:bg-blue-700 text-white font-bold gap-2">
-                            <Plus size={16} /> New Rule
+                            <Plus size={16} /> {t("automations.new_rule")}
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Create Automation Rule</DialogTitle>
-                            <DialogDescription>Define what triggers the automation and what action happens.</DialogDescription>
+                            <DialogTitle>{t("automations.create_rule_title")}</DialogTitle>
+                            <DialogDescription>{t("automations.create_rule_desc")}</DialogDescription>
                         </DialogHeader>
                         <form onSubmit={handleCreate} className="space-y-4">
                             <div className="space-y-1.5">
-                                <Label>Rule Name</Label>
+                                <Label>{t("automations.rule_name")}</Label>
                                 <Input required placeholder="e.g. Notify Client on Completion" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                             </div>
                             <div className="space-y-1.5">
-                                <Label>Description (Optional)</Label>
+                                <Label>{t("automations.description")}</Label>
                                 <Input placeholder="What does this rule do?" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
                             </div>
                             <div className="space-y-1.5">
-                                <Label>When this happens (Trigger)</Label>
+                                <Label>{t("automations.trigger")}</Label>
                                 <select className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={formData.triggerType} onChange={(e) => setFormData({ ...formData, triggerType: e.target.value })}>
-                                    <option value="DEAL_STAGE_CHANGED">Deal Stage Changed</option>
-                                    <option value="DELIVERABLE_STATUS_CHANGED" disabled>Deliverable Status Changed (Coming Soon)</option>
+                                    <option value="DEAL_STAGE_CHANGED">{t("automations.trigger.deal_stage_changed")}</option>
+                                    <option value="DELIVERABLE_STATUS_CHANGED" disabled>{t("automations.trigger.deliverable_status_changed")}</option>
                                 </select>
                             </div>
                             <div className="space-y-1.5">
-                                <Label>Do this (Action)</Label>
+                                <Label>{t("automations.action")}</Label>
                                 <select className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" value={formData.actionType} onChange={(e) => setFormData({ ...formData, actionType: e.target.value })}>
-                                    <option value="SEND_EMAIL">Send Automated Email</option>
-                                    <option value="SEND_SLACK_MESSAGE">Send Slack Message</option>
+                                    <option value="SEND_EMAIL">{t("automations.action.send_email")}</option>
+                                    <option value="SEND_SLACK_MESSAGE">{t("automations.action.send_slack")}</option>
                                 </select>
                             </div>
                             <DialogFooter className="mt-4">
                                 <Button type="submit" disabled={createMutation.isPending}>
-                                    {createMutation.isPending ? "Saving..." : "Create Rule"}
+                                    {createMutation.isPending ? t("automations.saving") : t("automations.create_btn")}
                                 </Button>
                             </DialogFooter>
                         </form>
@@ -145,8 +145,8 @@ export default function AutomationsPage() {
                                     <Zap size={16} />
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Trigger</p>
-                                    <p className="text-sm font-semibold text-slate-700 dark:text-white">{auto.triggerType.replace(/_/g, ' ')}</p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t("automations.label_trigger")}</p>
+                                    <p className="text-sm font-semibold text-slate-700 dark:text-white">{t("automations.trigger." + auto.triggerType.toLowerCase())}</p>
                                 </div>
                             </div>
                             <div className="flex justify-center">
@@ -157,17 +157,17 @@ export default function AutomationsPage() {
                                     {auto.actionType === 'SEND_EMAIL' ? <Mail size={16} /> : <ExternalLink size={16} />}
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Action</p>
-                                    <p className="text-sm font-semibold text-slate-700 dark:text-white">{auto.actionType.replace(/_/g, ' ')}</p>
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t("automations.label_action")}</p>
+                                    <p className="text-sm font-semibold text-slate-700 dark:text-white">{t("automations.action." + auto.actionType.toLowerCase())}</p>
                                 </div>
                             </div>
                         </CardContent>
                         <div className="p-4 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
                             <Badge variant={auto.isActive ? "default" : "secondary"} className={auto.isActive ? "bg-emerald-500 hover:bg-emerald-600" : ""}>
-                                {auto.isActive ? "Active" : "Paused"}
+                                {auto.isActive ? t("automations.status_active") : t("automations.status_paused")}
                             </Badge>
                             <Button variant="outline" size="sm" onClick={() => toggleMutation.mutate({ id: auto.id, isActive: !auto.isActive })} className="text-xs font-medium">
-                                {auto.isActive ? "Pause Rule" : "Activate Rule"}
+                                {auto.isActive ? t("automations.pause_rule") : t("automations.activate_rule")}
                             </Button>
                         </div>
                     </Card>
@@ -178,10 +178,10 @@ export default function AutomationsPage() {
                         <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 dark:text-slate-500 mb-4">
                             <Settings size={32} />
                         </div>
-                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">No automations yet</h3>
-                        <p className="text-slate-500 dark:text-slate-400 max-w-sm mb-6">Create rules to automate repetitive tasks and let the CRM do the heavy lifting for your agency.</p>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{t("automations.no_automations")}</h3>
+                        <p className="text-slate-500 dark:text-slate-400 max-w-sm mb-6">{t("automations.no_automations_desc")}</p>
                         <Button onClick={() => setIsCreateOpen(true)} className="bg-slate-900 text-white dark:bg-white dark:text-slate-900">
-                            Create your first rule
+                            {t("automations.create_first")}
                         </Button>
                     </div>
                 )}

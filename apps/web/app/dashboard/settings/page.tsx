@@ -10,8 +10,10 @@ import { User, Building, Lock, Monitor, Image as ImageIcon, Camera } from "lucid
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function SettingsPage() {
+    const { t } = useLanguage();
     const [darkMode, setDarkMode] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -57,9 +59,9 @@ export default function SettingsPage() {
         setIsSaving(true);
         try {
             await apiClient.patch("/auth/me", { email: formData.email, agencyName: formData.agencyName });
-            toast.success("Profile updated successfully!");
+            toast.success(t("settings.success_profile"));
         } catch (error) {
-            toast.error("Failed to update profile.");
+            toast.error(t("settings.error_profile"));
         } finally {
             setIsSaving(false);
         }
@@ -73,10 +75,10 @@ export default function SettingsPage() {
                 currentPassword: formData.currentPassword,
                 newPassword: formData.newPassword
             });
-            toast.success("Password changed successfully!");
+            toast.success(t("settings.success_password"));
             setFormData({ ...formData, currentPassword: "", newPassword: "" });
         } catch (error: any) {
-            toast.error(error.response?.data?.message || "Failed to update password.");
+            toast.error(error.response?.data?.message || t("settings.error_password"));
         } finally {
             setIsSaving(false);
         }
@@ -88,11 +90,11 @@ export default function SettingsPage() {
         if (willBeDark) {
             document.documentElement.classList.add('dark');
             localStorage.theme = 'dark';
-            toast.success("Dark Mode activated & saved");
+            toast.success(t("settings.dark_mode_active"));
         } else {
             document.documentElement.classList.remove('dark');
             localStorage.theme = 'light';
-            toast.success("Light Mode activated");
+            toast.success(t("settings.light_mode_active"));
         }
     };
 
@@ -100,8 +102,8 @@ export default function SettingsPage() {
         <div className="space-y-8 max-w-5xl">
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white font-outfit">Settings</h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Manage your agency profile, preferences, and account security.</p>
+                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white font-outfit">{t("settings.title")}</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">{t("settings.subtitle")}</p>
                 </div>
             </div>
 
@@ -111,9 +113,9 @@ export default function SettingsPage() {
                     <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 rounded-2xl overflow-hidden ring-1 ring-slate-100 dark:ring-slate-800">
                         <CardHeader className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 pb-4">
                             <CardTitle className="flex items-center gap-2 text-lg dark:text-slate-100">
-                                <User className="text-blue-600 dark:text-blue-400" size={20} /> Personal Profile
+                                <User className="text-blue-600 dark:text-blue-400" size={20} /> {t("settings.personal_profile")}
                             </CardTitle>
-                            <CardDescription className="dark:text-slate-400">Update your photo and personal details.</CardDescription>
+                            <CardDescription className="dark:text-slate-400">{t("settings.personal_profile_desc")}</CardDescription>
                         </CardHeader>
                         <CardContent className="p-6 md:p-8">
                             <div className="flex flex-col sm:flex-row gap-8 mb-8 items-start">
@@ -130,11 +132,11 @@ export default function SettingsPage() {
                                 </div>
                                 <div className="space-y-4 flex-1">
                                     <div className="space-y-1.5">
-                                        <Label className="text-slate-600 dark:text-slate-300 font-medium">Your Name</Label>
+                                        <Label className="text-slate-600 dark:text-slate-300 font-medium">{t("settings.your_name")}</Label>
                                         <Input disabled value={user?.fullName || "Loading..."} className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-none font-medium text-slate-500 dark:text-slate-400" />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <Label className="text-slate-600 dark:text-slate-300 font-medium">Email Address</Label>
+                                        <Label className="text-slate-600 dark:text-slate-300 font-medium">{t("settings.email_address")}</Label>
                                         <Input name="email" value={formData.email} onChange={handleChange} className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm focus-visible:ring-blue-500 font-medium" />
                                     </div>
                                 </div>
@@ -144,16 +146,16 @@ export default function SettingsPage() {
 
                             <div className="space-y-4 mb-8">
                                 <h4 className="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                                    <Building size={18} className="text-indigo-500 dark:text-indigo-400" /> Agency / Workspace
+                                    <Building size={18} className="text-indigo-500 dark:text-indigo-400" /> {t("settings.agency_workspace")}
                                 </h4>
                                 <div className="space-y-1.5">
-                                    <Label className="text-slate-600 dark:text-slate-300 font-medium">Agency Name</Label>
+                                    <Label className="text-slate-600 dark:text-slate-300 font-medium">{t("settings.agency_name")}</Label>
                                     <Input name="agencyName" value={formData.agencyName} onChange={handleChange} className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm focus-visible:ring-indigo-500 font-medium" />
                                 </div>
                             </div>
 
                             <Button onClick={handleSaveProfile} disabled={isSaving} className="bg-slate-900 dark:bg-blue-600 text-white hover:bg-slate-800 dark:hover:bg-blue-700 transition-all shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] rounded-xl font-bold px-8">
-                                {isSaving ? "Saving..." : "Save Profile Changes"}
+                                {isSaving ? t("settings.saving") : t("settings.save_profile")}
                             </Button>
                         </CardContent>
                     </Card>
@@ -161,21 +163,21 @@ export default function SettingsPage() {
                     <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 rounded-2xl overflow-hidden ring-1 ring-slate-100 dark:ring-slate-800">
                         <CardHeader className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 pb-4">
                             <CardTitle className="flex items-center gap-2 text-lg dark:text-slate-100">
-                                <Lock className="text-rose-500 dark:text-rose-400" size={20} /> Security & Passwords
+                                <Lock className="text-rose-500 dark:text-rose-400" size={20} /> {t("settings.security_passwords")}
                             </CardTitle>
-                            <CardDescription className="dark:text-slate-400">Ensure your account remains safe.</CardDescription>
+                            <CardDescription className="dark:text-slate-400">{t("settings.security_passwords_desc")}</CardDescription>
                         </CardHeader>
                         <CardContent className="p-6 md:p-8 space-y-6">
                             <div className="space-y-1.5">
-                                <Label className="text-slate-600 dark:text-slate-300 font-medium">Current Password</Label>
-                                <Input type="password" name="currentPassword" value={formData.currentPassword} onChange={handleChange} placeholder="Enter your current password" className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm" />
+                                <Label className="text-slate-600 dark:text-slate-300 font-medium">{t("settings.current_password")}</Label>
+                                <Input type="password" name="currentPassword" value={formData.currentPassword} onChange={handleChange} placeholder="" className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm" />
                             </div>
                             <div className="space-y-1.5">
-                                <Label className="text-slate-600 dark:text-slate-300 font-medium">New Password</Label>
-                                <Input type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} placeholder="Enter your new password" className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm" />
+                                <Label className="text-slate-600 dark:text-slate-300 font-medium">{t("settings.new_password")}</Label>
+                                <Input type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} placeholder="" className="border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 shadow-sm" />
                             </div>
                             <Button onClick={handleSavePassword} disabled={!formData.currentPassword || !formData.newPassword || isSaving} className="bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50 border border-rose-200 dark:border-rose-800 transition-all rounded-xl font-bold px-8">
-                                Update Password
+                                {t("settings.update_password")}
                             </Button>
                         </CardContent>
                     </Card>
@@ -186,14 +188,14 @@ export default function SettingsPage() {
                     <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none rounded-2xl overflow-hidden bg-gradient-to-b from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 text-white ring-1 ring-slate-800">
                         <CardHeader className="pb-4">
                             <CardTitle className="flex items-center gap-2 text-lg text-white">
-                                <Monitor size={20} className="text-blue-400" /> Preferences
+                                <Monitor size={20} className="text-blue-400" /> {t("settings.preferences")}
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="p-6">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <h4 className="font-bold text-white">Dark Mode</h4>
-                                    <p className="text-slate-400 text-sm mt-0.5">Toggle site theme.</p>
+                                    <h4 className="font-bold text-white">{t("settings.dark_mode")}</h4>
+                                    <p className="text-slate-400 text-sm mt-0.5">{t("settings.dark_mode_desc")}</p>
                                 </div>
                                 <Switch checked={darkMode} onCheckedChange={handleThemeToggle} className="data-[state=checked]:bg-blue-500" />
                             </div>
