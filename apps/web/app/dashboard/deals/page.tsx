@@ -21,10 +21,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function DealsPage() {
     const queryClient = useQueryClient();
     const router = useRouter();
+    const { t } = useLanguage();
 
     const { data: deals, isLoading } = useQuery<any[]>({
         queryKey: ["deals"],
@@ -48,8 +50,8 @@ export default function DealsPage() {
         <div className="space-y-8">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">Deals</h1>
-                    <p className="text-gray-500 dark:text-slate-400 mt-1">Full list of all active and past collaborations.</p>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white font-outfit">{t("deals.title")}</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1">{t("deals.subtitle")}</p>
                 </div>
             </div>
 
@@ -57,25 +59,25 @@ export default function DealsPage() {
                 <Table>
                     <TableHeader>
                         <TableRow className="bg-gray-50/50 dark:bg-slate-800/50 border-gray-100 dark:border-slate-800 hover:bg-gray-50/50 dark:hover:bg-slate-800/50">
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Title</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Brand</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Stage</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Value</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">Platform</TableHead>
-                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-right">Actions</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">{t("common.title")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">{t("common.brand")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">{t("common.stage")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">{t("common.value")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200">{t("common.platform")}</TableHead>
+                            <TableHead className="font-semibold text-gray-900 dark:text-slate-200 text-right">{t("common.actions")}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {isLoading ? (
                             <TableRow>
                                 <TableCell colSpan={6} className="h-24 text-center text-gray-500">
-                                    Loading deals...
+                                    {t("common.loading")}
                                 </TableCell>
                             </TableRow>
                         ) : deals?.length === 0 ? (
                             <TableRow>
                                 <TableCell colSpan={6} className="h-24 text-center text-gray-500">
-                                    No deals found. Create one from the Pipeline page!
+                                    {t("deals.no_deals")}
                                 </TableCell>
                             </TableRow>
                         ) : (
@@ -85,7 +87,7 @@ export default function DealsPage() {
                                     <TableCell className="text-gray-600 dark:text-slate-400">{deal.brand?.name}</TableCell>
                                     <TableCell>
                                         <Badge variant="outline" className="capitalize dark:border-slate-700 dark:text-slate-300">
-                                            {deal.stage.toLowerCase()}
+                                            {t(`stage.${deal.stage}`)}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="font-medium dark:text-white">₺{deal.totalAmount?.toLocaleString()}</TableCell>
@@ -103,10 +105,10 @@ export default function DealsPage() {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem className="cursor-pointer" onClick={() => router.push(`/dashboard/deals/${deal.id}`)}>
-                                                    <Eye className="mr-2 size-4" /> View Details
+                                                    <Eye className="mr-2 size-4" /> {t("deals.view_details")}
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem className="text-red-600 focus:bg-red-50 focus:text-red-600 cursor-pointer" onClick={() => deleteMutation.mutate(deal.id)}>
-                                                    <Trash2 className="mr-2 size-4" /> Delete Deal
+                                                    <Trash2 className="mr-2 size-4" /> {t("deals.delete_deal")}
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>

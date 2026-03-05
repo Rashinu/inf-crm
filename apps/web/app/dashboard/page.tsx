@@ -64,7 +64,7 @@ export default function DashboardPage() {
                     <CardContent>
                         <div>
                             <h3 className="text-3xl font-bold">₺{summary?.advanced?.monthlyRevenue?.toLocaleString() || '0'}</h3>
-                            <p className="text-xs text-blue-200 mt-1">Total revenue collected this month</p>
+                            <p className="text-xs text-blue-200 mt-1">{t("dashboard.monthly_revenue_sub")}</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -79,7 +79,7 @@ export default function DashboardPage() {
                     <CardContent>
                         <div>
                             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">₺{summary?.advanced?.activePipelineValue?.toLocaleString() || '0'}</h3>
-                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Across {summary?.advanced?.activeDealsCount || 0} active deals</p>
+                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{t("dashboard.active_pipeline_sub").replace("{count}", String(summary?.advanced?.activeDealsCount || 0))}</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -94,7 +94,7 @@ export default function DashboardPage() {
                     <CardContent>
                         <div>
                             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">% {summary?.advanced?.winRate || '0'}</h3>
-                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Percentage of won deals</p>
+                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{t("dashboard.win_rate_sub")}</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -103,7 +103,7 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
                             <AlertCircle className="w-4 h-4 text-red-500 dark:text-red-400" />
-                            Overdue Payments
+                            {t("dashboard.overdue_payments")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -111,7 +111,7 @@ export default function DashboardPage() {
                             <h3 className="text-2xl font-bold text-red-600 dark:text-red-400">
                                 ₺{summary?.overduePayments?.totalAmount?.toLocaleString() || '0'}
                             </h3>
-                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Across {summary?.overduePayments?.count || 0} invoices</p>
+                            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{t("dashboard.overdue_payments_sub").replace("{count}", String(summary?.overduePayments?.count || 0))}</p>
                         </div>
                     </CardContent>
                 </Card>
@@ -122,18 +122,18 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
                             <Clock className="w-4 h-4 text-orange-500" />
-                            Today's Tasks
+                            {t("dashboard.todays_tasks")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-end">
                             <div>
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{summary?.todayTasks.deliverablesDue}</h3>
-                                <p className="text-xs text-gray-500 dark:text-slate-400">Deliverables Due</p>
+                                <p className="text-xs text-gray-500 dark:text-slate-400">{t("dashboard.deliverables_due")}</p>
                             </div>
                             <div className="text-right">
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{summary?.todayTasks.paymentsDue}</h3>
-                                <p className="text-xs text-gray-500 dark:text-slate-400">Payments Due</p>
+                                <p className="text-xs text-gray-500 dark:text-slate-400">{t("dashboard.payments_due")}</p>
                             </div>
                         </div>
                     </CardContent>
@@ -143,14 +143,14 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
                             <Clock className="w-4 h-4 text-orange-500" />
-                            Weekly Deliverables Overview
+                            {t("dashboard.weekly_overview")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-end">
                             <div>
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{summary?.todayTasks.deliverablesDue}</h3>
-                                <p className="text-xs text-gray-500 dark:text-slate-400">Deliverables Due Today</p>
+                                <p className="text-xs text-gray-500 dark:text-slate-400">{t("dashboard.deliverables_due_today")}</p>
                             </div>
                         </div>
                     </CardContent>
@@ -160,7 +160,7 @@ export default function DashboardPage() {
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
                             <Package className="w-4 h-4 text-green-500 dark:text-green-400" />
-                            Active Pipeline
+                            {t("dashboard.active_pipeline")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -169,7 +169,7 @@ export default function DashboardPage() {
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                                     {Object.values(pipelineStats || {}).reduce((a: any, b: any) => a + b, 0) as number}
                                 </h3>
-                                <p className="text-xs text-gray-500 dark:text-slate-400">Total Deals</p>
+                                <p className="text-xs text-gray-500 dark:text-slate-400">{t("dashboard.total_deals")}</p>
                             </div>
                         </div>
                     </CardContent>
@@ -179,7 +179,7 @@ export default function DashboardPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
                 <Card className="md:col-span-4 border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
                     <CardHeader>
-                        <CardTitle className="text-gray-900 dark:text-white">Pipeline Overview</CardTitle>
+                        <CardTitle className="text-gray-900 dark:text-white">{t("dashboard.pipeline_overview")}</CardTitle>
                     </CardHeader>
                     <CardContent className="h-[300px]">
                         {chartData.length > 0 ? (
@@ -193,7 +193,7 @@ export default function DashboardPage() {
                             </ResponsiveContainer>
                         ) : (
                             <div className="h-full flex items-center justify-center text-gray-400 dark:text-slate-500">
-                                No pipeline data available.
+                                {t("dashboard.no_pipeline_data")}
                             </div>
                         )}
                     </CardContent>
@@ -201,12 +201,12 @@ export default function DashboardPage() {
 
                 <Card className="md:col-span-3 border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
                     <CardHeader>
-                        <CardTitle className="text-gray-900 dark:text-white">Recent Activity</CardTitle>
+                        <CardTitle className="text-gray-900 dark:text-white">{t("dashboard.recent_activity")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-6">
                             {summary?.recentActivity.length === 0 ? (
-                                <p className="text-gray-500 dark:text-slate-400 text-sm italic text-center py-4">No recent activity.</p>
+                                <p className="text-gray-500 dark:text-slate-400 text-sm italic text-center py-4">{t("dashboard.no_recent_activity")}</p>
                             ) : summary?.recentActivity.map((activity: any) => (
                                 <div
                                     key={activity.id}

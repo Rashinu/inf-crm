@@ -320,7 +320,7 @@ export default function PipelinePage() {
                             <div key={stage.id} className="flex flex-col w-80 shrink-0">
                                 <div className="flex items-center justify-between mb-4 px-1">
                                     <div className="flex items-center gap-2">
-                                        <h2 className="font-semibold text-gray-900 dark:text-white">{stage.title}</h2>
+                                        <h2 className="font-semibold text-gray-900 dark:text-white">{t(`stage.${stage.id}`)}</h2>
                                         <Badge variant="secondary" className="bg-gray-200/50 dark:bg-slate-800 text-gray-600 dark:text-slate-400">
                                             {stageDeals.length}
                                         </Badge>
