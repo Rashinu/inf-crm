@@ -83,11 +83,27 @@ export default function PipelinePage() {
         mutationFn: async ({ id, stage }: { id: string; stage: DealStage }) => {
             return apiClient.patch(`/deals/${id}/stage`, { stage });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["deals"] });
+        onMutate: async ({ id, stage }) => {
+            await queryClient.cancelQueries({ queryKey: ["deals"] });
+            const previousDeals = queryClient.getQueryData(["deals"]);
+
+            queryClient.setQueryData(["deals"], (old: any[]) => {
+                if (!old) return old;
+                // Move the deal to the new stage optimistically
+                return old.map(deal => deal.id === id ? { ...deal, stage } : deal);
+            });
+
+            return { previousDeals };
         },
-        onError: () => {
+        onError: (err, variables, context: any) => {
+            if (context?.previousDeals) {
+                queryClient.setQueryData(["deals"], context.previousDeals);
+            }
             toast.error("Failed to update deal stage");
+        },
+        onSettled: () => {
+            // Keep invalidate to make sure background is perfectly in sync
+            queryClient.invalidateQueries({ queryKey: ["deals"] });
         },
     });
 
