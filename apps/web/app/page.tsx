@@ -244,7 +244,7 @@ export default function Home() {
                   <div className="text-center mb-6">
                     <p className="text-slate-500 font-medium mb-2">Başlangıç Paketi</p>
                     <div className="text-4xl font-extrabold text-slate-900">
-                      $29<span className="text-lg text-slate-500 font-medium">/ay</span>
+                      $19<span className="text-lg text-slate-500 font-medium">/ay</span>
                     </div>
                     <p className="text-sm text-slate-500 mt-2">1 Kullanıcı (Sistem Sahibi) Dahildir.</p>
                   </div>
@@ -252,7 +252,7 @@ export default function Home() {
                   <div className="space-y-4 mb-8 text-sm">
                     <div className="flex justify-between">
                       <span className="text-slate-600 flex items-center gap-2"><Briefcase size={16} className="text-slate-400" /> Ekstra Kullanıcı Başına</span>
-                      <span className="font-bold">+$5/ay</span>
+                      <span className="font-bold">+$2/ay</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-600 flex items-center gap-2"><Zap size={16} className="text-slate-400" /> Yıllık Ödemelerde İndirim</span>
