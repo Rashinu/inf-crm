@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { DealsService } from './deals.service';
 import { CreateDealDto } from './dto/create-deal.dto';
 import { UpdateDealStageDto } from './dto/update-deal-stage.dto';
@@ -9,43 +18,43 @@ import { TenantId } from '../../common/decorators/tenant.decorator';
 @Controller('deals')
 @UseGuards(JwtAuthGuard, TenantGuard)
 export class DealsController {
-    constructor(private readonly dealsService: DealsService) { }
+  constructor(private readonly dealsService: DealsService) {}
 
-    @Post()
-    create(@TenantId() tenantId: string, @Body() createDealDto: CreateDealDto) {
-        return this.dealsService.create(tenantId, createDealDto);
-    }
+  @Post()
+  create(@TenantId() tenantId: string, @Body() createDealDto: CreateDealDto) {
+    return this.dealsService.create(tenantId, createDealDto);
+  }
 
-    @Get()
-    findAll(@TenantId() tenantId: string) {
-        return this.dealsService.findAll(tenantId);
-    }
+  @Get()
+  findAll(@TenantId() tenantId: string) {
+    return this.dealsService.findAll(tenantId);
+  }
 
-    @Get(':id')
-    findOne(@TenantId() tenantId: string, @Param('id') id: string) {
-        return this.dealsService.findOne(tenantId, id);
-    }
+  @Get(':id')
+  findOne(@TenantId() tenantId: string, @Param('id') id: string) {
+    return this.dealsService.findOne(tenantId, id);
+  }
 
-    @Patch(':id/stage')
-    updateStage(
-        @TenantId() tenantId: string,
-        @Param('id') id: string,
-        @Body() updateDealStageDto: UpdateDealStageDto,
-    ) {
-        return this.dealsService.updateStage(tenantId, id, updateDealStageDto);
-    }
+  @Patch(':id/stage')
+  updateStage(
+    @TenantId() tenantId: string,
+    @Param('id') id: string,
+    @Body() updateDealStageDto: UpdateDealStageDto,
+  ) {
+    return this.dealsService.updateStage(tenantId, id, updateDealStageDto);
+  }
 
-    @Delete(':id')
-    remove(@TenantId() tenantId: string, @Param('id') id: string) {
-        return this.dealsService.remove(tenantId, id);
-    }
+  @Delete(':id')
+  remove(@TenantId() tenantId: string, @Param('id') id: string) {
+    return this.dealsService.remove(tenantId, id);
+  }
 
-    @Post(':id/communications')
-    sendCommunication(
-        @TenantId() tenantId: string,
-        @Param('id') id: string,
-        @Body() dto: { type: 'EMAIL' | 'WHATSAPP'; message: string },
-    ) {
-        return this.dealsService.sendCommunication(tenantId, id, dto);
-    }
+  @Post(':id/communications')
+  sendCommunication(
+    @TenantId() tenantId: string,
+    @Param('id') id: string,
+    @Body() dto: { type: 'EMAIL' | 'WHATSAPP'; message: string },
+  ) {
+    return this.dealsService.sendCommunication(tenantId, id, dto);
+  }
 }

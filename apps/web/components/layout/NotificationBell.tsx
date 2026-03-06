@@ -63,18 +63,6 @@ export function NotificationBell() {
                 <div className="p-4 border-b border-gray-100 dark:border-slate-800 flex items-center justify-between bg-gray-50/50 dark:bg-slate-800/50">
                     <h3 className="font-semibold text-gray-900 dark:text-white font-outfit">Notifications</h3>
                     <div className="flex gap-2">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-auto py-1 px-2 text-xs text-amber-600 hover:text-amber-700 hover:bg-amber-50 font-bold"
-                            onClick={async () => {
-                                await apiClient.post("/notifications/demo");
-                                queryClient.invalidateQueries({ queryKey: ["notifications"] });
-                                toast.success("Test notification triggered!");
-                            }}
-                        >
-                            + Demo
-                        </Button>
                         {unreadCount > 0 && (
                             <Button
                                 variant="ghost"

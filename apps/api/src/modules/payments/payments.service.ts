@@ -7,100 +7,104 @@ import { ActivityType } from '@inf-crm/types';
 
 @Injectable()
 export class PaymentsService {
-    constructor(
-        private prisma: PrismaService,
-        private activities: ActivitiesService,
-        private reminders: RemindersService,
-    ) { }
+  constructor(
+    private prisma: PrismaService,
+    private activities: ActivitiesService,
+    private reminders: RemindersService,
+  ) {}
 
-    async create(tenantId: string, dto: CreatePaymentDto) {
-        const deal = await this.prisma.deal.findFirst({
-            where: { id: dto.dealId, tenantId },
-        });
-        if (!deal) throw new NotFoundException('Deal not found');
+  async create(tenantId: string, dto: CreatePaymentDto) {
+    const deal = await this.prisma.deal.findFirst({
+      where: { id: dto.dealId, tenantId },
+    });
+    if (!deal) throw new NotFoundException('Deal not found');
 
-        const payment = await this.prisma.payment.create({
-            data: {
-                ...dto,
-                tenantId,
-                dueDate: new Date(dto.dueDate),
-                paidAt: dto.paidAt ? new Date(dto.paidAt) : null,
-            },
-        });
+    const payment = await this.prisma.payment.create({
+      data: {
+        ...dto,
+        tenantId,
+        dueDate: new Date(dto.dueDate),
+        paidAt: dto.paidAt ? new Date(dto.paidAt) : null,
+      },
+    });
 
-        await this.activities.log({
-            tenantId,
-            dealId: dto.dealId,
-            type: ActivityType.PAYMENT_UPDATED,
-            message: `Payment added: ${dto.amount}`,
-        });
+    await this.activities.log({
+      tenantId,
+      dealId: dto.dealId,
+      type: ActivityType.PAYMENT_UPDATED,
+      message: `Payment added: ${dto.amount}`,
+    });
 
-        if (payment.dueDate) {
-            await this.reminders.createPaymentReminders(dto.dealId, payment.dueDate, tenantId);
-        }
-
-        return payment;
+    if (payment.dueDate) {
+      await this.reminders.createPaymentReminders(
+        dto.dealId,
+        payment.dueDate,
+        tenantId,
+      );
     }
 
-    async findAll(tenantId: string, dealId?: string) {
-        return this.prisma.payment.findMany({
-            where: {
-                tenantId,
-                ...(dealId ? { dealId } : {}),
-            },
-            include: {
-                deal: { select: { title: true } },
-            },
-            orderBy: { dueDate: 'asc' },
-        });
-    }
+    return payment;
+  }
 
-    async update(tenantId: string, id: string, dto: any) {
-        const payment = await this.prisma.payment.findFirst({
-            where: { id, tenantId },
-        });
-        if (!payment) throw new NotFoundException('Payment not found');
+  async findAll(tenantId: string, dealId?: string) {
+    return this.prisma.payment.findMany({
+      where: {
+        tenantId,
+        ...(dealId ? { dealId } : {}),
+      },
+      include: {
+        deal: { select: { title: true } },
+      },
+      orderBy: { dueDate: 'asc' },
+    });
+  }
 
-        return this.prisma.payment.update({
-            where: { id },
-            data: dto,
-        });
-    }
+  async update(tenantId: string, id: string, dto: any) {
+    const payment = await this.prisma.payment.findFirst({
+      where: { id, tenantId },
+    });
+    if (!payment) throw new NotFoundException('Payment not found');
 
-    async sendEFatura(tenantId: string, id: string) {
-        const payment = await this.prisma.payment.findFirst({
-            where: { id, tenantId },
-            include: { deal: { include: { brand: true } } },
-        });
-        if (!payment) throw new NotFoundException('Payment not found');
+    return this.prisma.payment.update({
+      where: { id },
+      data: dto,
+    });
+  }
 
-        // Simulate e-Fatura integration
-        const invoiceObj = await this.prisma.invoice.create({
-            data: {
-                tenantId,
-                dealId: payment.dealId,
-                invoiceNo: `F-${Date.now()}`,
-                invoiceDate: new Date(),
-                link: `https://efatura.gib.gov.tr/${Date.now()}` // Mock URL
-            }
-        });
+  async sendEFatura(tenantId: string, id: string) {
+    const payment = await this.prisma.payment.findFirst({
+      where: { id, tenantId },
+      include: { deal: { include: { brand: true } } },
+    });
+    if (!payment) throw new NotFoundException('Payment not found');
 
-        await this.activities.log({
-            tenantId,
-            dealId: payment.dealId,
-            type: ActivityType.PAYMENT_UPDATED,
-            message: `e-Fatura created and sent: ${invoiceObj.invoiceNo}`,
-        });
+    // Simulate e-Fatura integration
+    const invoiceObj = await this.prisma.invoice.create({
+      data: {
+        tenantId,
+        dealId: payment.dealId,
+        invoiceNo: `F-${Date.now()}`,
+        invoiceDate: new Date(),
+        link: `https://efatura.gib.gov.tr/${Date.now()}`, // Mock URL
+      },
+    });
 
-        return invoiceObj;
-    }
+    await this.activities.log({
+      tenantId,
+      dealId: payment.dealId,
+      type: ActivityType.PAYMENT_UPDATED,
+      message: `e-Fatura created and sent: ${invoiceObj.invoiceNo}`,
+    });
 
-    async remove(tenantId: string, id: string) {
-        const payment = await this.prisma.payment.findFirst({
-            where: { id, tenantId },
-        });
-        if (!payment) throw new NotFoundException('Payment not found');
+    return invoiceObj;
+  }
 
-        return this.prisma.payment.delete({ where: { id } });
-    }
+  async remove(tenantId: string, id: string) {
+    const payment = await this.prisma.payment.findFirst({
+      where: { id, tenantId },
+    });
+    if (!payment) throw new NotFoundException('Payment not found');
+
+    return this.prisma.payment.delete({ where: { id } });
+  }
 }

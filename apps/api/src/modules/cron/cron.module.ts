@@ -6,8 +6,8 @@ import { NotificationsModule } from '../notifications/notifications.module';
 import { EmailModule } from '../email/email.module';
 
 @Module({
-    imports: [PrismaModule, NotificationsModule, EmailModule],
-    controllers: [CronController],
-    providers: [CronService],
+  imports: [PrismaModule, NotificationsModule, EmailModule],
+  controllers: [CronController],
+  providers: [CronService],
 })
-export class CronModule { }
+export class CronModule {}

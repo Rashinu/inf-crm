@@ -3,110 +3,110 @@ import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class CalendarService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-    async getCalendarEvents(tenantId: string, from: Date, to: Date) {
-        const [deliverables, payments] = await Promise.all([
-            this.prisma.deliverable.findMany({
-                where: {
-                    tenantId,
-                    OR: [
-                        { dueDate: { gte: from, lte: to } },
-                        { publishDate: { gte: from, lte: to } },
-                    ],
-                },
-                include: { deal: { include: { brand: true } } },
-            }),
-            this.prisma.payment.findMany({
-                where: {
-                    tenantId,
-                    dueDate: { gte: from, lte: to },
-                },
-                include: { deal: { include: { brand: true } } },
-            }),
-        ]);
+  async getCalendarEvents(tenantId: string, from: Date, to: Date) {
+    const [deliverables, payments] = await Promise.all([
+      this.prisma.deliverable.findMany({
+        where: {
+          tenantId,
+          OR: [
+            { dueDate: { gte: from, lte: to } },
+            { publishDate: { gte: from, lte: to } },
+          ],
+        },
+        include: { deal: { include: { brand: true } } },
+      }),
+      this.prisma.payment.findMany({
+        where: {
+          tenantId,
+          dueDate: { gte: from, lte: to },
+        },
+        include: { deal: { include: { brand: true } } },
+      }),
+    ]);
 
-        const events: any[] = [];
+    const events: any[] = [];
 
-        // Deliverable due dates
-        deliverables.forEach(d => {
-            if (d.dueDate && d.dueDate >= from && d.dueDate <= to) {
-                events.push({
-                    id: `deliverable-due-${d.id}`,
-                    type: 'DELIVERABLE_DUE',
-                    title: `${d.deal.brand.name} - ${d.type} Due`,
-                    date: d.dueDate,
-                    dealId: d.dealId,
-                    deal: d.deal,
-                });
-            }
-
-            if (d.publishDate && d.publishDate >= from && d.publishDate <= to) {
-                events.push({
-                    id: `deliverable-publish-${d.id}`,
-                    type: 'PUBLISH_DATE',
-                    title: `${d.deal.brand.name} - Publish ${d.type}`,
-                    date: d.publishDate,
-                    dealId: d.dealId,
-                    deal: d.deal,
-                });
-            }
+    // Deliverable due dates
+    deliverables.forEach((d) => {
+      if (d.dueDate && d.dueDate >= from && d.dueDate <= to) {
+        events.push({
+          id: `deliverable-due-${d.id}`,
+          type: 'DELIVERABLE_DUE',
+          title: `${d.deal.brand.name} - ${d.type} Due`,
+          date: d.dueDate,
+          dealId: d.dealId,
+          deal: d.deal,
         });
+      }
 
-        // Payment due dates
-        payments.forEach(p => {
-            events.push({
-                id: `payment-due-${p.id}`,
-                type: 'PAYMENT_DUE',
-                title: `${p.deal.brand.name} - Payment Due`,
-                date: p.dueDate,
-                amount: p.amount,
-                currency: p.deal.currency,
-                status: p.status,
-                dealId: p.dealId,
-                deal: p.deal,
-            });
+      if (d.publishDate && d.publishDate >= from && d.publishDate <= to) {
+        events.push({
+          id: `deliverable-publish-${d.id}`,
+          type: 'PUBLISH_DATE',
+          title: `${d.deal.brand.name} - Publish ${d.type}`,
+          date: d.publishDate,
+          dealId: d.dealId,
+          deal: d.deal,
         });
+      }
+    });
 
-        return events.sort((a, b) => a.date.getTime() - b.date.getTime());
-    }
+    // Payment due dates
+    payments.forEach((p) => {
+      events.push({
+        id: `payment-due-${p.id}`,
+        type: 'PAYMENT_DUE',
+        title: `${p.deal.brand.name} - Payment Due`,
+        date: p.dueDate,
+        amount: p.amount,
+        currency: p.deal.currency,
+        status: p.status,
+        dealId: p.dealId,
+        deal: p.deal,
+      });
+    });
 
-    async getTodos(tenantId: string, userId: string, from: Date, to: Date) {
-        return this.prisma.calendarTodo.findMany({
-            where: {
-                tenantId,
-                userId,
-                date: { gte: from, lte: to },
-            },
-            orderBy: { createdAt: 'asc' },
-        });
-    }
+    return events.sort((a, b) => a.date.getTime() - b.date.getTime());
+  }
 
-    async createTodo(tenantId: string, userId: string, date: Date, text: string) {
-        return this.prisma.calendarTodo.create({
-            data: {
-                tenantId,
-                userId,
-                date,
-                text,
-            },
-        });
-    }
+  async getTodos(tenantId: string, userId: string, from: Date, to: Date) {
+    return this.prisma.calendarTodo.findMany({
+      where: {
+        tenantId,
+        userId,
+        date: { gte: from, lte: to },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+  }
 
-    async updateTodo(id: string, isCompleted?: boolean, text?: string) {
-        const data: any = {};
-        if (isCompleted !== undefined) data.isCompleted = isCompleted;
-        if (text !== undefined) data.text = text;
+  async createTodo(tenantId: string, userId: string, date: Date, text: string) {
+    return this.prisma.calendarTodo.create({
+      data: {
+        tenantId,
+        userId,
+        date,
+        text,
+      },
+    });
+  }
 
-        return this.prisma.calendarTodo.update({
-            where: { id },
-            data,
-        });
-    }
+  async updateTodo(id: string, isCompleted?: boolean, text?: string) {
+    const data: any = {};
+    if (isCompleted !== undefined) data.isCompleted = isCompleted;
+    if (text !== undefined) data.text = text;
 
-    async deleteTodo(id: string) {
-        return this.prisma.calendarTodo.delete({
-            where: { id },
-        });
-    }
+    return this.prisma.calendarTodo.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async deleteTodo(id: string) {
+    return this.prisma.calendarTodo.delete({
+      where: { id },
+    });
+  }
 }

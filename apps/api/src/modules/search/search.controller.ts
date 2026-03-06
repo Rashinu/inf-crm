@@ -7,10 +7,10 @@ import { TenantId } from '../../common/decorators/tenant.decorator';
 @Controller('search')
 @UseGuards(JwtAuthGuard, TenantGuard)
 export class SearchController {
-    constructor(private readonly searchService: SearchService) { }
+  constructor(private readonly searchService: SearchService) {}
 
-    @Get()
-    async search(@TenantId() tenantId: string, @Query('q') query: string) {
-        return this.searchService.globalSearch(tenantId, query);
-    }
+  @Get()
+  async search(@TenantId() tenantId: string, @Query('q') query: string) {
+    return this.searchService.globalSearch(tenantId, query);
+  }
 }

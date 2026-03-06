@@ -8,24 +8,24 @@ import { TenantId } from '../../common/decorators/tenant.decorator';
 @Controller('activities')
 @UseGuards(JwtAuthGuard, TenantGuard)
 export class ActivitiesController {
-    constructor(private readonly activitiesService: ActivitiesService) { }
+  constructor(private readonly activitiesService: ActivitiesService) {}
 
-    @Get('deal/:dealId')
-    findAll(@TenantId() tenantId: string, @Param('dealId') dealId: string) {
-        return this.activitiesService.findAll(tenantId, dealId);
-    }
+  @Get('deal/:dealId')
+  findAll(@TenantId() tenantId: string, @Param('dealId') dealId: string) {
+    return this.activitiesService.findAll(tenantId, dealId);
+  }
 
-    @Post('deal/:dealId/note')
-    addNote(
-        @TenantId() tenantId: string,
-        @Param('dealId') dealId: string,
-        @Body() body: { message: string }
-    ) {
-        return this.activitiesService.log({
-            tenantId,
-            dealId,
-            type: ActivityType.NOTE_ADDED,
-            message: body.message,
-        });
-    }
+  @Post('deal/:dealId/note')
+  addNote(
+    @TenantId() tenantId: string,
+    @Param('dealId') dealId: string,
+    @Body() body: { message: string },
+  ) {
+    return this.activitiesService.log({
+      tenantId,
+      dealId,
+      type: ActivityType.NOTE_ADDED,
+      message: body.message,
+    });
+  }
 }

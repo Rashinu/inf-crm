@@ -3,7 +3,7 @@ import { MobileController } from './mobile.controller';
 import { MobileService } from './mobile.service';
 
 @Module({
-    controllers: [MobileController],
-    providers: [MobileService],
+  controllers: [MobileController],
+  providers: [MobileService],
 })
-export class MobileModule { }
+export class MobileModule {}

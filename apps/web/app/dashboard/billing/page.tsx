@@ -113,7 +113,7 @@ export default function BillingPage() {
                         </CardHeader>
                         <CardContent>
                             <ul className="space-y-3">
-                                {["Sınırsız Anlaşma & Kampanya Yönetimi", "Dosya & Sözleşme Takibi", "Gelişmiş Takvim ve Görevler", "Mobil Uygulama Erişimi (iOS & Android)", "Canlı Destek Hizmeti"].map((feature, i) => (
+                                {["Sınırsız Anlaşma & Kampanya Yönetimi", "Dosya & Sözleşme Takibi", "Gelişmiş Takvim ve Görevler"].map((feature, i) => (
                                     <li key={i} className="flex items-center gap-2">
                                         <div className="p-1 rounded-full bg-primary/10 text-primary">
                                             <Check className="w-4 h-4" />

@@ -4,9 +4,9 @@ import { AutomationsController } from './automations.controller';
 import { EmailModule } from '../email/email.module';
 
 @Module({
-    imports: [EmailModule],
-    controllers: [AutomationsController],
-    providers: [AutomationsService],
-    exports: [AutomationsService],
+  imports: [EmailModule],
+  controllers: [AutomationsController],
+  providers: [AutomationsService],
+  exports: [AutomationsService],
 })
-export class AutomationsModule { }
+export class AutomationsModule {}

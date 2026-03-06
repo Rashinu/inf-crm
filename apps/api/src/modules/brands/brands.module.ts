@@ -5,6 +5,6 @@ import { PortalController } from './portal.controller';
 
 @Module({
   providers: [BrandsService],
-  controllers: [BrandsController, PortalController]
+  controllers: [BrandsController, PortalController],
 })
-export class BrandsModule { }
+export class BrandsModule {}

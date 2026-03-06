@@ -1,44 +1,51 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { DealStage, Platform } from '@inf-crm/types';
 
 export class CreateDealDto {
-    @IsString()
-    @IsNotEmpty()
-    title: string;
+  @IsString()
+  @IsNotEmpty()
+  title: string;
 
-    @IsUUID()
-    @IsNotEmpty()
-    brandId: string;
+  @IsUUID()
+  @IsNotEmpty()
+  brandId: string;
 
-    @IsOptional()
-    @IsUUID()
-    contactId?: string;
+  @IsOptional()
+  @IsUUID()
+  contactId?: string;
 
-    @IsNumber()
-    @IsOptional()
-    value?: number;
+  @IsNumber()
+  @IsOptional()
+  value?: number;
 
-    @IsEnum(DealStage)
-    @IsOptional()
-    stage?: DealStage;
+  @IsEnum(DealStage)
+  @IsOptional()
+  stage?: DealStage;
 
-    @IsEnum(Platform)
-    @IsNotEmpty()
-    platform: Platform;
+  @IsEnum(Platform)
+  @IsNotEmpty()
+  platform: Platform;
 
-    @IsOptional()
-    @IsString()
-    description?: string;
+  @IsOptional()
+  @IsString()
+  description?: string;
 
-    @IsOptional()
-    @IsUUID()
-    salesRepId?: string;
+  @IsOptional()
+  @IsUUID()
+  salesRepId?: string;
 
-    @IsOptional()
-    @IsNumber()
-    salesRepCommissionRate?: number;
+  @IsOptional()
+  @IsNumber()
+  salesRepCommissionRate?: number;
 
-    @IsOptional()
-    @IsNumber()
-    influencerCommissionRate?: number;
+  @IsOptional()
+  @IsNumber()
+  influencerCommissionRate?: number;
 }

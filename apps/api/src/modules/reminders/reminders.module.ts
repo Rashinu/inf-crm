@@ -13,4 +13,4 @@ import { BullModule } from '@nestjs/bullmq';
   providers: [RemindersService, RemindersProcessor],
   exports: [RemindersService],
 })
-export class RemindersModule { }
+export class RemindersModule {}

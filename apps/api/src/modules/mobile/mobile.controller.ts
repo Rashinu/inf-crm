@@ -7,20 +7,25 @@ import { TenantId } from '../../common/decorators/tenant.decorator';
 @Controller('mobile')
 @UseGuards(JwtAuthGuard, TenantGuard)
 export class MobileController {
-    constructor(private readonly mobileService: MobileService) { }
+  constructor(private readonly mobileService: MobileService) {}
 
-    @Get('contracts')
-    async getContracts(@TenantId() tenantId: string) {
-        return this.mobileService.getContractsForFlutter(tenantId);
-    }
+  @Get('contracts')
+  async getContracts(@TenantId() tenantId: string) {
+    return this.mobileService.getContractsForFlutter(tenantId);
+  }
 
-    @Post('device-token')
-    async registerDeviceToken(
-        @TenantId() tenantId: string,
-        @Req() req,
-        @Body('token') token: string,
-        @Body('platform') platform?: string,
-    ) {
-        return this.mobileService.saveDeviceToken(tenantId, req.user.userId, token, platform);
-    }
+  @Post('device-token')
+  async registerDeviceToken(
+    @TenantId() tenantId: string,
+    @Req() req,
+    @Body('token') token: string,
+    @Body('platform') platform?: string,
+  ) {
+    return this.mobileService.saveDeviceToken(
+      tenantId,
+      req.user.userId,
+      token,
+      platform,
+    );
+  }
 }

@@ -7,15 +7,15 @@ import { TenantId } from '../../common/decorators/tenant.decorator';
 @Controller('dashboard')
 @UseGuards(JwtAuthGuard, TenantGuard)
 export class DashboardController {
-    constructor(private readonly dashboardService: DashboardService) { }
+  constructor(private readonly dashboardService: DashboardService) {}
 
-    @Get('summary')
-    getSummary(@TenantId() tenantId: string) {
-        return this.dashboardService.getSummary(tenantId);
-    }
+  @Get('summary')
+  getSummary(@TenantId() tenantId: string) {
+    return this.dashboardService.getSummary(tenantId);
+  }
 
-    @Get('pipeline')
-    getPipelineStats(@TenantId() tenantId: string) {
-        return this.dashboardService.getPipelineStats(tenantId);
-    }
+  @Get('pipeline')
+  getPipelineStats(@TenantId() tenantId: string) {
+    return this.dashboardService.getPipelineStats(tenantId);
+  }
 }

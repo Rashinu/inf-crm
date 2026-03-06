@@ -4,8 +4,8 @@ import { ActivitiesController } from './activities.controller';
 
 @Global()
 @Module({
-    controllers: [ActivitiesController],
-    providers: [ActivitiesService],
-    exports: [ActivitiesService],
+  controllers: [ActivitiesController],
+  providers: [ActivitiesService],
+  exports: [ActivitiesService],
 })
-export class ActivitiesModule { }
+export class ActivitiesModule {}

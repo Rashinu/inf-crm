@@ -6,4 +6,4 @@ import { CalendarController } from './calendar.controller';
   controllers: [CalendarController],
   providers: [CalendarService],
 })
-export class CalendarModule { }
+export class CalendarModule {}

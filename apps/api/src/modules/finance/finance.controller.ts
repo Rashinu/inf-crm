@@ -7,15 +7,15 @@ import { TenantId } from '../../common/decorators/tenant.decorator';
 @Controller('finance')
 @UseGuards(JwtAuthGuard, TenantGuard)
 export class FinanceController {
-    constructor(private readonly financeService: FinanceService) { }
+  constructor(private readonly financeService: FinanceService) {}
 
-    @Get('summary')
-    async getSummary(@TenantId() tenantId: string) {
-        return this.financeService.getSummary(tenantId);
-    }
+  @Get('summary')
+  async getSummary(@TenantId() tenantId: string) {
+    return this.financeService.getSummary(tenantId);
+  }
 
-    @Get('commissions')
-    async getCommissions(@TenantId() tenantId: string) {
-        return this.financeService.getCommissions(tenantId);
-    }
+  @Get('commissions')
+  async getCommissions(@TenantId() tenantId: string) {
+    return this.financeService.getCommissions(tenantId);
+  }
 }

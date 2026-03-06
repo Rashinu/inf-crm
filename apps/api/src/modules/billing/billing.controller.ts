@@ -4,23 +4,30 @@ import { BillingService } from './billing.service';
 
 @Controller('billing')
 export class BillingController {
-    constructor(private readonly billingService: BillingService) { }
+  constructor(private readonly billingService: BillingService) {}
 
-    @Get('status')
-    getBillingStatus(@Req() req) {
-        const tenantId = req.user?.tenantId || req.headers['x-tenant-id'];
-        return this.billingService.getBillingStatus(tenantId);
-    }
+  @Get('status')
+  getBillingStatus(@Req() req) {
+    const tenantId = req.user?.tenantId || req.headers['x-tenant-id'];
+    return this.billingService.getBillingStatus(tenantId);
+  }
 
-    @Post('checkout')
-    createCheckoutSession(@Req() req, @Body() body: { expectedUserCount: number, billingCycle: 'monthly' | 'yearly' }) {
-        const tenantId = req.user?.tenantId || req.headers['x-tenant-id'];
-        return this.billingService.createCheckoutSession(tenantId, body);
-    }
+  @Post('checkout')
+  createCheckoutSession(
+    @Req() req,
+    @Body()
+    body: { expectedUserCount: number; billingCycle: 'monthly' | 'yearly' },
+  ) {
+    const tenantId = req.user?.tenantId || req.headers['x-tenant-id'];
+    return this.billingService.createCheckoutSession(tenantId, body);
+  }
 
-    @Post('webhook')
-    handleWebhook(@Headers('stripe-signature') signature: string, @Req() req: RawBodyRequest<Request>) {
-        if (!req.rawBody) throw new Error('Raw body required for webhook');
-        return this.billingService.handleWebhook(signature, req.rawBody);
-    }
+  @Post('webhook')
+  handleWebhook(
+    @Headers('stripe-signature') signature: string,
+    @Req() req: RawBodyRequest<Request>,
+  ) {
+    if (!req.rawBody) throw new Error('Raw body required for webhook');
+    return this.billingService.handleWebhook(signature, req.rawBody);
+  }
 }

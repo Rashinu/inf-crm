@@ -4,8 +4,8 @@ import { BillingController } from './billing.controller';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Module({
-    providers: [BillingService, PrismaService],
-    controllers: [BillingController],
-    exports: [BillingService],
+  providers: [BillingService, PrismaService],
+  controllers: [BillingController],
+  exports: [BillingService],
 })
-export class BillingModule { }
+export class BillingModule {}

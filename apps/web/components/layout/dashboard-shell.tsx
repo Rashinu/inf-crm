@@ -6,14 +6,26 @@ import { NotificationBell } from "./NotificationBell";
 import GlobalSearch from "./global-search";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import apiClient from "@/lib/api-client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useLanguage } from "../providers/LanguageProvider";
+import Link from "next/link";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<any>(null);
     const router = useRouter();
+    const pathname = usePathname();
     const { language, setLanguage } = useLanguage();
+
+    const { data: billingStatus } = useQuery({
+        queryKey: ["billing-status"],
+        queryFn: async () => {
+            const res = await apiClient.get("/billing/status");
+            return res.data;
+        },
+        retry: false
+    });
 
     useEffect(() => {
         async function fetchUser() {
@@ -31,6 +43,19 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <div className="flex h-screen bg-gray-50/50 dark:bg-slate-900 overflow-hidden transition-colors">
             <Sidebar />
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                {/* Trial Banner */}
+                {billingStatus?.trialActive && billingStatus.daysLeft <= 14 && pathname !== '/dashboard/billing' && (
+                    <div className="bg-amber-500 text-white px-4 py-2 text-center text-sm font-medium flex items-center justify-center gap-2 z-50">
+                        <span className="animate-pulse">⚠️</span>
+                        {language === 'tr'
+                            ? `Deneme sürümünüzün bitmesine ${billingStatus.daysLeft} gün kaldı.`
+                            : `Your trial period ends in ${billingStatus.daysLeft} days.`}
+                        <Link href="/dashboard/billing" className="underline font-bold ml-2 hover:text-amber-100">
+                            {language === 'tr' ? 'Şimdi Yükselt' : 'Upgrade Now'}
+                        </Link>
+                    </div>
+                )}
+
                 {/* Top Header */}
                 <header className="h-16 bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 flex items-center justify-between px-8 shrink-0 transition-colors">
                     <div className="flex items-center gap-4 flex-1 max-w-xl">

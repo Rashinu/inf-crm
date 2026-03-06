@@ -89,4 +89,4 @@ import { BillingModule } from './modules/billing/billing.module';
   controllers: [AppController, MobileController],
   providers: [AppService, MobileService],
 })
-export class AppModule { }
+export class AppModule {}

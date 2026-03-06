@@ -6,23 +6,23 @@ import { TenantGuard } from '../../common/guards/tenant.guard';
 @Controller('ai')
 @UseGuards(JwtAuthGuard, TenantGuard)
 export class AiController {
-    constructor(private readonly aiService: AiService) { }
+  constructor(private readonly aiService: AiService) {}
 
-    @Post('analyze-contract')
-    async analyzeContract(@Body('text') text: string) {
-        return this.aiService.analyzeContract(text);
-    }
+  @Post('analyze-contract')
+  async analyzeContract(@Body('text') text: string) {
+    return this.aiService.analyzeContract(text);
+  }
 
-    @Post('draft-email')
-    async draftEmail(@Body('context') context: string) {
-        return this.aiService.draftEmail(context);
-    }
+  @Post('draft-email')
+  async draftEmail(@Body('context') context: string) {
+    return this.aiService.draftEmail(context);
+  }
 
-    @Post('generate-hooks')
-    async generateHooks(
-        @Body('topic') topic: string,
-        @Body('platform') platform: string,
-    ) {
-        return this.aiService.generateHooks(topic, platform);
-    }
+  @Post('generate-hooks')
+  async generateHooks(
+    @Body('topic') topic: string,
+    @Body('platform') platform: string,
+  ) {
+    return this.aiService.generateHooks(topic, platform);
+  }
 }

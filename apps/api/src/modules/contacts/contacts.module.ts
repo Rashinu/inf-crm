@@ -6,6 +6,6 @@ import { FinanceModule } from '../finance/finance.module';
 @Module({
   imports: [FinanceModule],
   providers: [ContactsService],
-  controllers: [ContactsController]
+  controllers: [ContactsController],
 })
-export class ContactsModule { }
+export class ContactsModule {}

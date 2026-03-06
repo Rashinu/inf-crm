@@ -3,8 +3,8 @@ import { CommunicationsService } from './communications.service';
 import { CommunicationsController } from './communications.controller';
 
 @Module({
-    controllers: [CommunicationsController],
-    providers: [CommunicationsService],
-    exports: [CommunicationsService],
+  controllers: [CommunicationsController],
+  providers: [CommunicationsService],
+  exports: [CommunicationsService],
 })
-export class CommunicationsModule { }
+export class CommunicationsModule {}

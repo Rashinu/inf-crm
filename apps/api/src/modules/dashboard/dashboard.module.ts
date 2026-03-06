@@ -6,6 +6,6 @@ import { FinanceModule } from '../finance/finance.module';
 @Module({
   imports: [FinanceModule],
   controllers: [DashboardController],
-  providers: [DashboardService]
+  providers: [DashboardService],
 })
-export class DashboardModule { }
+export class DashboardModule {}
