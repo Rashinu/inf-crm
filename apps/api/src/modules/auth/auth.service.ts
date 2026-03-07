@@ -9,6 +9,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import * as argon2 from 'argon2';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import pool from '../../db';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+  ) { }
 
   async register(dto: RegisterDto) {
     const existingUser = await this.prisma.user.findUnique({
@@ -71,9 +72,12 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { email: dto.email },
-    });
+    // Bypass Prisma and use raw connection pool for performance
+    const result = await pool.query(
+      `SELECT id, "tenantId", email, "passwordHash", "fullName", role FROM users WHERE email = $1 LIMIT 1`,
+      [dto.email]
+    );
+    const user = result.rows[0];
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -88,7 +92,25 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const tokens = await this.generateTokens(user.id, user.tenantId, user.role);
+    const payload = { sub: user.id, tenantId: user.tenantId, role: user.role };
+
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        expiresIn: '15m',
+        secret: this.configService.get('JWT_SECRET'),
+      }),
+      this.jwtService.signAsync(payload, {
+        expiresIn: '7d',
+        secret: this.configService.get('JWT_REFRESH_SECRET'),
+      }),
+    ]);
+
+    // Update refresh token silently to avoid Prisma initialization overhead
+    await pool.query(
+      `UPDATE users SET "refreshToken" = $1 WHERE id = $2`,
+      [refreshToken, user.id]
+    );
+
     return {
       user: {
         id: user.id,
@@ -96,7 +118,8 @@ export class AuthService {
         fullName: user.fullName,
         role: user.role,
       },
-      ...tokens,
+      accessToken,
+      refreshToken,
     };
   }
 
