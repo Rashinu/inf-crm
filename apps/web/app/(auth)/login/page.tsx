@@ -57,6 +57,40 @@ export default function LoginPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <div className="mb-4">
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            className="w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-gray-200"
+                            onClick={async () => {
+                                setLoading(true);
+                                try {
+                                    const { data } = await apiClient.post("/auth/demo");
+                                    localStorage.setItem("access_token", data.accessToken);
+                                    localStorage.setItem("refresh_token", data.refreshToken);
+                                    toast.success("Giriş başarılı! Yönlendiriliyorsunuz...");
+                                    router.push("/dashboard");
+                                } catch (error) {
+                                    toast.error("Demo girişi başarısız oldu.");
+                                } finally {
+                                    setLoading(false);
+                                }
+                            }}
+                            disabled={loading}
+                        >
+                            {loading ? "Giriş yapılıyor..." : "🚀 Ücretsiz İncele (Şifresiz Giriş Yap)"}
+                        </Button>
+                    </div>
+
+                    <div className="relative mb-4">
+                        <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-gray-50/50 dark:bg-slate-950 px-2 text-muted-foreground transition-colors">Veya email ile</span>
+                        </div>
+                    </div>
+
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
@@ -66,14 +100,14 @@ export default function LoginPage() {
                             )}
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">Password (Şifre)</Label>
                             <Input id="password" type="password" {...form.register("password")} />
                             {form.formState.errors.password && (
                                 <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
                             )}
                         </div>
                         <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? "Logging in..." : "Login"}
+                            {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
                         </Button>
                     </form>
                 </CardContent>

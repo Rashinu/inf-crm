@@ -65,7 +65,7 @@ export default function Home() {
               </Link>
               <Link href="/login">
                 <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-bold border-slate-300 dark:border-slate-700 dark:text-white rounded-xl bg-white dark:bg-slate-900 shadow-sm shrink-0">
-                  Sisteme Giriş Yap
+                  Sistemi İncele (Demo Girişi)
                 </Button>
               </Link>
             </div>

@@ -226,4 +226,45 @@ export class AuthService {
 
     return { success: true };
   }
+
+  async demoLogin() {
+    // Proje tanıtımı için şifresiz demo girişi. İlk kullanıcıyı bulur ve giriş yapar.
+    const result = await pool.query(
+      `SELECT id, "tenantId", email, "passwordHash", "fullName", role FROM users LIMIT 1`
+    );
+    const user = result.rows[0];
+
+    if (!user) {
+      throw new UnauthorizedException('No demo user found in database');
+    }
+
+    const payload = { sub: user.id, tenantId: user.tenantId, role: user.role };
+
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        expiresIn: '15m',
+        secret: this.configService.get('JWT_SECRET'),
+      }),
+      this.jwtService.signAsync(payload, {
+        expiresIn: '7d',
+        secret: this.configService.get('JWT_REFRESH_SECRET'),
+      }),
+    ]);
+
+    await pool.query(
+      `UPDATE users SET "refreshToken" = $1 WHERE id = $2`,
+      [refreshToken, user.id]
+    );
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+      },
+      accessToken,
+      refreshToken,
+    };
+  }
 }
