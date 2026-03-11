@@ -254,7 +254,7 @@ export default function Home() {
                   <p className="text-slate-400 text-sm">Büyüyen Ekipler ve Şirketler</p>
                 </div>
                 <div className="text-4xl font-extrabold text-white mb-6">
-                  $29<span className="text-lg text-slate-400 font-medium">/ay</span>
+                  $19<span className="text-lg text-slate-400 font-medium">/ay</span>
                 </div>
                 <ul className="space-y-4 mb-8 flex-1 text-sm text-slate-300">
                   <li className="flex items-center gap-2"><Check size={16} className="text-emerald-400" /> 10 Kullanıcı Dahil</li>
@@ -276,7 +276,7 @@ export default function Home() {
                   <p className="text-slate-500 text-sm">Büyük Ölçekli Operasyonlar</p>
                 </div>
                 <div className="text-4xl font-extrabold text-slate-900 mb-6">
-                  $39<span className="text-lg text-slate-500 font-medium">/ay</span>
+                  $29<span className="text-lg text-slate-500 font-medium">/ay</span>
                 </div>
                 <ul className="space-y-4 mb-8 flex-1 text-sm text-slate-600">
                   <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Sınırsız Kullanıcı Ekleme</li>
