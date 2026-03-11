@@ -71,7 +71,7 @@ export class AuthService {
     });
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto, ipAddress?: string, userAgent?: string) {
     // Bypass Prisma and use raw connection pool for performance
     const result = await pool.query(
       `SELECT id, "tenantId", email, "passwordHash", "fullName", role FROM users WHERE email = $1 LIMIT 1`,
@@ -110,6 +110,16 @@ export class AuthService {
       `UPDATE users SET "refreshToken" = $1 WHERE id = $2`,
       [refreshToken, user.id]
     );
+
+    // Track login session
+    await this.prisma.userSession.create({
+      data: {
+        userId: user.id,
+        tenantId: user.tenantId,
+        ipAddress: ipAddress || 'Unknown',
+        userAgent: userAgent || 'Unknown',
+      },
+    });
 
     return {
       user: {
@@ -227,7 +237,7 @@ export class AuthService {
     return { success: true };
   }
 
-  async demoLogin() {
+  async demoLogin(ipAddress?: string, userAgent?: string) {
     // Proje tanıtımı için şifresiz demo girişi. İlk kullanıcıyı bulur ve giriş yapar.
     const result = await pool.query(
       `SELECT id, "tenantId", email, "passwordHash", "fullName", role FROM users LIMIT 1`
@@ -255,6 +265,16 @@ export class AuthService {
       `UPDATE users SET "refreshToken" = $1 WHERE id = $2`,
       [refreshToken, user.id]
     );
+
+    // Track login session
+    await this.prisma.userSession.create({
+      data: {
+        userId: user.id,
+        tenantId: user.tenantId,
+        ipAddress: ipAddress || 'Unknown',
+        userAgent: userAgent || 'Unknown',
+      },
+    });
 
     return {
       user: {

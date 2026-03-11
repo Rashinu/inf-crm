@@ -22,13 +22,17 @@ export class AuthController {
   }
 
   @Post('login')
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  login(@Body() dto: LoginDto, @Req() req) {
+    const ip = req.ip || req.connection?.remoteAddress;
+    const userAgent = req.headers['user-agent'];
+    return this.authService.login(dto, ip, userAgent);
   }
 
   @Post('demo')
-  demoLogin() {
-    return this.authService.demoLogin();
+  demoLogin(@Req() req) {
+    const ip = req.ip || req.connection?.remoteAddress;
+    const userAgent = req.headers['user-agent'];
+    return this.authService.demoLogin(ip, userAgent);
   }
 
   @Post('refresh')

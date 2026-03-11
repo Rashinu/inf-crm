@@ -134,7 +134,7 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
                     <CardHeader className="pb-2">
                         <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
@@ -193,8 +193,8 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="md:col-span-4 border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+            <div className="grid gap-6 grid-cols-1 lg:grid-cols-7">
+                <Card className="lg:col-span-4 border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
                     <CardHeader>
                         <CardTitle className="text-gray-900 dark:text-white">{t("dashboard.pipeline_overview")}</CardTitle>
                     </CardHeader>
@@ -216,7 +216,7 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
 
-                <Card className="md:col-span-3 border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+                <Card className="lg:col-span-3 border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
                     <CardHeader>
                         <CardTitle className="text-gray-900 dark:text-white">{t("dashboard.recent_activity")}</CardTitle>
                     </CardHeader>

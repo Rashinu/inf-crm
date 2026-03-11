@@ -18,7 +18,8 @@ import {
     ChevronRight,
     Zap,
     Trophy,
-    CreditCard
+    CreditCard,
+    ShieldAlert
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -79,6 +80,17 @@ export function Sidebar() {
 
             {/* Bottom Section */}
             <div className="p-3 border-t border-gray-100 dark:border-slate-800/60 space-y-1">
+                {/* Admin Link - In real app, check for SUPER_ADMIN role */}
+                <Link
+                    href="/admin"
+                    className={cn(
+                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors shadow-sm mb-2",
+                    )}
+                >
+                    <ShieldAlert className="size-5" />
+                    {!collapsed && <span>Platform Admin</span>}
+                </Link>
+
                 <Link
                     href="/dashboard/settings"
                     className={cn(

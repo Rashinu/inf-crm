@@ -38,12 +38,17 @@ model Tenant {
   calendarTodos CalendarTodo[]
   automations   Automation[]
   communications Communication[]
+  userSessions  UserSession[]
 
   @@map("tenants")
 }
 
 enum UserRole {
+  SUPER_ADMIN
   OWNER
+  ADMIN
+  MANAGER
+  STAFF
   ASSISTANT
 }
 
@@ -66,10 +71,29 @@ model User {
   deviceTokens  DeviceToken[]
   calendarTodos CalendarTodo[]
   salesDeals    Deal[] @relation("DealSalesRep")
+  userSessions  UserSession[]
 
   @@index([tenantId])
   @@index([email])
   @@map("users")
+}
+
+// ========== SESSIONS ==========
+
+model UserSession {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenantId  String
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  ipAddress String?
+  userAgent String?
+  loginAt   DateTime  @default(now())
+  logoutAt  DateTime?
+
+  @@index([tenantId])
+  @@index([userId])
+  @@map("user_sessions")
 }
 
 // ========== BRANDS & CONTACTS ==========

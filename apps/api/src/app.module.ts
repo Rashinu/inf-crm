@@ -32,6 +32,7 @@ import { CommunicationsModule } from './modules/communications/communications.mo
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CronModule } from './modules/cron/cron.module';
 import { BillingModule } from './modules/billing/billing.module';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
   imports: [
@@ -85,6 +86,7 @@ import { BillingModule } from './modules/billing/billing.module';
     CommunicationsModule,
     CronModule,
     BillingModule,
+    AdminModule,
   ],
   controllers: [AppController, MobileController],
   providers: [AppService, MobileService],
