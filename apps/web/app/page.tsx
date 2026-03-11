@@ -207,62 +207,88 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Trial & Pricing Explanation Section */}
+        {/* Trial & Pricing Section */}
         <section id="fiyatlandirma" className="py-24 bg-blue-600 text-white relative overflow-hidden">
           {/* Abstract circles */}
           <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[600px] h-[600px] rounded-full bg-blue-500/50 blur-3xl mix-blend-screen" />
           <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/3 w-[400px] h-[400px] rounded-full bg-indigo-500/50 blur-3xl mix-blend-screen" />
 
           <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 md:p-12 shadow-2xl">
-              <div className="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                  <h2 className="text-3xl md:text-4xl font-bold mb-4 font-outfit">Hiçbir Karta İhtiyaç Duymadan 14 Gün Deneyin</h2>
-                  <p className="text-blue-100 text-lg mb-6 leading-relaxed">
-                    INF CRM gücünü keşfetmeniz için harika bir fırsat! Hemen kayıt olun ve projenin tüm premium ayrıcalıklarını iki hafta boyunca <strong>100% Ücretsiz ve Limitsiz</strong> deneyimleyin.
-                  </p>
-                  <ul className="space-y-4 mb-8">
-                    {[
-                      "Abonelik başlatmadan otomatik 14 gün erişim",
-                      "Sınırsız sayıda anlaşma, proje ve bağlantı oluşturma",
-                      "Süre dolduğunda otomatik uyarı; veri kaybı yaşanmaz!",
-                      "Hesap paneli (Dashboard) üzerinden süre takibi"
-                    ].map((item, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <div className="bg-white/20 rounded-full p-1 mt-0.5">
-                          <Check size={14} className="text-white" />
-                        </div>
-                        <span className="text-blue-50">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 font-outfit text-white">Hiçbir Karta İhtiyaç Duymadan 14 Gün Deneyin</h2>
+              <p className="text-blue-100 text-lg leading-relaxed">
+                Geliştirme aşamasında olduğumuz için INF CRM'i çok uygun fiyatlarla, kredi kartı gerektirmeden tam donanımlı olarak deneyebilirsiniz. İhtiyacınıza uygun paketi seçin:
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+              {/* Starter Tier */}
+              <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-xl flex flex-col relative transition-transform hover:-translate-y-2">
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Başlangıç</h3>
+                  <p className="text-slate-500 text-sm">Freelancer ve Küçük Ajanslar</p>
                 </div>
-                <div className="bg-white text-slate-900 rounded-2xl p-8 shadow-xl relative">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md">
-                    Özel Fiyatlandırma
-                  </div>
-                  <div className="text-center mb-6">
-                    <p className="text-slate-500 font-medium mb-2">Başlangıç Paketi</p>
-                    <div className="text-4xl font-extrabold text-slate-900">
-                      $19<span className="text-lg text-slate-500 font-medium">/ay</span>
-                    </div>
-                    <p className="text-sm text-slate-500 mt-2">1 Kullanıcı (Sistem Sahibi) Dahildir.</p>
-                  </div>
-                  <hr className="border-slate-100 mb-6" />
-                  <div className="space-y-4 mb-8 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-slate-600 flex items-center gap-2"><Briefcase size={16} className="text-slate-400" /> Ekstra Kullanıcı Başına</span>
-                      <span className="font-bold">+$2/ay</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-600 flex items-center gap-2"><Zap size={16} className="text-slate-400" /> Yıllık Ödemelerde İndirim</span>
-                      <span className="font-bold text-emerald-600">%20 İndirim</span>
-                    </div>
-                  </div>
-                  <Button className="w-full h-12 text-md font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-xl">
-                    Paketleri Karşılaştır
+                <div className="text-4xl font-extrabold text-slate-900 mb-6">
+                  $9<span className="text-lg text-slate-500 font-medium">/ay</span>
+                </div>
+                <ul className="space-y-4 mb-8 flex-1 text-sm text-slate-600">
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> 2 Kullanıcı Dahil</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Sınırsız Müşteri (CRM)</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Temel Finans Yönetimi</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> 14 Gün Ücretsiz Deneme</li>
+                </ul>
+                <Link href="/register" className="block w-full">
+                  <Button className="w-full h-12 text-md font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl">
+                    Ücretsiz Başla
                   </Button>
+                </Link>
+              </div>
+
+              {/* Pro Tier (Highlighted) */}
+              <div className="bg-slate-900 text-white rounded-3xl p-8 shadow-2xl flex flex-col relative scale-105 z-10 border border-blue-500/30">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md">
+                  En Çok Tercih Edilen
                 </div>
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-white mb-2">Profesyonel</h3>
+                  <p className="text-slate-400 text-sm">Büyüyen Ekipler ve Şirketler</p>
+                </div>
+                <div className="text-4xl font-extrabold text-white mb-6">
+                  $29<span className="text-lg text-slate-400 font-medium">/ay</span>
+                </div>
+                <ul className="space-y-4 mb-8 flex-1 text-sm text-slate-300">
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-400" /> 10 Kullanıcı Dahil</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-400" /> Sınırsız Gelişmiş Finans & Komisyon</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-400" /> Gelişmiş Raporlama Paneli</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-400" /> Öncelikli Destek</li>
+                </ul>
+                <Link href="/register" className="block w-full">
+                  <Button className="w-full h-12 text-md font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-600/20">
+                    14 Gün Ücretsiz Deneyin
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Premium Tier */}
+              <div className="bg-white text-slate-900 rounded-3xl p-8 shadow-xl flex flex-col relative transition-transform hover:-translate-y-2 border border-slate-100">
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Kurumsal</h3>
+                  <p className="text-slate-500 text-sm">Büyük Ölçekli Operasyonlar</p>
+                </div>
+                <div className="text-4xl font-extrabold text-slate-900 mb-6">
+                  $39<span className="text-lg text-slate-500 font-medium">/ay</span>
+                </div>
+                <ul className="space-y-4 mb-8 flex-1 text-sm text-slate-600">
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Sınırsız Kullanıcı Ekleme</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Tüm Özel Modüllere Erişim</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Birden Fazla Marka Yönetimi</li>
+                  <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Platform Super Admin Yetkisi</li>
+                </ul>
+                <Link href="/contact" className="block w-full">
+                  <Button className="w-full h-12 text-md font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl">
+                    Bize Ulaşın
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
