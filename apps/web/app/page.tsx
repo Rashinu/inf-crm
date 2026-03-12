@@ -65,11 +65,7 @@ export default function Home() {
                   <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link href="/login">
-                <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-bold border-slate-300 dark:border-slate-700 dark:text-white rounded-xl bg-white dark:bg-slate-900 shadow-sm shrink-0">
-                  Sistemi İncele (Demo Girişi)
-                </Button>
-              </Link>
+
             </div>
             <p className="mt-4 text-sm text-slate-500 dark:text-slate-500">
               Kredi kartı gerektirmez. İptal etmek tamamen ücretsizdir.
