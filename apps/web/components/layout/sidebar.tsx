@@ -26,15 +26,15 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "../providers/LanguageProvider";
 
 const menuItems = [
-    { icon: LayoutDashboard, key: "nav.dashboard", href: "/dashboard" },
-    { icon: Trello, key: "nav.pipeline", href: "/dashboard/pipeline" },
-    { icon: Briefcase, key: "nav.deals", href: "/dashboard/deals" },
-    { icon: Building2, key: "nav.brands", href: "/dashboard/brands" },
-    { icon: Contact, key: "nav.contacts", href: "/dashboard/contacts" },
-    { icon: Calendar, key: "nav.calendar", href: "/dashboard/calendar" },
-    { icon: Wallet, key: "nav.finance", href: "/dashboard/finance" },
-    { icon: Trophy, key: "nav.leaderboard", href: "/dashboard/leaderboard" },
-    { icon: Zap, key: "nav.automations", href: "/dashboard/automations" },
+    { icon: LayoutDashboard, key: "nav.dashboard", href: "/dashboard", description: "Genel istatistikler ve özet görünüm." },
+    { icon: Trello, key: "nav.pipeline", href: "/dashboard/pipeline", description: "Satış süreçlerinizi ve fırsat aşamalarını yönetin." },
+    { icon: Briefcase, key: "nav.deals", href: "/dashboard/deals", description: "Biten ve devam eden tüm marka anlaşmaları." },
+    { icon: Building2, key: "nav.brands", href: "/dashboard/brands", description: "Hizmet verdiğiniz markaların portföyü." },
+    { icon: Contact, key: "nav.contacts", href: "/dashboard/contacts", description: "Influencer ve içerik üretici listesi." },
+    { icon: Calendar, key: "nav.calendar", href: "/dashboard/calendar", description: "Yayın ve ödeme takvimi yönetimi." },
+    { icon: Wallet, key: "nav.finance", href: "/dashboard/finance", description: "Hakedişler, komisyonlar ve nakit akışı." },
+    { icon: Trophy, key: "nav.leaderboard", href: "/dashboard/leaderboard", description: "En çok kazandıran kampanya ve markalar." },
+    { icon: Zap, key: "nav.automations", href: "/dashboard/automations", description: "Süreçlerinizi otomatize eden kurallar." },
 ];
 
 export function Sidebar() {
@@ -62,19 +62,32 @@ export function Sidebar() {
             {/* Navigation */}
             <nav className="flex-1 px-3 py-6 space-y-1">
                 {menuItems.map((item) => (
-                    <Link
-                        key={item.href}
-                        href={item.href}
-                        className={cn(
-                            "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                            pathname === item.href
-                                ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
-                                : "text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-900 hover:text-gray-900 dark:hover:text-slate-100"
-                        )}
-                    >
-                        <item.icon className={cn("size-5", pathname === item.href ? "text-blue-600 dark:text-blue-500" : "text-gray-400 dark:text-slate-500")} />
-                        {!collapsed && <span>{t(item.key)}</span>}
-                    </Link>
+                    <div key={item.href} className="group relative">
+                        <Link
+                            href={item.href}
+                            className={cn(
+                                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                                pathname === item.href
+                                    ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400"
+                                    : "text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-900 hover:text-gray-900 dark:hover:text-slate-100"
+                            )}
+                        >
+                            <item.icon className={cn("size-5", pathname === item.href ? "text-blue-600 dark:text-blue-500" : "text-gray-400 dark:text-slate-500")} />
+                            {!collapsed && <span>{t(item.key)}</span>}
+                        </Link>
+                        
+                        {/* Custom Tooltip */}
+                        <div className={cn(
+                            "absolute z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200",
+                            collapsed ? "left-full ml-4" : "left-full ml-2",
+                            "top-1/2 -translate-y-1/2 w-48 p-3 bg-slate-900 text-white text-xs rounded-xl shadow-2xl pointer-events-none border border-slate-800"
+                        )}>
+                            <div className="font-bold mb-1 text-blue-400">{t(item.key)}</div>
+                            <div className="text-slate-300 leading-relaxed font-normal">{item.description}</div>
+                            {/* Arrow */}
+                            <div className="absolute top-1/2 -translate-y-1/2 -left-1.5 w-3 h-3 bg-slate-900 rotate-45 border-l border-b border-slate-800" />
+                        </div>
+                    </div>
                 ))}
             </nav>
 

@@ -18,6 +18,7 @@ export default function Home() {
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
+            <a href="#nasil-calisir" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Nasıl Çalışır?</a>
             <a href="#ozellikler" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Özellikler</a>
             <a href="#fiyatlandirma" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Fiyatlandırma</a>
             <a href="#iletisim" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">İletişim</a>
@@ -161,6 +162,59 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section id="nasil-calisir" className="py-24 bg-slate-50 dark:bg-slate-950/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 font-outfit text-slate-900 dark:text-white">Nasıl Çalışır?</h2>
+              <p className="text-lg text-slate-600 dark:text-slate-400">
+                INF CRM, ajans operasyonlarınızı kaostan kurtarıp sisteme bağlayan 3 temel adım üzerine kuruludur.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto relative">
+              {/* Connector Lines (Desktop only) */}
+              <div className="hidden md:block absolute top-24 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-blue-200 via-indigo-200 to-blue-200 dark:from-blue-900/30 dark:via-indigo-900/30 dark:to-blue-900/30 -z-10" />
+
+              {/* Step 1 */}
+              <div className="flex flex-col items-center text-center group">
+                <div className="w-20 h-20 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl flex items-center justify-center mb-8 relative transition-all group-hover:-translate-y-2 group-hover:border-blue-500/50">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold shadow-lg">1</div>
+                  <Briefcase className="w-10 h-10 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Portföyünüzü Oluşturun</h3>
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  İş birliği yaptığınız markaları ve influencerlarınızı sisteme tanımlayın. Tüm iletişim bilgilerini ve geçmiş çalışmalarını tek bir kartta toplayın.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex flex-col items-center text-center group">
+                <div className="w-20 h-20 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl flex items-center justify-center mb-8 relative transition-all group-hover:-translate-y-2 group-hover:border-indigo-500/50">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold shadow-lg">2</div>
+                  <LayoutDashboard className="w-10 h-10 text-indigo-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Süreci Yönetin</h3>
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Açılan her kampanyayı "Fırsat" olarak tanımlayın. Kanban panosu ile "Görüşmede", "Onaylandı" veya "Yayınlandı" aşamalarını anlık takip edin.
+                </p>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex flex-col items-center text-center group">
+                <div className="w-20 h-20 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl flex items-center justify-center mb-8 relative transition-all group-hover:-translate-y-2 group-hover:border-emerald-500/50">
+                  <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg">3</div>
+                  <LineChart className="w-10 h-10 text-emerald-600" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Hakedişleri Hesaplayın</h3>
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Anlaşma bütçesinden ajans komisyonunu ve influencer hakedişini sistem saniyeler içinde ayırsın. Ödeme takviminizi ve nakit akışınızı kontrol altında tutun.
+                </p>
               </div>
             </div>
           </div>
