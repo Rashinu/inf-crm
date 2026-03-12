@@ -16,7 +16,7 @@ export class BillingController {
   createCheckoutSession(
     @Req() req,
     @Body()
-    body: { expectedUserCount: number; billingCycle: 'monthly' | 'yearly' },
+    body: { plan: 'starter' | 'pro' | 'premium'; billingCycle?: 'monthly' | 'yearly' },
   ) {
     const tenantId = req.user?.tenantId || req.headers['x-tenant-id'];
     return this.billingService.createCheckoutSession(tenantId, body);

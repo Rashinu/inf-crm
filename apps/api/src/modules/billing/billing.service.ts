@@ -52,16 +52,36 @@ export class BillingService implements OnModuleInit {
 
   async createCheckoutSession(
     tenantId: string,
-    payload: { expectedUserCount: number; billingCycle: 'monthly' | 'yearly' },
+    payload: { plan: 'starter' | 'pro' | 'premium'; billingCycle?: 'monthly' | 'yearly' },
   ) {
     const tenant = await this.prisma.tenant.findUnique({
       where: { id: tenantId },
       include: { users: { where: { role: 'OWNER' } } },
     });
 
-    if (!tenant) throw new BadRequestException();
+    if (!tenant) throw new BadRequestException('Tenant not found');
 
     const ownerUser = tenant.users[0];
+
+    // Map plan to product ID from env
+    let productId: string;
+    switch (payload.plan) {
+      case 'starter':
+        productId = process.env.STRIPE_PRODUCT_STARTER;
+        break;
+      case 'pro':
+        productId = process.env.STRIPE_PRODUCT_PRO;
+        break;
+      case 'premium':
+        productId = process.env.STRIPE_PRODUCT_PREMIUM;
+        break;
+      default:
+        throw new BadRequestException('Invalid plan selected');
+    }
+
+    if (!productId) {
+      throw new BadRequestException('Stripe Product ID not configured for this plan');
+    }
 
     // Ensure stripe customer exists
     let customerId = tenant.stripeCustomerId;
@@ -78,43 +98,38 @@ export class BillingService implements OnModuleInit {
       });
     }
 
-    // Calculate custom price based on inputs (like Resbox dynamic pricing)
-    // E.g., base $29/mo, plus $5 per user over 1
-    const basePrice = 2900; // $29.00
-    const extraUserCount = Math.max(0, payload.expectedUserCount - 1);
-    const userPrice = 500; // $5.00 per user
+    // Get the first active price for this product
+    const prices = await this.stripe.prices.list({
+      product: productId,
+      active: true,
+      limit: 1,
+    });
 
-    let monthlyTotal = basePrice + extraUserCount * userPrice;
-    let finalAmount =
-      payload.billingCycle === 'yearly'
-        ? monthlyTotal * 12 * 0.8
-        : monthlyTotal; // 20% discount for yearly
+    if (prices.data.length === 0) {
+      throw new BadRequestException('No active price found for the selected product');
+    }
 
-    // Create line item
+    const priceId = prices.data[0].id;
+
+    // Create session
     const session = await this.stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
       mode: 'subscription',
+      subscription_data: {
+        trial_period_days: 14,
+      },
       customer_update: {
         address: 'auto',
       },
       line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: `ICM Dynamic Plan (${payload.expectedUserCount} Users) - ${payload.billingCycle}`,
-            },
-            recurring: {
-              interval: payload.billingCycle === 'yearly' ? 'year' : 'month',
-            },
-            unit_amount: Math.round(finalAmount),
-          },
+          price: priceId,
           quantity: 1,
         },
       ],
-      success_url: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard/billing`,
+      success_url: `${process.env.APP_BASE_URL || 'http://localhost:3000'}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.APP_BASE_URL || 'http://localhost:3000'}/dashboard/billing`,
       client_reference_id: tenantId,
     });
 
