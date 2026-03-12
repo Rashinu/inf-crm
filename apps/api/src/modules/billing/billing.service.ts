@@ -64,7 +64,7 @@ export class BillingService implements OnModuleInit {
     const ownerUser = tenant.users[0];
 
     // Map plan to product ID from env
-    let productId: string;
+    let productId: string | undefined;
     switch (payload.plan) {
       case 'starter':
         productId = process.env.STRIPE_PRODUCT_STARTER;

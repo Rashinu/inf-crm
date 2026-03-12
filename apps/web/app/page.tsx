@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronRight, LayoutDashboard, LineChart, Briefcase, Zap, ShieldCheck } from "lucide-react";
+import { CheckoutButton } from "@/components/billing/checkout-button";
 
 export default function Home() {
   return (
@@ -237,11 +238,9 @@ export default function Home() {
                   <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Temel Finans Yönetimi</li>
                   <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> 14 Gün Ücretsiz Deneme</li>
                 </ul>
-                <Link href="/register" className="block w-full">
-                  <Button className="w-full h-12 text-md font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl">
-                    Ücretsiz Başla
-                  </Button>
-                </Link>
+                <CheckoutButton plan="starter" className="w-full h-12 text-md font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl">
+                  Ücretsiz Başla
+                </CheckoutButton>
               </div>
 
               {/* Pro Tier (Highlighted) */}
@@ -262,11 +261,9 @@ export default function Home() {
                   <li className="flex items-center gap-2"><Check size={16} className="text-emerald-400" /> Gelişmiş Raporlama Paneli</li>
                   <li className="flex items-center gap-2"><Check size={16} className="text-emerald-400" /> Öncelikli Destek</li>
                 </ul>
-                <Link href="/register" className="block w-full">
-                  <Button className="w-full h-12 text-md font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-600/20">
-                    14 Gün Ücretsiz Deneyin
-                  </Button>
-                </Link>
+                <CheckoutButton plan="pro" className="w-full h-12 text-md font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-600/20">
+                  14 Gün Ücretsiz Deneyin
+                </CheckoutButton>
               </div>
 
               {/* Premium Tier */}
@@ -284,11 +281,9 @@ export default function Home() {
                   <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Birden Fazla Marka Yönetimi</li>
                   <li className="flex items-center gap-2"><Check size={16} className="text-emerald-500" /> Platform Super Admin Yetkisi</li>
                 </ul>
-                <Link href="/contact" className="block w-full">
-                  <Button className="w-full h-12 text-md font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl">
-                    Bize Ulaşın
-                  </Button>
-                </Link>
+                <CheckoutButton plan="premium" className="w-full h-12 text-md font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl">
+                  Bize Ulaşın
+                </CheckoutButton>
               </div>
             </div>
           </div>
