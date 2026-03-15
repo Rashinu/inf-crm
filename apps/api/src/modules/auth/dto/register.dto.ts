@@ -1,7 +1,9 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class RegisterDto {
   @IsEmail()
+  @Transform(({ value }) => value?.toLowerCase())
   email: string;
 
   @IsString()
@@ -16,4 +18,8 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   workspaceName: string;
+
+  @IsString()
+  @IsOptional()
+  referralCode?: string;
 }

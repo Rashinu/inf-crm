@@ -20,8 +20,9 @@ export class AuthService {
   ) { }
 
   async register(dto: RegisterDto) {
+    const email = dto.email.toLowerCase();
     const existingUser = await this.prisma.user.findUnique({
-      where: { email: dto.email },
+      where: { email },
     });
 
     if (existingUser) {
@@ -35,16 +36,36 @@ export class AuthService {
       const trialEndsAt = new Date();
       trialEndsAt.setDate(trialEndsAt.getDate() + 14);
 
+      // Handle Referral
+      let referredByTenant: any = null;
+      if (dto.referralCode) {
+        referredByTenant = await tx.tenant.findUnique({
+          where: { id: dto.referralCode },
+        });
+
+        if (referredByTenant) {
+          // Reward the referrer: 1 free month
+          await tx.tenant.update({
+            where: { id: referredByTenant.id },
+            data: {
+              referralBalanceMonths: { increment: 1 },
+            },
+          });
+        }
+      }
+
       const tenant = await tx.tenant.create({
         data: {
           name: dto.workspaceName,
           trialEndsAt,
+          planType: 'FREE',
+          referredById: referredByTenant?.id || null,
         },
       });
 
       const user = await tx.user.create({
         data: {
-          email: dto.email,
+          email,
           passwordHash: passwordHash,
           fullName: dto.fullName,
           role: 'OWNER',
@@ -72,10 +93,11 @@ export class AuthService {
   }
 
   async login(dto: LoginDto, ipAddress?: string, userAgent?: string) {
+    const email = dto.email.toLowerCase();
     // Bypass Prisma and use raw connection pool for performance
     const result = await pool.query(
       `SELECT id, "tenantId", email, "passwordHash", "fullName", role FROM users WHERE email = $1 LIMIT 1`,
-      [dto.email]
+      [email]
     );
     const user = result.rows[0];
 
