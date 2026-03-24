@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
@@ -33,10 +34,17 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CronModule } from './modules/cron/cron.module';
 import { BillingModule } from './modules/billing/billing.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { InfluencersModule } from './modules/influencers/influencers.module';
+import { PortalModule } from './modules/portal/portal.module';
+import { OutreachModule } from './modules/outreach/outreach.module';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 20,
+    }]),
     EventEmitterModule.forRoot({ global: true }),
     ConfigModule.forRoot({ isGlobal: true }),
     BullModule.forRootAsync({
@@ -87,6 +95,9 @@ import { AdminModule } from './modules/admin/admin.module';
     CronModule,
     BillingModule,
     AdminModule,
+    InfluencersModule,
+    PortalModule,
+    OutreachModule,
   ],
   controllers: [AppController, MobileController],
   providers: [AppService, MobileService],

@@ -14,13 +14,17 @@ import { UpdateDealStageDto } from './dto/update-deal-stage.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { TenantGuard } from '../../common/guards/tenant.guard';
 import { TenantId } from '../../common/decorators/tenant.decorator';
+import { BillingGuard } from '../auth/guards/billing.guard';
+import { QuotaGuard } from '../auth/guards/quota.guard';
+import { Quota } from '../auth/decorators/quota.decorator';
 
 @Controller('deals')
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, BillingGuard, QuotaGuard)
 export class DealsController {
   constructor(private readonly dealsService: DealsService) {}
 
   @Post()
+  @Quota('campaign')
   create(@TenantId() tenantId: string, @Body() createDealDto: CreateDealDto) {
     return this.dealsService.create(tenantId, createDealDto);
   }
@@ -56,5 +60,14 @@ export class DealsController {
     @Body() dto: { type: 'EMAIL' | 'WHATSAPP'; message: string },
   ) {
     return this.dealsService.sendCommunication(tenantId, id, dto);
+  }
+
+  @Patch(':id/performance')
+  updatePerformance(
+    @TenantId() tenantId: string,
+    @Param('id') id: string,
+    @Body() metrics: { reach?: number; engagement?: number; clicks?: number },
+  ) {
+    return this.dealsService.updatePerformance(tenantId, id, metrics);
   }
 }

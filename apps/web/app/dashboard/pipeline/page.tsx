@@ -79,6 +79,14 @@ export default function PipelinePage() {
         },
     });
 
+    const { data: influencers } = useQuery<any[]>({
+        queryKey: ["influencers"],
+        queryFn: async () => {
+            const { data } = await apiClient.get("/influencers");
+            return data;
+        },
+    });
+
     const updateStageMutation = useMutation({
         mutationFn: async ({ id, stage }: { id: string; stage: DealStage }) => {
             return apiClient.patch(`/deals/${id}/stage`, { stage });
@@ -295,6 +303,43 @@ export default function PipelinePage() {
                                             </Select>
                                         )}
                                     />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label>Assigned Influencer (Optional)</Label>
+                                <Controller
+                                    name="influencerId"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select influencer from network" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {influencers?.map((inf) => (
+                                                    <SelectItem key={inf.id} value={inf.id}>
+                                                        {inf.name} ({inf.handle})
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-3 gap-3">
+                                <div className="space-y-2">
+                                    <Label htmlFor="reach">Reach</Label>
+                                    <Input id="reach" type="number" placeholder="50k" {...register("reach")} />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="engagement">Eng %</Label>
+                                    <Input id="engagement" type="number" step="0.1" placeholder="3.5" {...register("engagement")} />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="roi">ROI (x)</Label>
+                                    <Input id="roi" type="number" step="0.1" placeholder="2.5" {...register("roi")} />
                                 </div>
                             </div>
 

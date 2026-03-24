@@ -124,6 +124,27 @@ export class DashboardService {
         ? Math.round((wonDeals / totalClosedDeals) * 100)
         : 0;
 
+    // Outreach Metrics (Phase 5)
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const newInfluencers = await (this.prisma.influencer as any).count({
+      where: { tenantId, createdAt: { gte: startOfWeek } }
+    });
+
+    const contactedThisWeek = await (this.prisma.influencer as any).count({
+      where: { tenantId, lastContactDate: { gte: startOfWeek } }
+    });
+
+    const repliesReceived = await (this.prisma.influencer as any).count({
+      where: { tenantId, outreachStatus: 'REPLIED' }
+    });
+
+    const convertedToDeal = await (this.prisma.influencer as any).count({
+      where: { tenantId, outreachStatus: 'DEAL_CREATED' }
+    });
+
     return {
       todayTasks: {
         deliverablesDue: deliverablesDueToday,
@@ -139,7 +160,88 @@ export class DashboardService {
         activeDealsCount,
         winRate,
       },
+      outreachStats: {
+        newInfluencers,
+        contactedThisWeek,
+        repliesReceived,
+        convertedToDeal
+      },
       recentActivity,
+    };
+  }
+
+  async getAnalytics(tenantId: string) {
+    const deals = await this.prisma.deal.findMany({
+      where: { tenantId },
+      include: {
+        influencer: true,
+      },
+    });
+
+    const platforms: Record<string, { total: number; won: number; spent: number }> = {};
+    const categories: Record<string, number> = {};
+    let totalSpent = 0;
+    let totalPredictedROI = 0;
+    const influencerStats: Record<string, any> = {};
+
+    for (const deal of deals) {
+      const platform = deal.influencer?.platform || 'Other';
+      const category = deal.influencer?.category || 'General';
+
+      if (!platforms[platform]) platforms[platform] = { total: 0, won: 0, spent: 0 };
+      platforms[platform].total++;
+      if (deal.stage === 'COMPLETED') platforms[platform].won++;
+
+      const amount = await this.currencyService.convertToTRY(Number(deal.totalAmount), deal.currency);
+      platforms[platform].spent += amount;
+      totalSpent += amount;
+
+      if (!categories[category]) categories[category] = 0;
+      categories[category]++;
+
+      // AI Simulation: ROI Prediction
+      // If deal is completed, ROI is usually higher. We use followers and engagement as multipliers.
+      const followers = Number(deal.influencer?.followers || 0);
+      const engRate = Number(deal.influencer?.engagementRate || 0);
+      
+      // Rough predictive model: (Followers * EngRate / 100) * 0.1 conversion factor
+      const predictedValue = (followers * (engRate / 100)) * 0.1 * (deal.stage === 'COMPLETED' ? 1.5 : 0.8);
+      totalPredictedROI += predictedValue;
+      
+      // Track top influencers
+      if (!influencerStats[deal.influencer?.id || 'unknown']) {
+        influencerStats[deal.influencer?.id || 'unknown'] = {
+          name: deal.influencer?.name || 'Unknown',
+          platform: platform,
+          spent: 0,
+          deals: 0,
+          roi: 0
+        };
+      }
+      influencerStats[deal.influencer?.id || 'unknown'].spent += amount;
+      influencerStats[deal.influencer?.id || 'unknown'].deals++;
+      influencerStats[deal.influencer?.id || 'unknown'].roi += predictedValue;
+    }
+
+    // Convert to array and sort by ROI 
+    const topInfluencers = Object.values(influencerStats)
+      .filter(inf => inf.name !== 'Unknown')
+      .sort((a, b) => b.roi - a.roi)
+      .slice(0, 10);
+
+    return {
+      platformStats: Object.entries(platforms).map(([name, stats]) => ({
+        name,
+        winRate: stats.total > 0 ? (stats.won / stats.total) * 100 : 0,
+        spent: stats.spent,
+      })),
+      categoryDistribution: Object.entries(categories).map(([name, value]) => ({ name, value })),
+      globalMetrics: {
+        totalSpent,
+        predictedROI: totalPredictedROI,
+        roiFactor: totalSpent > 0 ? (totalPredictedROI / totalSpent) : 0,
+      },
+      topInfluencers,
     };
   }
 

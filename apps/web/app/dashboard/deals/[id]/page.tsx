@@ -6,7 +6,7 @@ import apiClient from "@/lib/api-client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, DollarSign, Package, FileText, Activity as ActivityIcon, Link as LinkIcon, Sparkles } from "lucide-react";
+import { Calendar, DollarSign, Package, FileText, Activity as ActivityIcon, Link as LinkIcon, Sparkles, Users } from "lucide-react";
 import DeliverablesList from "@/components/deals/DeliverablesList";
 import PaymentsList from "@/components/deals/PaymentsList";
 import ContractSection from "@/components/deals/ContractSection";
@@ -56,6 +56,14 @@ export default function DealDetailPage() {
                                     <>
                                         <span className="text-slate-300">•</span>
                                         <span className="text-slate-600">With: {deal.contact.name}</span>
+                                    </>
+                                )}
+                                {deal.influencer?.name && (
+                                    <>
+                                        <span className="text-slate-300">•</span>
+                                        <a href={`/dashboard/influencers/${deal.influencer.id}`} className="text-indigo-600 hover:underline flex items-center gap-1">
+                                            <Users size={14} /> Source: {deal.influencer.name}
+                                        </a>
                                     </>
                                 )}
                             </div>

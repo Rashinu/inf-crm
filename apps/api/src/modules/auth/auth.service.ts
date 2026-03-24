@@ -94,12 +94,10 @@ export class AuthService {
 
   async login(dto: LoginDto, ipAddress?: string, userAgent?: string) {
     const email = dto.email.toLowerCase();
-    // Bypass Prisma and use raw connection pool for performance
-    const result = await pool.query(
-      `SELECT id, "tenantId", email, "passwordHash", "fullName", role FROM users WHERE email = $1 LIMIT 1`,
-      [email]
-    );
-    const user = result.rows[0];
+    
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -127,11 +125,10 @@ export class AuthService {
       }),
     ]);
 
-    // Update refresh token silently to avoid Prisma initialization overhead
-    await pool.query(
-      `UPDATE users SET "refreshToken" = $1 WHERE id = $2`,
-      [refreshToken, user.id]
-    );
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
 
     // Track login session
     await this.prisma.userSession.create({
@@ -261,10 +258,7 @@ export class AuthService {
 
   async demoLogin(ipAddress?: string, userAgent?: string) {
     // Proje tanıtımı için şifresiz demo girişi. İlk kullanıcıyı bulur ve giriş yapar.
-    const result = await pool.query(
-      `SELECT id, "tenantId", email, "passwordHash", "fullName", role FROM users LIMIT 1`
-    );
-    const user = result.rows[0];
+    const user = await this.prisma.user.findFirst();
 
     if (!user) {
       throw new UnauthorizedException('No demo user found in database');
@@ -283,10 +277,10 @@ export class AuthService {
       }),
     ]);
 
-    await pool.query(
-      `UPDATE users SET "refreshToken" = $1 WHERE id = $2`,
-      [refreshToken, user.id]
-    );
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
 
     // Track login session
     await this.prisma.userSession.create({

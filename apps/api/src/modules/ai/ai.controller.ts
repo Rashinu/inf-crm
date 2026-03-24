@@ -25,4 +25,15 @@ export class AiController {
   ) {
     return this.aiService.generateHooks(topic, platform);
   }
+
+  @Post('outreach-message')
+  async generateOutreachVariations(@Body() body: any) {
+    return this.aiService.generateOutreachVariations({
+      influencerName: body.influencerName,
+      niche: body.niche,
+      platform: body.platform,
+      brandName: body.brandName,
+      offerType: body.offerType,
+    });
+  }
 }

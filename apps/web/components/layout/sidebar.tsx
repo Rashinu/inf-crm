@@ -19,7 +19,10 @@ import {
     Zap,
     Trophy,
     CreditCard,
-    ShieldAlert
+    ShieldAlert,
+    Sparkles,
+    TrendingUp,
+    Mail
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -30,14 +33,18 @@ const menuItems = [
     { icon: Trello, key: "nav.pipeline", href: "/dashboard/pipeline", description: "Satış süreçlerinizi ve fırsat aşamalarını yönetin." },
     { icon: Briefcase, key: "nav.deals", href: "/dashboard/deals", description: "Biten ve devam eden tüm marka anlaşmaları." },
     { icon: Building2, key: "nav.brands", href: "/dashboard/brands", description: "Hizmet verdiğiniz markaların portföyü." },
-    { icon: Contact, key: "nav.contacts", href: "/dashboard/contacts", description: "Influencer ve içerik üretici listesi." },
+    { icon: Trophy, key: "nav.influencers", href: "/dashboard/influencers", description: "Influencer veritabanı ve profil yönetimi." },
+    { icon: Contact, key: "nav.contacts", href: "/dashboard/contacts", description: "Genel kontak listesi." },
     { icon: Calendar, key: "nav.calendar", href: "/dashboard/calendar", description: "Yayın ve ödeme takvimi yönetimi." },
     { icon: Wallet, key: "nav.finance", href: "/dashboard/finance", description: "Hakedişler, komisyonlar ve nakit akışı." },
     { icon: Trophy, key: "nav.leaderboard", href: "/dashboard/leaderboard", description: "En çok kazandıran kampanya ve markalar." },
     { icon: Zap, key: "nav.automations", href: "/dashboard/automations", description: "Süreçlerinizi otomatize eden kurallar." },
+    { icon: Sparkles, key: "nav.discovery", href: "/dashboard/discovery", description: "AI destekli influencer keşif motoru." },
+    { icon: Mail, key: "nav.outreach", href: "/dashboard/outreach", description: "Bulk email kampanya yönetimi." },
+    { icon: TrendingUp, key: "nav.analytics", href: "/dashboard/analytics", description: "Yapay zeka destekli yatırım getirisi (ROI) ve performans analizleri." },
 ];
 
-export function Sidebar() {
+export function Sidebar({ user }: { user?: any }) {
     const pathname = usePathname();
     const [collapsed, setCollapsed] = useState(false);
     const { t } = useLanguage();
@@ -93,16 +100,18 @@ export function Sidebar() {
 
             {/* Bottom Section */}
             <div className="p-3 border-t border-gray-100 dark:border-slate-800/60 space-y-1">
-                {/* Admin Link - In real app, check for SUPER_ADMIN role */}
-                <Link
-                    href="/admin"
-                    className={cn(
-                        "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors shadow-sm mb-2",
-                    )}
-                >
-                    <ShieldAlert className="size-5" />
-                    {!collapsed && <span>Platform Admin</span>}
-                </Link>
+                {/* Admin Link - Only visible to SUPER_ADMIN */}
+                {user?.role === 'SUPER_ADMIN' && (
+                    <Link
+                        href="/admin"
+                        className={cn(
+                            "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-500/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 transition-colors shadow-sm mb-2",
+                        )}
+                    >
+                        <ShieldAlert className="size-5" />
+                        {!collapsed && <span>Platform Admin</span>}
+                    </Link>
+                )}
 
                 <Link
                     href="/dashboard/settings"

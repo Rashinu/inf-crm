@@ -48,4 +48,24 @@ export class CreateDealDto {
   @IsOptional()
   @IsNumber()
   influencerCommissionRate?: number;
+
+  @IsOptional()
+  @IsUUID()
+  influencerId?: string;
+
+  @IsOptional()
+  @IsNumber()
+  reach?: number;
+
+  @IsOptional()
+  @IsNumber()
+  engagement?: number;
+
+  @IsOptional()
+  @IsNumber()
+  clicks?: number;
+
+  @IsOptional()
+  @IsNumber()
+  roi?: number;
 }

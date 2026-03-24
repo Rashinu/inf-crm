@@ -11,7 +11,11 @@ import {
     DollarSign,
     Package,
     TrendingUp,
-    Briefcase
+    Briefcase,
+    Users,
+    MessageCircle,
+    CheckCircle,
+    UserPlus
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -66,6 +70,59 @@ export default function DashboardPage() {
                     <div>
                         <h3 className="font-bold flex items-center gap-2">💡 14 Günlük Deneme Sürümü Aktif</h3>
                         <p className="text-sm mt-1">Deneme sürümünüzün bitmesine <strong>{statusData.daysLeft} gün</strong> kaldı. Tüm özellikleri ücretsiz kullanıyorsunuz. Paketinizi belirlemek için tıklayın.</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Phase 5: Outreach Performance Widgets */}
+            {summary?.outreachStats && (
+                <div className="mb-8">
+                    <h2 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">Outreach Performance</h2>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        <Card className="border-none shadow-sm dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
+                                    <UserPlus className="w-4 h-4 text-purple-500" />
+                                    New Influencers (This Week)
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{summary.outreachStats.newInfluencers}</h3>
+                            </CardContent>
+                        </Card>
+                        <Card className="border-none shadow-sm dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
+                                    <MessageCircle className="w-4 h-4 text-blue-500" />
+                                    Contacted (This Week)
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{summary.outreachStats.contactedThisWeek}</h3>
+                            </CardContent>
+                        </Card>
+                        <Card className="border-none shadow-sm dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
+                                    <ActivityIcon className="w-4 h-4 text-orange-500" />
+                                    Replies Received
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{summary.outreachStats.repliesReceived}</h3>
+                            </CardContent>
+                        </Card>
+                        <Card className="border-none shadow-sm dark:shadow-none bg-white dark:bg-slate-900 ring-1 ring-slate-100 dark:ring-slate-800">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm font-medium text-gray-500 dark:text-slate-400 flex items-center gap-2">
+                                    <CheckCircle className="w-4 h-4 text-green-500" />
+                                    Converted to Deal
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <h3 className="text-3xl font-bold text-gray-900 dark:text-white">{summary.outreachStats.convertedToDeal}</h3>
+                            </CardContent>
+                        </Card>
                     </div>
                 </div>
             )}

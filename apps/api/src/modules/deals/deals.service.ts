@@ -32,6 +32,7 @@ export class DealsService {
       },
       include: {
         brand: { select: { name: true } },
+        influencer: { select: { name: true } },
       },
     });
 
@@ -51,6 +52,7 @@ export class DealsService {
       include: {
         brand: { select: { name: true } },
         contact: { select: { name: true, email: true } },
+        influencer: { select: { name: true, handle: true } },
         salesRep: { select: { fullName: true, email: true } },
       },
       orderBy: { createdAt: 'desc' },
@@ -63,6 +65,7 @@ export class DealsService {
       include: {
         brand: true,
         contact: true,
+        influencer: true,
         deliverables: true,
         payments: true,
       },
@@ -169,5 +172,20 @@ export class DealsService {
   async remove(tenantId: string, id: string) {
     const deal = await this.findOne(tenantId, id);
     return this.prisma.deal.delete({ where: { id: deal.id } });
+  }
+
+  async updatePerformance(
+    tenantId: string,
+    id: string,
+    metrics: { reach?: number; engagement?: number; clicks?: number },
+  ) {
+    return (this.prisma.deal as any).update({
+      where: { id, tenantId },
+      data: {
+        reach: metrics.reach,
+        engagement: metrics.engagement,
+        clicks: metrics.clicks,
+      },
+    });
   }
 }
