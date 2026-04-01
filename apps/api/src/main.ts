@@ -24,9 +24,16 @@ async function bootstrap() {
     origin: process.env.FRONTEND_URL || '*',
     credentials: true,
   });
-  
-  await app.listen(process.env.PORT || 3001, '0.0.0.0');
-  console.log(`Application is running on: ${await app.getUrl()}`);
+
+  const port = process.env.PORT || 3001;
+  const dbUrl = process.env.DATABASE_URL;
+
+  if (!dbUrl) {
+    console.warn('[CRITICAL] DATABASE_URL is missing in environment variables!');
+  }
+
+  await app.listen(port, '0.0.0.0');
+  console.log(`Application is running on port: ${port}`);
 }
 bootstrap();
 // Server reload trigger
