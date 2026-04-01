@@ -49,22 +49,35 @@ import { OutreachModule } from './modules/outreach/outreach.module';
     ConfigModule.forRoot({ isGlobal: true }),
     BullModule.forRootAsync({
       useFactory: () => {
-        if (process.env.REDIS_URL) {
-          const url = new URL(process.env.REDIS_URL);
-          return {
-            connection: {
-              host: url.hostname,
-              port: parseInt(url.port, 10),
-              username: url.username || undefined,
-              password: url.password || undefined,
-              tls: url.protocol === 'rediss:' ? {} : undefined,
-            },
-          };
+        const redisUrl = process.env.REDIS_URL;
+        if (redisUrl) {
+          try {
+            const url = new URL(redisUrl);
+            return {
+              connection: {
+                host: url.hostname,
+                port: parseInt(url.port, 10) || 6379,
+                username: url.username || undefined,
+                password: url.password || undefined,
+                tls: url.protocol === 'rediss:' ? {} : undefined,
+                maxRetriesPerRequest: null,
+              },
+            };
+          } catch (e) {
+            console.error('Invalid REDIS_URL provided:', redisUrl);
+          }
         }
+        
+        const host = process.env.REDIS_HOST || 'localhost';
+        const port = parseInt(process.env.REDIS_PORT || '6380', 10);
+        
+        console.warn(`Redis URL not found, falling back to ${host}:${port}`);
+        
         return {
           connection: {
-            host: process.env.REDIS_HOST || 'localhost',
-            port: parseInt(process.env.REDIS_PORT || '6380', 10),
+            host,
+            port,
+            maxRetriesPerRequest: null,
           },
         };
       },
